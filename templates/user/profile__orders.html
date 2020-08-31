@@ -1,0 +1,106 @@
+{% extends './profile.html' %}
+{% load static %}
+{% block profile %}
+<div class="heading_second">
+    <p class="h3 grey title">Мои заказы ({{ user.orders.all|length }})</p>
+    <div>
+        <span>Показать</span>
+        <select name="" id="">
+            <option value="10" selected>10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+        </select>
+    </div>
+</div>
+
+<div class="profile_orders__data">
+    <div class="profile_orders__heading">
+        <span>Номер</span>
+        <span>Дата</span>
+        <span>Получатель</span>
+        <span>Сумма</span>
+        <span>Cтатус</span>
+        <span>Трек-номер</span>
+        <span>Детали</span>
+    </div>
+    {% for order in user.orders.all %}
+        <div class="row">
+            <p data-title="Номер" class="bold">{{ order.order_id }}</p>
+            <p data-title="Дата" >{{ order.created|date:"d.m.Y" }}</p>
+            <p data-title="Получатель"  class="upper">{{ order.customer_name }}</p>
+            <p data-title="Сумма"  class="bold">{{ order.products_cost }} RUB {% if order.discount_cost > 0 %}<span class="red">/ {{ order.initial_cost }} RUB</span>{% endif %}</p>
+            <p data-title="Cтатус" >{{ order.order_satus }}</p>
+            <p data-title="Трек-номер" >{% if order.track_number %}{{ order.track_number }}{% endif %}</p>
+            <p data-title="Детали" >
+                <button class="order_details_btn" onclick='SetActive("order_data_{{ order.pk }}", this)'>
+                    <img src="{% static 'img/ico/arrow.svg' %}" alt="\/">
+                </button>
+            </p>
+        </div>
+        <div class="order_data" id="order_data_{{ order.pk }}">
+            {% if order.payed != None %}
+            <div>
+                <p class="payed">Оплачен</p>
+            </div>
+            {% endif %}
+            <div class="products">
+                {% for product in order.products.all %}
+                    <div class="product">
+                        <div class="image" style="background-image: url({{ product.product.imgs.image.s }});"></div>
+                        <div class="data">
+                            <p class="upper grey">{{ product.name }}</p>
+                            <p>
+                                {% if product.color %}
+                                    <span>Цвет: {{ product.color.color.name }}</span>
+                                {% endif %}
+                                <span>Артикул: {{ product.code }}</span>
+                            </p>
+                            <p>
+                                <span>Цена: <span class="black">{{ product.price }}</span> <span class="h6"> RUB</span></span>
+                                <span>Кол-во: {{ product.quantity }}</span>
+                            </p>
+                            <p>Сумма: <span class="balack">{{ product.total }} <span>RUB</span></span></p>
+                        </div>
+                        
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="adress">
+                <p class="upper title">Адрес доставки</p>
+                <div class="data">
+                    <p class="upper 600">{{ order.customer_name }}</p>
+                    <p>{{ order.adress }}</p>
+                    <p>Россия</p>
+                    <p>TEL: {{ order.phone }}</p>
+                </div>
+            </div>
+            <div class="payment">
+                <p class="title">Оплата онлайн на сайте</p>
+                <div class="payment_data">
+                    <div class="data">
+                        <div class="row">
+                            <p class="title">Сумма заказа</p>
+                            <p class="number ещефд">{{ order.products_cost }} RUB</p>
+                        </div>
+                        <div class="row">
+                            <p class="title">Скидка по купону</p>
+                            <p class="number">{{ order.discount_cost }} RUB</p>
+                        </div>
+                        <div class="row">
+                            <p class="title">Стоимость доставки</p>
+                            <p class="number">{{ order.delivery_cost }} RUB</p>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+   
+   
+</div>
+
+
+
+
+{% endblock %}

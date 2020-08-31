@@ -1,0 +1,85 @@
+{% load static %}
+<header>
+   
+    <nav>
+        <div class="burger">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="data burger_data">
+            <ul>
+                <li><a href="/">Магазин</a></li>
+                {% for page in shop_pages %}
+                    <li><a href="{% url 'pages:page' page.slug %}">{{ page.name }}</a></li>
+                {% endfor %}
+                <li class="search">
+                    <form class="search_form" action="{% url 'shop:search' %}" method="GET">
+                        <input type="search" name="input" id="header_search_input" placeholder="Поиск">
+                        <button type="submit">
+                            <img src="{% static 'img/ico/search.svg' %}" alt="search" id="header_search_button"  >
+                        </button>
+                    </form>
+                </li>
+            </ul>
+            <div class="close">
+                <img src="{% static 'img/ico/close.svg' %}" alt="x">
+            </div>
+        </div>
+       
+    </nav>
+    <div class="logo">
+        <a href="/">
+            <img src="{% static 'img/logo.png' %}" alt="logo">
+        </a>
+    </div>
+    <div class="actions">
+        <div class="user_cabinet">
+            {% if user.is_authenticated %}
+                <a href="{% url 'user:profile_orders' %}" class="auth">
+                    <p>{{ user.name }}</p>
+                    <img class="user_icon" src="{% static 'img/ico/user.svg' %}" alt="user">
+                </a>
+            {% else %}
+                <a href="{% url 'user:login' %}" class="auth">
+                    <p><span>Войти</span> / <span>Регистрация</span></p>
+                    <img class="user_icon" src="{% static 'img/ico/user.svg' %}" alt="user">
+                </a>
+            {% endif %}
+            
+        </div>
+      
+        <form class="search_icon search_form" id="header_search_form" action="{% url 'shop:search' %}" method="GET">
+            <input type="search" name="input" id="header_search_input" placeholder="Поиск">
+            <button type="submit">
+                <img src="{% static 'img/ico/search.svg' %}" alt="search" id="header_search_button">
+            </button>
+        </form>
+        
+        <div class="cart_icon">
+            <a href="{% url 'order:cart' %}">
+                <img src="{% static 'img/ico/cart.svg' %}" alt="cart">
+                <div class="total"><span class="big_num number header_cart__total">0</span> RUB</div>
+                <div class="quantity header_cart__quantity">0</div>
+            </a>
+            
+           
+            <div class="cart_data">
+                <div class="cart_products__list"></div>
+                <p class="inner_total">
+                    <span class="inner_total_word">Сумма:</span>
+                    <span class="header_cart__total__inner"></span>
+                    <span>RUB</span>
+                </p>
+                <a href="{% url 'order:cart' %}">
+                    <button class="button">Оформить заказ</button>
+                </a>
+                
+            </div>
+        </div>
+        <a href="viber://add?number=+380930403614" class="viber_icon">
+            <img src="{% static 'img/ico/viber.png' %}" alt="viber">
+        </a>
+    </div>
+</header>
+

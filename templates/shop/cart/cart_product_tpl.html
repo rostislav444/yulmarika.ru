@@ -1,0 +1,16 @@
+{% verbatim %}
+{% for product in products %}
+    <div class="cart__product">
+        <div class="image">
+            <div style="background-image: url({{ product.image }});"></div>
+        </div>
+        <div class="info">
+            <p>{{ product.name }}</p>
+            {% if product.color %}
+                <p class="color">Цвет: <span style="background-color: {{ product.color }};"></span></p>
+            {% endif %}
+            <p class="product_quntity">{{ product.quantity }} * {{ product.price }} RUB</p>
+        </div>
+    </div>
+{% endfor %}
+{% endverbatim %}

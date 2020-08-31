@@ -1,0 +1,62 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="{% static 'lib/sumoselect/jquery.sumoselect.js' %}"></script>
+<script>
+   $(document).ready(function () {
+    
+    
+    window.multipleSumoSelect = $('select[multiple]').SumoSelect({ csvDispCount: 3, selectAll:true });
+
+
+    var multipleSelect = document.querySelectorAll('select[multiple]')
+    for (let i = 0; i < multipleSelect.length; i++) {
+      let el = multipleSelect[i];
+      let len = el.querySelectorAll('option').length
+     
+      el.onchange = () => {
+        let newLen = el.querySelectorAll('option').length
+        if (len !== newLen) {
+          window.multipleSumoSelect[i].sumo.reload()
+          len = newLen
+        }
+      }
+      
+    }
+   
+  });
+</script>
+<link rel="stylesheet" href="{% static 'lib/sumoselect/sumoselect.css' %}">
+<style>
+  .form-row *,
+  .form-row.field-category,
+  .form-row.field-who_intended,
+  .form-row.field-gift_reason,
+  .form-row.field-status {
+    overflow: visible !important;
+  }
+
+  .optWrapper {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+ 
+  .form-row .help {
+    visibility: hidden;
+    height: 0;
+  }
+  .CaptionCont span {
+    padding: 4px 8px ;
+    margin-right: 8px;
+  }
+
+</style>
+{% endblock %}
+
+{% block after_related_objects %}
+{% endblock %}
+

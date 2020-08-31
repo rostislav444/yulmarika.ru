@@ -1,0 +1,25 @@
+{% load static %}
+{% if banners|length %}
+    <div class="banner">
+        <div class="swiper-container slider">
+            <div class="swiper-wrapper">
+                {% for banner in banners %}
+                    <div class="swiper-slide" style="background-image: url({{ banner.image.url }});">
+                    <div class="info">
+                        <p class="h1 heading"><a href="{{ banner.url }}">{{ banner.name }}</a></p>
+                        <p class="h4 text"><a href="{{ banner.url }}">{{ banner.description }}</a></p>
+                        <a class="button" href="{{ banner.url }}">Подробнее</a>
+                    </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="home-banner-prev prev navigation arrow">
+            <img style="transform: rotate(180deg);" src="{% static 'img/ico/arrow.svg' %}" alt="<">
+            </div>
+            <div class="home-banner-next next navigation arrow">
+            <img src="{% static 'img/ico/arrow.svg' %}" alt=">">
+            </div>
+        </div>
+    </div>
+{% endif %}

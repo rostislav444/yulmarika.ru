@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% load static %}
+    
+{% block links %}
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+{% endblock %}
+
+{% block content %}
+<div class="home">
+    {% include 'shop/home/filters/home__banner.html' %}
+    <div class="catalogue">
+      <div class="content">
+        <div class="categories">
+          <span>Выберите то, что именно интеренсно Вам:</span>
+          <ul>
+            {% for category in categories %}
+              <label for="category_{{ category.pk }}">
+                <input 
+                  id="category_{{ category.pk }}" 
+                  type="checkbox" 
+                  class="catalogue_category" 
+                  data-slug="{{ category.slug }}" 
+                  data-id="{{ category.pk }}"
+                
+                  {% if category.slug in selected.categories %}checked=true{% endif %}>
+                  
+                <li data-id="{{ category.id }}">{{ category.name }} </li>
+              </label>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="catalogue__actions">
+          <div class="mobile_filter_button"> 
+            <div class="icon">
+              <img src="{% static 'img/ico/filters.svg' %}" alt="">
+              <div class="dot"></div>
+            </div>
+            <p>Фильтры</p>
+          </div>
+
+          <div class="filters__outer">
+            <div class="filters__wrapper">
+              <div class="heading">
+                <div class="actions">
+                  <p>Фильтры</p> 
+                  <p class="clear_filters">Очистить фильтры</p>
+                </div>
+                <div class="close">
+                  <img class="mobile_filter_close_button" src="{% static 'img/ico/close.svg' %}" alt="">
+                </div>
+              </div>
+              <ul class="filters">
+                {% for filter in filters %}
+                  {% if filter.objects|length %}
+                    <li class="filter_group__button drop_button__wrapper  filter__{{ filter.slug }}">
+                      <div class="drop_button">
+                        <span>{{ filter.name }}</span> 
+                        <div class="arr">
+                          <img src="{% static 'img/ico/arrow.svg' %}" alt=">">
+                        </div>
+                      </div>
+                      {% include 'shop/home/filters/filter__date.html' with slug=filter.slug items=filter.objects %}
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                
+                <li class="drop_button__wrapper">
+                  <div class="drop_button">
+                    <span>Цена</span>
+                    <div class="arr">
+                      <img src="{% static 'img/ico/arrow.svg' %}" alt=">">
+                    </div>
+                  </div>
+                  <div class="data price">
+                    <ul>
+                       <li>
+                         <label for="price_start">Цена от</label>
+                         <input 
+                          class="catalogue_filter__input min_price_input" 
+                          data-slug="price__gte" 
+                          type="number" 
+                          min="{{ min_price }}" max="{{ max_price }}" 
+                          placeholder="{{ min_price }}">
+                       </li>
+                       <li>
+                        <label for="price_start">Цена до</label>
+                        <input 
+                          class="catalogue_filter__input max_price_input" 
+                          data-slug="price__lte" 
+                          type="number" 
+                          placeholder="{{ max_price }}" 
+                          min="{{ min_price }}" max="{{ max_price }}">
+                      </li>
+                    </ul>
+                    <div class="actions">
+                      <button class="catalogue_filter__action_button" data-active=true>Фильтровать</button>
+                    </div>
+                  </div>
+                </li>
+    
+                <li class="drop_button__wrapper">
+                  <div class="drop_button">
+                    <span>Сортировать по</span>
+                    <div class="arr">
+                      <img src="{% static 'img/ico/arrow.svg' %}" alt=">">
+                    </div>
+                  </div>
+                  <div class="data">
+                    <ul>
+                      {% for sort in sort_by %}
+                        <li>
+                          <label class="checkbox">{{ sort.name }}
+                            <input class="catalogue_filter__input"  type="radio" name="sort_by" data-key="{{ sort.key }}" {% if sort.key == 'default' %}checked="checked"{% endif %}>
+                            <span class="checkmark"></span>
+                          </label>
+                        </li>
+                      {% endfor %}
+                      
+                    </ul>
+                    <div class="actions">
+                      <button class="catalogue_filter__action_button" data-active=true>Сортировать</button>
+                    </div>
+                  </div>
+                </li>
+               
+              </ul>
+              <div class="action_button">
+                <button class="button catalogue_filter__action_button" data-active=true>Фильтровать</button>
+              </div>
+              
+            </div>
+            
+          </div>
+         
+          
+          <div class="view">
+            <div class="products_qty">
+              <p class="catalogue_products_quantity">Товары: <span class="quantity catalogue_products_quantity_num">{{ products_len }}</span></p>
+            </div>
+            <div class="columns">
+              <span>Вид:</span>
+              <label>
+                <input name="product_columns" data-action="wide" type="radio">
+                <span>
+                  <span>3</span>
+                  <img class="active"   src="{% static 'img/ico/column_0.svg' %}" alt="">
+                  <img class="disabled" src="{% static 'img/ico/column_1.svg' %}" alt="">
+                </span>
+              </label>
+              <label>
+                <input name="product_columns" type="radio" checked>
+                <span>
+                  <span>4</span>
+                  <img class="active"   src="{% static 'img/ico/grid_0.svg' %}" alt="">
+                  <img class="disabled" src="{% static 'img/ico/grid_1.svg' %}" alt="">
+                </span>
+              </label>
+              
+            </div>
+          </div>
+          <ul class="chosen_filters">
+            
+            <div class="chosen_filters_list">
+              
+
+            </div>
+          </ul>
+        </div>
+       
+       
+
+        <div class="products_list">  
+          <div class="preloader">
+            <img src="{% static 'img/preloader.gif' %}" alt="...">
+          </div>
+          <div class="products_list__wrapper">
+            {% include 'shop/catalogue/catalogue__product.html' %}
+          </div>
+        </div>
+        <div class="products_list__pagination">
+         
+          <button class="load_more_btn button">Показать еще</button>
+         
+          <div class="pagination">
+            <div class="pages">
+              <p class="current curent_page">1</p>
+              <p class="total total_pages">{{ pages }}</p>
+
+            </div>
+            <div class="buttons">
+              <button data-action="prev" class="pagination_buton prev"><</button>
+              <button data-action="next" class="pagination_buton next">></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script src="{% static 'lib/nunjuncks/nunjucks.js' %}"></script>
+<script src="{% static 'js/home/banner.js' %}"></script>
+<script src="{% static 'js/catalogue/catalogue_filters_ui.js' %}"></script>
+<script>
+  const prductTpl = `{% include 'shop/catalogue/catalogue__product_tpl.html' %}`
+  const filterTpl = `{% include 'shop/home/filters/filter_tpl.html' %}`
+</script>
+<script src="{% static 'js/home/catalogue.js' %}"></script>
+<script src="{% static 'js/home/open_mobile_filters.js' %}"></script>
+{% endblock %}

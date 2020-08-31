@@ -1,0 +1,21 @@
+{% verbatim %}
+    {% for adress in adress_list %}
+        <li>
+            <label class="adress">
+                <input type="radio" name="adress" data-num="{{ loop.index }}" id="" {% if adress.selected %}checked=true{% endif %}>
+                <div class="data">
+                    <p class="grey">{{ adress.name }} {{ adress.surname }}</p>
+                    <p class="grey h6">
+                        г. {{ adress.city }}, ул. {{ adress.street }} {{ adress.house }}, кв {{ adress.apartment }}
+                    </p>
+                </div>
+            </label>
+        </li>
+    {% endfor %}
+    <li>
+        <label class="adress">
+            <input type="radio" data-num="0" name="adress" id="">
+            <div class="data">Новый адрес</div>
+        </label>
+    </li>
+{% endverbatim %}

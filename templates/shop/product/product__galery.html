@@ -1,0 +1,55 @@
+{% load static %}
+
+<div class="product__galery ">
+    <div class="product__galery__slider ">
+        <div class="close">
+            <img src="{% static 'img/ico/close.svg' %}" alt="">
+        </div>
+        <!-- Galery -->
+        <div class="swiper-container slider galery ">
+            <div class="swiper-wrapper">
+                {% if variant %}
+                    {% for field, image in variant.imgs.items %}
+                        {% if image %}
+                            <div class="swiper-slide slide ">
+                                <img class="product_slider_image" src="{{ image.l }}" alt="">
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% for field, image in product.imgs.items %}
+                    {% if image %}
+                        <div class="swiper-slide slide ">
+                            <img class="product_slider_image" src="{{ image.s }}" alt="">
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <!-- Navigation -->
+            <div class="home-banner-prev prev navigation arrow">
+                <img style="transform: rotate(180deg);" src="{% static 'img/ico/arrow.svg' %}" alt="<">
+            </div>
+        <div class="home-banner-next next navigation arrow">
+            <img src="{% static 'img/ico/arrow.svg' %}" alt=">">
+        </div>
+        </div>
+        <!-- Thumbnails -->
+        <div class="thumbs">
+            {% if variant %}
+                {% for field, image in variant.imgs.items %}
+                    {% if image %}
+                        <div class="thumb" style="background-image: url({{ image.s }});"></div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {% for field, image in product.imgs.items %}
+                {% if image %}
+                    <div class="thumb" style="background-image: url({{ image.s }});"></div>
+                {% endif %}
+            {% endfor %}
+           
+        </div>
+    </div>
+    
+</div>
+

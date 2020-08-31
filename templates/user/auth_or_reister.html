@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+    
+{% block links %}
+    <link rel="stylesheet" href="{% static 'css/auth_or_register.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="auth_or_register">
+    {% csrf_token %}
+   
+        <div class="auth">
+           
+                <p class="h3 title">Уже зарегестрированы?</p>
+                <form class="form" id="form_auth" action="{% url 'user:auth' %}" method="POST" novalidate>
+                    
+                    <div class="message col2"></div>
+                    <div class="data">
+                        <div class="smart_input_label col2">   
+                            <label>
+                                <input 
+                                    class="input" 
+                                    data-type="email" 
+                                    type="email" 
+                                    name="email"
+                                    placeholder="" 
+                                    data-alert="Введите Ваш Email" 
+                                    data-error="Email имеет не верный формат"
+                                    required>
+                                <span>Адрес электронной почты</span>
+                                <p class="msg">Введите Ваш Email</p>
+                            </label>
+                        </div>
+                        <div class="smart_input_label col2">   
+                            <label>
+                                <input 
+                                    name="password"
+                                    data-type="password" 
+                                    type="password" 
+                                    required>
+                                <span>Пароль</span>
+                            </label>
+                            <div class="show_password"></div>
+                        </div>
+                        <button type="submit" class="col2 button h4 bold">Войти</button>
+                    </div>
+                    
+                </form>
+            
+        </div>
+   
+    
+  
+        
+        <div class="register">
+        
+            <p class="h3 title">Вы здесь первый раз?</p>
+                <form class="form" id="form_register" action="{% url 'user:register' %}" method="POST" novalidate>
+                    <div class="message col2"></div>
+                    <div class="data">
+                        <div class="smart_input_label col2">   
+                            <label>
+                                <input data-type="email" class="input" type="email" name="email" placeholder="" data-error="Введите Ващ Email" required>
+                                <span>Адрес электронной почты</span>
+                            </label>
+                        </div>
+                        <div class="smart_input_label">   
+                            <label>
+                                <input data-type="text_only" type="text" name="name"  placeholder="" required>
+                                <span>Имя</span>
+                            </label>
+    
+                        </div>
+                        
+                        <div class="smart_input_label">   
+                            <label>
+                                <input data-type="text_only" type="text" name="surname"  placeholder="" required>
+                                <span>Фамилия</span>
+                            </label>
+                        </div>
+                        <div class="smart_input_label col2">   
+                            <label>
+                                <input data-type="password" type="password" name="password"  placeholder="" required>
+                                <span>Пароль</span>
+                            </label>
+                            <div class="show_password"></div>
+                        </div>
+                        <button type="submit" class="col2 button h4 bold">Создать аккаунт <img src="/static/img/preloader.gif" alt="*"></button>
+                        <p class="center col2">Нажимая на кнопку Создать аккаунт, Вы соглашаетесь с <a class="bold" href="/">условия и положениями</a></p>
+                    </div>
+                    
+                </form>
+                
+            </div>
+       
+    
+   
+</div>
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'lib/form_validation.js' %}"></script>
+
+{% endblock %}

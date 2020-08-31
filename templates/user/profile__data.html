@@ -1,0 +1,132 @@
+{% extends './profile.html' %}
+{% load static %}
+
+{% block profile %}
+<div class="profile_data">
+    <div class="profile_messages message"></div>
+    <p class="title">Мои данные</p>
+    <p class="grey h6">* обязательные поля</p>
+    <form action="/" method="POST"  data-name="userdata" class="form">
+        <div class="userdata_messages message"></div>
+        <div class="data">
+            <ul class="gender col2">
+                <li>
+                    <label class="form_field radio">
+                        <input type="radio" data-type="radio" name="gender" value="female" {% if user.gender == 'female' %} checked=true {% endif %} required>
+                        <p>Женщина</p>
+                    </label>
+                </li>
+                <li>
+                    <label class="form_field radio">
+                        <input type="radio" data-type="radio" name="gender" value="male" {% if user.gender == 'male' %} checked=true {% endif %} required>
+                        <p>Мужчина</p>
+                    </label>
+                </li>
+            </ul>
+            <div class="form_field">
+                <label for="profile_name_field">Имя *</label>
+                <input id="profile_name_field" name="name" data-type="text" type="text" value="{{ user.name }}" required>
+            </div>
+            <div class="form_field">
+                <label for="profile_surname_field">Фамилия *</label>
+                <input id="profile_surname_field" name="surname" data-type="text" type="text" value="{{ user.surname }}" required>
+            </div>
+            <div class="form_field phone">
+                <label for="profile_phone_field">Номер телефона *</label>
+                <div class="input">
+                    <span>+7</span>
+                    <input id="profile_phone_field" name="phone" data-type="number" type="text" value="{{ user.phone }}" required>
+                </div>
+            </div>
+            <div class="form_field">
+                <label for="profile_email_field">Электронная почта *</label>
+                <input id="profile_email_field" name="email" data-type="email" type="text" value="{{ user.email }}" required>
+            </div>
+            <div class="form_field">
+                <label for="profile_birthday_field">Дата рождения</label>
+                <input id="profile_birthday_field" name="birthday"  data-type="text" type="text" value="{{ user.birthday|date:"d.m.Y" }}" required>
+            </div>
+        </div>
+    </form>
+
+<div class="password_change">
+    <p class="title">Смена пароля</p>
+    <form class="form" data-name="password" action="/">
+        <div class="password_messages message"></div>
+        <div class="data">
+            <div class="form_field">
+                <label for="profile_old_password_field">Старый пароль</label>
+                <input name="old_password" data-type="password" id="profile_old_password_field" type="password" required>
+            </div>
+            <div class="form_field">
+                <label for="profile_password_field">Новый пароль</label>
+                <input name="new_password" data-type="password"  id="profile_password_field" type="password" required>
+            </div>
+            <div class="form_field">
+                <label for="profile_password_2_field">Новый пароль еще раз</label>
+                <input name="password_repeat" data-type="password2" data-parent="profile_password_field" id="profile_password_2_field" type="password" required>
+            </div>
+        </div>
+        
+    </form>
+</div>
+<button type="submit" class="button profile_submit_button">Обновить данные</button>
+</div>
+
+
+
+
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'lib/form_validation.js' %}"></script>
+
+<script>
+    const profileMessages = document.querySelector('.profile_messages')
+    const profileSubmitButton = document.querySelector('.profile_submit_button')
+    const profileUpdateURL = "{% url 'user:profile_data' %}"
+
+    function formBlank(form) {
+        for (const input of form.querySelectorAll('input')) {
+            if (input.value.length > 0) {
+                return false
+            }
+        } return true
+    }
+
+    profileSubmitButton.onclick = () => {
+        profileMessages.innerHTML = ''
+        let valid = true
+      
+        let data = {}
+        for (let form of document.querySelectorAll('form')) {
+            if (formBlank(form) == false) {
+                if (formOnSubmit(form) == false) {
+                    valid = false
+                } else {
+                    data[form.dataset.name] = formToDict(form)
+                }
+            } else {
+                for (let msg of form.querySelectorAll('.msg')) {
+                    msg.classList.remove('active')
+                    msg.innerHTML = ''
+                }
+            }
+        }
+       
+        if (valid) {
+            let response = XHR('POST',profileUpdateURL, JSON.stringify(data))
+            if (response.status == '403') {
+                document.location.reload(true);
+            }
+            if (response['errors'].length == 0) {
+                profileMessages.innerHTML = "Данные обновлены"
+            }
+           
+        }
+        
+    }
+    
+</script>
+
+{% endblock %}

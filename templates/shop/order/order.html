@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+    
+{% block links %}
+    <link rel="stylesheet" href="{% static 'css/order.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="order">
+    <div class="order__main">
+        <h1 class="main_title h1">Корзина <span class="order_quantity"><span class="order_quantity_number">0</span> шт.</span></h1>
+        <div class="products_list order__main_list">
+            
+        </div>
+    </div>
+    <div class="order__form">
+        <div class="total_save"></div>
+        
+        <div class="total_table">
+            <div class="row">
+                <span class="title">Стоисомть товаров</span>
+                <span class="data "><span class="number big_num initial_total_price_num">0</span> руб.</span>
+            </div>
+            <div class="row">
+                <span class="title">Скидка по купону</span>
+                <span class="data coupon_total_discount">
+                    <span>нет</span> 
+                    <img class="info" src="{% static 'img/ico/info_black.svg' %}" alt="i">
+                </span>
+            </div>
+            <div class="total row">
+                <div class="title">
+                    <p>
+                        <span class="bold h5">Всего</span><span class="h6"> с НДС</span>
+                    </p>
+                    <p class="h6 add_info">(Без учета стоимости доставки)</p>
+                </div>
+                <span class="data bold h4">
+                    <span class="number big_num total_price_num">0</span>
+                    <span class="currency">руб</span>
+                </span>
+            </div>
+            <div class="create_order_btn_wrapper tooltip">
+                <span class="tooltiptext">Сумма вашего заказа слишком мала</span>
+                <a href="{% url 'order:order_or_register' %}">
+                    <button class="button h4 bold create_order_btn">Перейти к оформлению</button>
+                </a>
+            </div>
+            
+        </div>
+        <div class="pomo_code">
+            <div class="drop_button pomo_code_button">
+                <span class="h5">У меня есть промокод</span>
+                <div class="arr">
+                    <img src="{% static 'img/ico/arrow.svg' %}" alt=">">
+                </div>
+            </div>
+            
+            <div class="pomo_code_data">
+               
+                <form class="form" action="{% url 'coupon:coupon' %}" method="POST" id="promocode_form">
+                    <p class="prormocode_messages message"></p>
+                    <div class="smart_input_label">
+                        <label for="promocode__input h6">
+                            <input id="promocode__input" type="text" required>
+                            <span>Введите промокод</span>
+                        </label>
+                    </div>
+                    <button class="button" type="submit">Добавить <img src="/static/img/preloader.gif" alt="*"></button>
+                </form>
+            </div>
+        </div>
+        <div class="pay_types">
+            <span class="h5 upper">Способы оплаты</span>
+            <img src="{% static 'img/pay_types.png' %}" alt="Pay types">
+            <ul class="h6 pay_rules">
+                <li>Минимальная сумма заказа - 500 руб.</li>
+                <li>Бесплатная доставка для заказов от 5000 руб</li>
+            </ul>
+            <p class="pay_note">Выбор способа и расчет стоимости доставки, производится во время оформления заказа</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    const orderProductsList =   document.querySelector('.order__main_list')
+    const orderProductTpl = `{% include 'shop/order/order_product__tpl.html' %}`
+</script>
+<script src="{% static 'js/order/cart.js' %}"></script>
+<script src="{% static 'js/order/promocode.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+    
+{% block links %}
+    
+
+{% endblock %}
+
+{% block content %}
+<div class="payment">
+    <div class="content">
+        <h1 class="h3">Оплата</h1>
+        
+        {
+            "amount":{
+                "currency":"RUB",
+                "value":100.0
+            },
+            "confirmation":{
+                "confirmation_url":"https://money.yandex.ru/api-pages/v2/payment-confirm/epl?orderId=26d8cb72-000f-5000-a000-172d0bc7bcb7",
+                "type":"redirect"
+            },
+            "created_at":"2020-08-26T19:27:46.131Z",
+            "description":"\u0417\u0430\u043a\u0430\u0437 \u21161",
+            "id":"26d8cb72-000f-5000-a000-172d0bc7bcb7",
+            "metadata":{
+                "scid":"1893932"
+            },
+            "paid":false,
+            "recipient":{
+                "account_id":"740433",
+                "gateway_id":"1762417"
+            },
+            "refundable":false,
+            "status":"pending",
+        }
+
+                <!--Подключение библиотеки-->
+        <script src="https://kassa.yandex.ru/checkout-ui/v2.js"></script>
+
+        <!--HTML-элемент, в котором будет отображаться платежная форма-->
+        <div id="payment-form"></div>
+
+        <script>
+            //Инициализация виджета. Все параметры обязательные.
+            const checkout = new window.YandexCheckout({
+                confirmation_token: 'confirmation-token', //Токен, который перед проведением оплаты нужно получить от Яндекс.Кассы
+                return_url: 'https://merchant.site', //Ссылка на страницу завершения оплаты
+                error_callback(error) {
+                    //Обработка ошибок инициализации
+                }
+            });
+
+            //Отображение платежной формы в контейнере
+            checkout.render('payment-form');
+        </script>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+{% endblock %}

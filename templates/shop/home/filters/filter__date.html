@@ -1,0 +1,20 @@
+{% load static %}
+<div data-slug="{{ slug }}" class="data filter_group__wrapper">
+    <ul>
+        {% for item in items %}
+            <li>
+                <label class="checkbox">{{ item.name }}
+                    <input class="catalogue_filter__input" type="checkbox" data-label="{{ item.name }}" data-slug="{{ slug }}" data-id="{{ item.pk }}">
+                    <span class="checkmark"></span>
+                </label>
+            </li>
+        {% endfor %}
+    </ul>
+    <div class="actions">
+        <label class="checkbox">Выбрать все
+            <input type="checkbox" class="check-all" data-id="{{ item.pk }}">
+            <span class="checkmark"></span>
+        </label>
+        <button class="catalogue_filter__action_button" data-active=true>Фильтровать</button>
+    </div>
+</div>

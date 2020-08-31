@@ -1,0 +1,33 @@
+{% verbatim %}
+{% if products|length %}
+    {% for product in products %}
+        <div class="order__product">
+            <a href="{{ product.url }}" class="image">
+                <img src="{{ product.image }}" alt="">
+            </a>
+            <div class="info">
+                <p class="name bold">{{ product.name }}</p>
+                {% if product.color %}
+                <div class="product_color">
+                    <span>Цвет: </span><span class="color" style="background-color: {{ product.color }};"></span>
+                </div>
+                    
+                {% endif %}
+                <p class="code">Артикул: {{ product.code }}</p>
+                <p class="quantity">Кол-во: {{ product.quantity }} шт.</p>
+                <div data-product_id="{{ product.product_id }}" data-variant_id="{{ product.variant_id }}" class="remove order_item__remove"></div>
+                
+                <p class="product_price {% if product.old_price > product.price %}discount{% endif %}">
+                    <span class="currnet_price"><span class="number big_num">{{ product.price }}</span> RUB</span>
+                    {% if product.old_price > product.price %}
+                    <span class="old_price big_num">{{ product.old_price }} RUB</span>
+                    {% endif %}
+                </p>
+
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+        <p class="h4 grey">Корзина пуста</p>
+{% endif %}
+{% endverbatim %}

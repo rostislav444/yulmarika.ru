@@ -1,0 +1,89 @@
+{% verbatim %}
+<form  class="form adress_popup" id="form_rus_post"  action="{{ url }}" method="POST"  data-popup="rus_post_popup"  data-update_func="AdressUpdate" novalidate>
+    {% if change %}
+        <span class="title h2 col2 back_to_list">
+            <img src="/static/img/ico/arrow.svg" alt="<">
+            <span>Изменить</span>
+        </span>
+        <input type="hidden" name="id"  value="{{ adress.pk }}">
+    {% else %}
+        <p class="title h2 col2">Адрес доставки</p>
+    {% endif %}
+    <div class="message col2"></div>
+    <div class="data">
+        <!-- NAME -->
+        <div class="smart_input_label">   
+            <label>
+                <input data-type="text_only" type="text" name="name"  placeholder="" value="{{ adress.name }}" required>
+                <span>Имя</span>
+            </label>
+        </div>
+        <!-- SURNAME -->
+        <div class="smart_input_label">   
+            <label>
+                <input data-type="text_only" type="text" name="surname"  placeholder="" value="{{ adress.surname }}" required>
+                <span>Фамилия</span>
+            </label>
+        </div>
+        <!-- PHONE -->
+        <div class="phone col2">
+            <div class="country">
+                <select  name="country" data-type="select" id="phone_country">
+                    <option value="ru" selected>+7</option>
+                </select>
+            </div>
+            
+            <div class="smart_input_label">   
+                <label>
+                    <input data-type="number" type="tel" name="phone"  placeholder="" value="{{ adress.phone }}" required>
+                    <span>Телефон</span>
+                </label>
+                <p class="help_text пкун р6">Перед доставкой курьер свяжется с Вами</p>
+            </div>
+        </div>
+    
+        <!-- CITY -->
+        <div class="smart_input_label col2">   
+            <label>
+                <input data-type="text" type="text" name="city" data-ajax="/core/search/city" placeholder="" autocomplete="off" value="{{ adress.city }}" required>
+                <span>Город</span>
+            </label>
+        </div>
+        <!-- STREET -->
+        <div class="smart_input_label col2">   
+            <label>
+                <input data-type="text" type="text" name="street"  placeholder="" value="{{ adress.street }}" required>
+                <span>Улица</span>
+            </label>
+        </div>
+        <!-- HOUSE -->
+        <div class="smart_input_label">   
+            <label>
+                <input data-type="text" type="text" name="house"  placeholder="" value="{{ adress.house }}" required>
+                <span>Дом</span>
+            </label>
+        </div>
+        <!-- APARTMENT -->
+        <div class="smart_input_label">   
+            <label>
+                <input data-type="text" type="text" name="apartment"  placeholder="" value="{{ adress.apartment }}" required>
+                <span>Кварнтира</span>
+            </label>
+        </div>
+        <!-- ADDTIYIONAL INFO -->
+        <div class="smart_input_label col2">   
+            <label>
+                <input data-type="text" type="text" name="add_info"  placeholder="" value="{{ adress.add_info }}">
+                <span>Дополнительная информация (не обязательно)</span>
+            </label>
+            <div class="help_text">Например, этаж или название фирмы</div>
+        </div>
+        
+    </div>
+    <button class="col2 button h4 bold" type="submit">Выбрать <img src="/static/img/preloader.gif" alt="*"></button>
+    
+
+    
+    
+</form>
+{% endverbatim %}

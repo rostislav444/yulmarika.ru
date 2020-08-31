@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+    
+{% block links %}
+    <link rel="stylesheet" href="{% static 'css/pages.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="pages">
+    <div class="content">
+        <p class="title">{{ page.name }}</p>
+        {% if page.image %}
+            <img src="{{ page.imgs.image.l }}" alt="">
+        {% endif %}
+        {% for block in page.blocks.all %}
+            <div class="block">
+                <p class="title">{{ block.name }}</p>
+                <p class="text">{{ block.text }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+{% endblock %}

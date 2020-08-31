@@ -1,0 +1,42 @@
+{% verbatim %}
+<div class="delivery_adress__list">
+    <form action="{{ url }}" method="POST" data-update_func="AdressSet" novalidate>
+    <p class="title h2 col2">Адрес доставки</p>
+    <p class="info_text blue">Предыдущие адреса доставки</p>
+    <div class="list">
+        
+        {% for adress in adress_list %}
+            <label class="adress">
+                <div class="check_box big_check_box">
+                    <input 
+                        type="radio" 
+                        data-type="radio"
+                        name="adress" 
+                        {% if adress.pk %}
+                            value="{{ adress.pk }}" 
+                        {% else %}
+                            value="{{ loop.index }}" 
+                        {% endif %}
+                        {% if adress.selected %}checked{% endif %}>
+                    <span class="checkmark"></span>
+                </div>
+                
+                <div class="info">
+                    <p class="grey uppe h5">{{ adress.name }} {{ adress.surname }}</p>
+                    <p class="grey h6">{{ adress.city }}, {{ adress.street }} {{ adress.house }}, кв. {{ adress.apartment }}</p>
+                    <p class="grey">+7 {{ adress.phone }}</p>
+                    <span class="change bold">Изменить</span>
+                </div>
+            </label>
+        {% endfor %}
+       
+    </div>
+    <div class="add_adress">
+        <span>Добавить адрес</span>
+    </div>
+    <button class="button h4 bold mt48" type="submit">Выбрать <img src="/static/img/preloader.gif" alt=""></button>
+    </form>
+</div>
+    
+    
+{% endverbatim %}

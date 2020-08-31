@@ -1,0 +1,42 @@
+{% verbatim %}
+{% if products|length %}
+    {% for product in products %}
+        <div class="order__product">
+            <div class="image">
+                <a href="{{ product.url }}" style="background-image: url({{ product.image }});"></a>
+            </div>
+            
+            <div class="info">
+                <p class="name">{{ product.name }}</p>
+                {% if product.color %}
+                    <p class="color">Цвет: <span style="background-color: {{ product.color }};"></span></p>
+                {% endif %}
+                <p class="code">Артикул: {{ product.code }}</p>
+                <div class="counter" data-function="updateCartQuantity">
+                    <button>-</button>
+                    <input 
+                        data-product_id="{{ product.product_id }}" 
+                        data-variant_id="{{ product.variant_id }}" 
+                        data-update="true"
+                        class="product_card_counter_quantity"
+                        min="1" max="99"  
+                        value="{{ product.quantity }}" 
+                        type="number">
+                    <button>+</button>
+                </div>
+                <div data-product_id="{{ product.product_id }}" data-variant_id="{{ product.variant_id }}" class="remove order_item__remove"></div>
+                
+                <p class="product_price {% if product.old_price > product.price %}discount{% endif %}">
+                    <span class="currnet_price"><span class="number big_num">{{ product.price }}</span> RUB</span>
+                    {% if product.old_price > product.price %}
+                    <span class="old_price big_num">{{ product.old_price }} RUB</span>
+                    {% endif %}
+                </p>
+
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+        <p class="h4 grey">Корзина пуста</p>
+{% endif %}
+{% endverbatim %}

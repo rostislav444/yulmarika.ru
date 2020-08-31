@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <defs>
+        <style>
+            .prefix__cls-1{fill:#040405}
+        </style>
+    </defs>
+    <g id="prefix__icon_column_active" data-name="icon column active" transform="translate(-48 -48)">
+        <path id="prefix__Rectangle_53" d="M0 0H7V7H0z" class="prefix__cls-1" data-name="Rectangle 53" transform="translate(48 48)"/>
+        <path id="prefix__Rectangle_54" d="M0 0H7V7H0z" class="prefix__cls-1" data-name="Rectangle 54" transform="translate(57 48)"/>
+        <path id="prefix__Rectangle_55" d="M0 0H7V7H0z" class="prefix__cls-1" data-name="Rectangle 55" transform="translate(48 57)"/>
+        <path id="prefix__Rectangle_56" d="M0 0H7V7H0z" class="prefix__cls-1" data-name="Rectangle 56" transform="translate(57 57)"/>
+    </g>
+</svg>

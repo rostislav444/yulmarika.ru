@@ -1,0 +1,10 @@
+{% verbatim %}
+    {% for item in filter.objects %}
+        <li>
+            <label class="checkbox">{{ item.name }}
+                <input class="catalogue_filter__input" type="checkbox" data-label="{{ item.name }}" data-slug="{{ filter.slug }}" data-id="{{ item.pk }}" {% if item.selected %}checked=true{% endif %}>
+                <span class="checkmark"></span>
+            </label>
+        </li>
+    {% endfor %}
+{% endverbatim %}

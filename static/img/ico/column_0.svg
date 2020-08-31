@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" viewBox="0 0 12 16">
+    <defs>
+        <style>
+            .prefix__cls-1{fill:#040405}
+        </style>
+    </defs>
+    <g id="prefix__icon_row_active" data-name="icon row active" transform="translate(-94 -3.5)">
+        <path id="prefix__Rectangle_59" d="M0 0H12V11H0z" class="prefix__cls-1" data-name="Rectangle 59" transform="translate(94 3.5)"/>
+        <path id="prefix__Rectangle_60" d="M0 0H12V3H0z" class="prefix__cls-1" data-name="Rectangle 60" transform="translate(94 16.5)"/>
+    </g>
+</svg>

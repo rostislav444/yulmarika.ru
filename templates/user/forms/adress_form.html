@@ -1,0 +1,45 @@
+{% verbatim %}
+<form action="{{ url }}" method="POST" class="form profile_adress_form" data-id="{{ adress.pk }}" data-update_func="AdressList" novalidate>
+    <div class="userdata_messages message"></div>
+    <div class="data">
+        <input type="hidden" data-type="id" name="id" value="{{ adress.pk }}">
+        <div class="form_field">
+            <label for="profile_adres_name_field">Имя</label>
+            <input id="profile_adres_name_field"   name="name"     data-type="text" type="text" value="{{ adress.name }}" required>
+        </div>
+        <div class="form_field">
+            <label for="profile_adres_surname_field">Имя</label>
+            <input id="profile_adres_surname_field" name="surname" data-type="text" type="text" value="{{ adress.surname }}" required>
+        </div>
+        <div class="form_field phone">
+            <label for="profile_phone_field">Номер телефона *</label>
+            <div class="input">
+                <span>+7</span>
+                <input id="profile_phone_field" name="phone" data-type="number" type="text" value="{{ adress.phone }}" required>
+            </div>
+        </div>
+        <div class="form_field">
+            <label for="profile_adres_city_field">Город</label>
+            <input id="profile_adres_city_field" name="city" data-ajax="/core/search/city" data-type="text" type="text" value="{{ adress.city }}" required>
+        </div>
+        <div class="form_field">
+            <label for="profile_adres_street_field">Улица</label>
+            <input id="profile_adres_street_field" name="street" data-type="text" type="text" value="{{ adress.street }}" required>
+        </div>
+        <div class="form_field">
+            <label for="profile_adres_house_field">Дом</label>
+            <input id="profile_adres_house_field" name="house" data-type="text" type="text" value="{{ adress.house }}" required>
+        </div>
+        <div class="form_field">
+            <label for="profile_adres_appartment_field">Квартира</label>
+            <input id="profile_adres_appartment_field" name="apartment" data-type="text" type="text" value="{{ adress.apartment }}" required>
+        </div>
+        <div class="form_field">
+            <label for="profile_adres_add_info_field">Доролнительная информация</label>
+            <input id="profile_adres_add_info_field" name="add_info" data-type="text" type="text" value="{{ adress.add_info }}" required>
+        </div>
+    </div>
+    
+    <button class="button" type="submit">{% if adress %}Обновить{% else %}Добавить адрес{% endif %}</button>
+</form>
+{% endverbatim %}

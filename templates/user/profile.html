@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+    
+{% block links %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="profile">
+    <div class="content">
+        <div class="heading">
+            <h1 class="p h3">Мои данные</h1>
+        </div>
+        
+        <div class="main">
+            <nav>
+                <ul>
+                    <li class="{% if request.resolver_match.url_name == 'profile_orders' %}active{% endif %}">
+                        <a href="{% url 'user:profile_orders' %}">Мои заказы</a>
+                    </li>
+                    <li class="{% if request.resolver_match.url_name == 'profile_data' %}active{% endif %}">
+                        <a href="{% url 'user:profile_data' %}">Мои данные</a>
+                    </li>
+                    <li class="{% if request.resolver_match.url_name == 'profile_adresses' %}active{% endif %}">
+                        <a href="{% url 'user:profile_adresses' %}">Адреса</a>
+                    </li>
+                    <li class="{% if request.resolver_match.url_name == 'profile_exit' %}active{% endif %}">
+                        <a href="{% url 'user:profile_exit' %}">Выйти</a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="data">
+                {% block profile %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    
+</script>
+{% endblock %}

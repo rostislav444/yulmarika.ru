@@ -1,0 +1,162 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/catalogue.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/colors.css' %}">
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+    {% block links %}
+    {% endblock %}
+</head>
+<body>
+    <!-- Header -->
+    {% if header != False %}
+        {% include 'header.html' %}
+    {% endif %}
+    <!-- Main -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <!-- Footer -->
+    {% include 'footer.html' %}
+    <!-- js -->
+    {% csrf_token %}
+    <script src="{% static 'lib/jquery/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'lib/cookie/js.cookie.min.js' %}"></script>
+    <script src="{% static 'lib/nunjuncks/nunjucks.min.js' %}"></script>
+    <script src="{% static 'js/xhr.js' %}"></script>
+    <script src="{% static 'lib/big_num_split.js' %}"></script>
+    <script src="{% static 'lib/counter.js' %}"></script>
+    <script src="{% static 'lib/click_out.js' %}"></script>
+    <script>
+        const userAuthenticated = {% if request.user.is_authenticated %}true{% else %}false{% endif %}
+        const cartProductTpl = `{% include 'shop/cart/cart_product_tpl.html' %}`
+        const cartHeader = document.querySelector('.cart_icon')
+        const cartProductsList = document.querySelector('.cart_products__list') 
+        const cartQuantity = document.querySelector('.header_cart__quantity')
+        const cartTotal = document.querySelector('.header_cart__total')
+        const cartTotalInner = document.querySelector('.header_cart__total__inner')
+        // URLS
+        const cartDataUrl = "{% url 'shop:cart_data' %}"
+        const cartUpdateUrl = "{% url 'shop:cart_add' %}"
+        const cartRemoveUrl = "{% url 'shop:cart_remove' %}"
+
+        function CartUpdate(data, dict=false) {
+            if (dict == false) {
+                data = JSON.parse(data)
+            } 
+            
+            if (cartHeader) {
+                cartProductsList.innerHTML = nunjucks.renderString(cartProductTpl, data);
+                cartQuantity.innerHTML = data['quantity']
+                cartTotal.innerHTML = makeBigNum(data['total'])
+                cartTotalInner.innerHTML = cartTotal.innerHTML
+                if (data['quantity'] > 0) {
+                    cartHeader.classList.add('active')
+                }
+            }
+            if('updateOrder' in this){
+                this['updateOrder'](data)
+            }
+        }
+        xhrOnLoad('GET', cartDataUrl, null, CartUpdate)
+
+
+        function AddToCart(input) {
+            request = {}
+            request['product_id'] = parseInt(input.dataset.product_id)
+            try {  
+                request['variant_id'] = parseInt(input.dataset.variant_id)
+            } catch(e) { 
+                request['variant_id'] = null 
+            }
+            request['quantity'] = parseInt(input.value)
+            if ('update' in input.dataset) {
+                request['update'] = true
+            }
+            xhrOnLoad('POST', cartUpdateUrl, JSON.stringify(request), CartUpdate)
+        }
+
+        function RemoveFromCart(obj) {
+            request = {}
+            request['product_id'] = parseInt(obj.dataset.product_id)
+            try { 
+                request['variant_id'] = parseInt(obj.dataset.variant_id)
+            } catch(e) {
+                request['variant_id'] = null
+            }
+            xhrOnLoad('POST', cartRemoveUrl, JSON.stringify(request), CartUpdate)
+        }
+
+    </script>
+    <script>
+        // Burger
+        const burger = document.querySelector('.burger')
+        const burgerData = document.querySelector('.burger_data')
+        if(burgerData) {
+            const burgerClose = burgerData.querySelector('.close')
+            burger.onclick = () => {
+                burgerData.classList.add('active')
+            }
+            burgerClose.onclick = () => {
+                burgerData.classList.remove('active')
+            }
+
+        }
+        
+        // Header search
+        const headerSearch = document.querySelector('.search_icon')
+        const headerSearchForm = document.querySelector('#header_search_form')
+        const SearchForm = document.querySelectorAll('.search_form')
+        const headerSearchInput = document.querySelector('#header_search_input')
+        const headerSearchButton = document.querySelector('#header_search_button')
+        for (let form of SearchForm) {
+            form.onsubmit = (e) => {
+               let input = form.querySelector('input')
+               if (input.value.length == 0) {
+                e.preventDefault() 
+               }
+            }
+        }
+
+        if (headerSearch) {
+            headerSearch.onclick = () => {
+            if (headerSearch.classList.contains('active') == false) {
+                clickListener(headerSearch, 'active')
+            }
+        }
+        }
+      
+     
+
+        
+        // Global set active class
+        function SetActive(id, btn) {
+            let obj = document.getElementById(id)
+            if (!obj.classList.contains('active')) {
+                obj.classList.add('active')
+                if (btn != undefined) {
+                    btn.classList.add('active')
+                }
+            } else {
+                obj.classList.remove('active')
+                if (btn != undefined) {
+                    btn.classList.remove('active')
+                }
+            }
+           
+        }
+    </script>
+
+    {% block js %}
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+    
+{% block links %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="home">
+    <div class="search_results">
+        <div class="content">
+            <form class="search_form" action="{% url 'shop:search' %}" method="GET">
+                <p>Результатов: <span class="catalogue_products_quantity_num">{{ products_len }}</span></p>
+                <p class="h4 grey">Плиск по запросу:</p>
+                <div class="actions">
+                    <input type="search" name="input" id="" value="{{ search_input }}">
+                    <button class="button" type="submit">Найти</button>
+                </div>
+            </form>
+            
+        </div>
+        <div class="content">
+            {% if products|length %}
+                <div class="products_list">  
+                <div class="preloader">
+                    <img src="{% static 'img/preloader.gif' %}" alt="...">
+                </div>
+                <div class="products_list__wrapper">
+                    {% include 'shop/catalogue/catalogue__product.html' %}
+                </div>
+                </div>
+                {% if products_len > 12 %}
+                <div class="products_list__pagination">
+                    <button class="load_more_btn button">Показать еще</button>
+                    <div class="pagination">
+                        <div class="pages">
+                            <p class="current curent_page">1</p>
+                            <p class="total total_pages">{{ pages }}</p>
+                        </div>
+                        <div class="buttons">
+                        <button data-action="prev" class="pagination_buton prev"><</button>
+                        <button data-action="next" class="pagination_buton next">></button>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% else %}
+                <p class="h3 grey">Ничего не найдено</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    const curUrl = window.location.href 
+    const prductTpl = `{% include 'shop/catalogue/catalogue__product_tpl.html' %}`
+    const filterTpl = `{% include 'shop/home/filters/filter_tpl.html' %}`
+</script>
+<script src="{% static 'js/home/catalogue.js' %}"></script>
+{% endblock %}

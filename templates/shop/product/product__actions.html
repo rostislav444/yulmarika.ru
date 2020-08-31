@@ -1,0 +1,55 @@
+{% load static %}
+
+<div class="product__actions__wrapper">
+  <div class="product__actions">
+    {% if product.status.all|length %}
+    <p class="status">
+      {% for status in product.status.all %}
+        <span style="color: {{ status.hex }};">{{ status.name }}</span>
+      {% endfor %}
+    </p>
+    {% endif %}
+    <p class="name">{{ product.name }}</p>
+    <p class="code">Артикул: {{ product.code }}</p>
+    <p class="product_price {% if product.old_price > product.price %}discount{% endif %}">
+        <span class="currnet_price"><span class="number big_num">{{ product.price }}</span> RUB</span>
+        {% if product.old_price > product.price %}
+          <span class="old_price big_num">{{ product.old_price }} RUB</span>
+        {% endif %}
+    </p>
+    <div class="product__color">
+      <p class="title">Цвет</p>
+      
+      <div class="colors">
+        {% for color in product.variants.all %}
+          <a {% if color.pk == variant.pk %}class="active"{% endif %} 
+            aria-label="{{ color.color.name }}" data-microtip-position="bottom" role="tooltip"
+            href="{{color.get_absolute_url }}" 
+            style="background-color: {{ color.color.hex }};"></a>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="counter">
+      <button>-</button>
+      <input 
+        data-product_id="{{ product.pk }}" 
+        data-variant_id="{{ variant.pk }}" 
+        class="product_card_counter_quantity" 
+        min="1" max="99" value="1" 
+        type="number">
+      <button>+</button>
+    </div>
+    <button class="action_button add_to_cart">
+      <img src="{% static 'img/ico/cart_add.svg' %}" alt="[]">
+      <span>Добавить в корзину</span>
+    </button>
+
+    
+    <a href="{% if varint %}{% url 'shop:fast_buy' product.pk variant.pk %}{% else %}{% url 'shop:fast_buy' product.pk %}{% endif %}" class="action_button one_click_buy">
+      <img src="{% static 'img/ico/wallet.svg' %}" alt="[]">
+      <span>Купить в 1 клик</span>
+    </a>
+  </div>
+    
+</div>
+

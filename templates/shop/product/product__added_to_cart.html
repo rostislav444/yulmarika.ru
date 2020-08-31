@@ -1,0 +1,36 @@
+{% load static %}
+
+<div class="popup__wrapper product_added_to_cart">
+    <div class="popup">
+        <div class="popup__inner">
+            <div class="added_to_cart">
+                <div class="heading">
+                    <div class="checkbox">
+                        <span class="checkmark"></span>
+                    </div>
+                    <p>Товар был добавлен в корзину
+                        
+                    </p>
+                </div>
+                <div class="about">
+                    <div class="image">
+                        <img src="{{ variant.imgs.photo_1.s }}" alt="">
+                    </div>
+                    <div class="info">
+                        <p class="code">Артикул: {{ product.code }}</p>
+                        <p class="product_price {% if product.old_price > product.price %}discount{% endif %}">
+                            <span class="currnet_price"><span class="number big_num">{{ product.price }}</span> RUB</span>
+                            {% if product.old_price > product.price %}
+                              <span class="old_price big_num">{{ product.old_price }} RUB</span>
+                            {% endif %}
+                        </p>
+                        <a href="{% url 'order:cart' %}" class="button">В корзину</a>
+                        <a class="continue_shoping" href="/">Продолжить покупки</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <img class="close" onclick="popupClose()" src="{% static 'img/ico/close.svg' %}" alt="X">
+    </div>
+</div>
+

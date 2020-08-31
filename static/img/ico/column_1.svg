@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" viewBox="0 0 12 16">
+    <g id="prefix__icon_row" data-name="icon row" transform="translate(-50 -3.5)">
+        <g id="prefix__Rectangle_44" data-name="Rectangle 44" style="stroke:#040405;stroke-miterlimit:10;stroke-width:1.5px;fill:none">
+            <path d="M0 0H12V11H0z" style="stroke:none" transform="translate(50 3.5)"/>
+            <path d="M0.75 0.75H11.25V10.25H0.75z" style="fill:none" transform="translate(50 3.5)"/>
+        </g>
+        <path id="prefix__Path_8" d="M51.5 19.5V18h9v1.5H62v-3H50v3z" data-name="Path 8" style="fill:#040405"/>
+    </g>
+</svg>
