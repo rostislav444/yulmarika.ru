@@ -93,7 +93,7 @@
 .home .catalogue .categories ul li {
     position: relative;
     display: inline-block;
-    margin: 8px 8px 0 0;
+    margin: 8px 4px 0 0;
     padding: 6px 10px;
     border: 1px solid var(--grey-light);
     color: var(--grey);
@@ -217,6 +217,17 @@ ul.chosen_filters .chosen_filters_list.active {
     grid-gap: 12px;
     padding-left: 50px;
 }
+.home ul.filters li .data.price ul {
+    padding: 16px;
+}
+.home ul.filters li .data.price ul li:hover {
+    background-color: unset;
+}
+.home ul.filters li .data.price ul label {
+    padding: 16px 0px;
+}
+
+
 .home ul.filters li .data .actions button {
     width: 100%;
     padding: 12px 0;

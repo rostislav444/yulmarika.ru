@@ -4,6 +4,15 @@ from project.settings import MEDIA_URL
 import json
 
 
+class FilterSerializer(serializers.Serializer):
+    pk =       serializers.IntegerField()
+    name =     serializers.CharField()
+    slug =     serializers.CharField()
+    selected = serializers.BooleanField(default=False)
+
+
+
+
 class WhoIntendedSeriaziler(serializers.ModelSerializer):
     selected = serializers.BooleanField()
 

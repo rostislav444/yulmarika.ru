@@ -17,10 +17,11 @@
   const maxPriceInput = document.querySelector('.max_price_input')
   const minPriceInput = document.querySelector('.min_price_input')
   
-  function upadateQTY() {
+  function upadateQTY(more=false) {
     ProductsLoaded = document.querySelectorAll('.product__wrapper').length
     ProductsTotal = parseInt(document.querySelector('.catalogue_products_quantity_num').innerHTML)
-    if (ProductsLoaded >= ProductsTotal) {
+    console.log(ProductsLoaded,ProductsTotal);
+    if (more == false) {
       loadMoreButton.classList.add('disabled')
     } else {
       loadMoreButton.classList.remove('disabled')
@@ -138,7 +139,8 @@
     selectAllButtonupdate()
     PriceFilterUpdate(response)
     setChosenFilters()
-    upadateQTY()
+    
+    upadateQTY(response['more'])
   }
 
 

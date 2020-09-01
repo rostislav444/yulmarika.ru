@@ -3,7 +3,7 @@ from django.db.models import BooleanField
 from django.template import Template
 from apps.banner.models import Banner
 from apps.shop.models import Category, Product, Variant, WhoIntended, GiftReason, Color
-from apps.shop.serializers import ProductSeriaziler, WhoIntendedSeriaziler, GiftReasonSeriaziler, ColorSeriaziler
+from apps.shop.serializers import ProductSeriaziler, WhoIntendedSeriaziler, GiftReasonSeriaziler, ColorSeriaziler, FilterSerializer
 from django.http import JsonResponse
 import json
 import time
@@ -77,13 +77,7 @@ def add_products():
 
 
 
-    # login = 'yulmarika'
-    # email = login + '@yandex.ru'
-    # token='AgAAAABEorK8AAaTQHTTaPICCEMIpMuk6JByluY'
-    # s = str.encode('user={login}\@yandex.ru\001auth=Bearer {token}\001\001')
-    # s64 = base64.b64encode(s).decode()
-   
-    # #dXNlcj17bG9naW59XEB5YW5kZXgucnUBYXV0aD1CZWFyZXIge3Rva2VufQEB
+
 
 
 
@@ -91,10 +85,8 @@ def add_products():
    
 def home(request, category=None):
     # add_products()
-    # send_mail("rostislav444@gmail.com", "Authentication", "Your account has been succesfuly authenticated.")
-    
-
-
+    page, on_page = 1, 12
+   
     context, fltr = {'selected' : {}}, {}
     sort_by = [
         {'key' : 'price',    'name' : 'По цене',           'arg' : '-price'},
@@ -111,62 +103,74 @@ def home(request, category=None):
 
     products =     Product.objects.filter(in_sell=True, variants__isnull=False, **fltr).distinct()
     variants =     Variant.objects.filter(parent__in=products)
+ 
+    
 
-    filters = {
-        'who_intended' : {
+    context['filters'] = [
+        {
+            'name' : 'Кому', 
+            'slug' : 'who_intended',
             'objects' : WhoIntended.objects.filter(product__in=products).distinct(),
             'selected' : []
         },
-        'gift_reason' :  {
+        {
+            'name' : 'Повод', 
+            'slug' : 'gift_reason',
             'objects' : GiftReason.objects.filter(product__in=products).distinct(),
             'selected' : []
         },
-        'color' : {
+        {
+            'name' : 'Цвет', 
+            'slug' : 'color',
             'objects' : Color.objects.filter(variants__in=variants).distinct(),
             'selected' : []
         }
-    }
-
+    ]
+    
     if products.first() is not None:
         context['max_price'] =  products.order_by('-price').first().price
         context['min_price'] =  products.order_by('price').first().price
     
+
     if request.method == 'POST':
-        product_filter, variant_filter = {}, {}
+        product_filter = {}
         data = json.loads(request.body.decode('utf-8'))
-       
+
+        # Add selected ids to queryser kwargs (**product_filter) and
+        # to fiter['selected'] for serializer selected True or False
+        for fltr in context['filters']:
+            key = fltr['slug']
+            if data.get(key):
+                value = [int(pk) for pk in data[key]] 
+                if key in ['color']:
+                    product_filter[f"variants__{key}__pk__in"] = value
+                else:
+                    product_filter[f"{key}__pk__in"] = value
+                fltr['selected'] = value
         # Prepere data for filtering and annonantion
         for key, value in data.items():
-            if key in ['who_intended','gift_reason','color']:
-                value = [int(pk) for pk in value]
-                slct_key = key + "__pk__in"
-                if key in ['color']:
-                    slct_key = "variants__" + slct_key
-                product_filter[slct_key] = value
-                filters[key]['selected'] = value
-            elif key in ['price__gte','price__lte']:
+            if key in ['price__gte','price__lte']:
                 try: product_filter[key] = int(value)
                 except: pass
             elif key == 'sort_by':
                 if value == 'price':
                     products = products.order_by('price')
                 elif value == 'date':
-                    products = products.order_by('-created')
 
+                    products = products.order_by('-created')
         products = products.filter(**product_filter)
         products_len = len(products)
         pages = math.ceil(products_len / 12)
      
-
         # Annonante selected filed for selected filter objects
-        for key, value in filters.items():
-            value['objects'] = value['objects'].annotate(selected=Case(
-                When(pk__in=value['selected'], 
+        for fltr in context['filters']:
+            fltr['objects'] = fltr['objects'].annotate(selected=Case(
+                When(pk__in=fltr['selected'], 
                 then=Value(True)),
                 default=Value(False),
                 output_field=BooleanField(),
             ))
-            value['objects'] = value['objects'].order_by('-selected')
+            fltr['objects'] = FilterSerializer(fltr['objects'].order_by('-selected'), many=True,).data
 
         # Pagisntion / display products
         if 'display' in data.keys():
@@ -176,40 +180,26 @@ def home(request, category=None):
             if page + 1 <= pages:
                 context['page'] = page + 1
         elif 'page' in data.keys():
-            context['page'] = int(data['page'])
+            page = int(data['page'])
+            context['page'] = page
             pages = math.ceil(products_len / 12)
             n = int(data['page']) - 1
             products = products[n:n + 12]
         else: products = products[:12]
 
 
-        context['filters'] = [
-            {
-                'name' : 'Кому', 'slug' : 'who_intended',
-                'objects' : WhoIntendedSeriaziler(filters['who_intended']['objects'], many=True,).data,
-            },{
-                'name' : 'Повод', 'slug' : 'gift_reason',
-                'objects' : GiftReasonSeriaziler(filters['gift_reason']['objects'], many=True).data,
-            },{
-                'name' : 'Цвет', 'slug' : 'color',
-                'objects' : ColorSeriaziler(filters['color']['objects'], many=True).data,
-            },
-        ]
-     
-          
+        
+        context['more']  = True if products_len > page * on_page else False
         context['products'] = json.loads(json.dumps(ProductSeriaziler(products, many=True).data))
         context['products_len'] = products_len
         context['pages'] = math.ceil(products_len / 12)
         return JsonResponse(context)
 
 
-    context['filters'] = [
-        {'name' : 'Кому',  'slug' : 'who_intended', 'objects' : filters['who_intended']['objects']},
-        {'name' : 'Повод', 'slug' : 'gift_reason',  'objects' : filters['gift_reason']['objects']},
-        {'name' : 'Цвет',  'slug' : 'color',        'objects' : filters['color']['objects']},
-    ]
+    products_len = len(products)
+    context['more']  = True if products_len > page * on_page else False
     context['products'] = json.loads(json.dumps(ProductSeriaziler(products[:12], many=True).data))
-    context['products_len'] = len(products)
+    context['products_len'] = products_len
     context['pages'] = math.ceil(context['products_len'] / 12)
     context['categories'] = Category.objects.filter(product__variants__isnull=False).distinct()
     context['banners'] = Banner.objects.all()

@@ -4,8 +4,7 @@
     <div class="recomendations">
         <p class="title">Рекомендации</p>
         <div class="swiper-container recomendation_list">  
-          
-            <div class="swiper-wrapper ">
+            <div class="swiper-wrapper">
                 {% for product in recomendations %}
                     <div class="product__wrapper swiper-slide">
                         <div class="product">
@@ -27,12 +26,17 @@
                         </div>
                     </div>
                 {% endfor %}
-              
+                
             </div>
+            <div class="recomendations-prev prev navigation arrow round">
+                <img style="transform: rotate(180deg);" src="{% static 'img/ico/arrow.svg' %}" alt="<">
+            </div>
+            <div class="recomendations-next next navigation arrow round">
+                <img src="{% static 'img/ico/arrow.svg' %}" alt=">">
+            </div>
+            
           </div>
-        
-       
-       
+          
     </div>
 </div>
 

@@ -1,11 +1,10 @@
 <footer>
     <div class="content">
         <div class="info">
-            <a href="/">Oursore.ru</a>
+            <a href="/">{{ front_files.copyright }}</a>
             <p class="upper h6">Все права защищены</p>
         </div>
         <div class="social">
-           
             <ul>
                 {% for file in front_files.icons.all %}
                     <a href="{{ file.url }}">
