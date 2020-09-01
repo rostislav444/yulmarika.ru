@@ -20,6 +20,9 @@ class BackUpDB(models.Model):
     loaded = models.BooleanField(default=False, verbose_name="Загружен в облако")
 
     def dump_db(self):
+        root = settings.MEDIA_ROOT
+        if not os.path.isdir(root + 'backup'): 
+            os.mkdir(root + 'backup')
         self.name = 'backup_' + dateformat.format(timezone.now(), 'Y-m-d_H-i-s')
         path = f'media/backup/{self.name}.sql'
         with gzip.open(path, 'wb') as f:
@@ -58,8 +61,6 @@ IMAGES_SIZES = {
 }
 
 class ModelImages(models.Model):
-    
-
     id = models.AutoField(primary_key=True)
 
     class Meta:
@@ -113,9 +114,12 @@ class ModelImages(models.Model):
                 if filename in file:
                     try: os.remove(address+file)
                     except: pass
-        for path in thmbs.values():
-            try: os.remove(path)
-            except: pass
+        if thmbs:
+            if type(thmbs) == str:
+                thmbs = json.loads(thmbs.replace("'", '"'))
+            for path in thmbs.values():
+                try: os.remove(path)
+                except: pass
     
 
     def save(self):
@@ -140,8 +144,15 @@ class ModelImages(models.Model):
                     image = PIL.Image.open(image_field.file).convert("RGB")
                     image_io = io.BytesIO()
                     image.save(image_io, format='JPEG')
-                    image_field.name = filepath + '.' + ext
+                    image.close()
+                  
+                    image_field.delete(save=True)
                     super(ModelImages, self).save()
+
+                    image_field = getattr(self, field.name)
+
+                    setattr(image_field, 'name', filepath + '.' + ext)
+                    
                  
                     for key, size in IMAGES_SIZES.items():
                         if key == 'l':  path = filepath + '.' + ext

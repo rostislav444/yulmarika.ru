@@ -32,7 +32,7 @@ def add_products():
     gift_reason = list(GiftReason.objects.all())
     colors = list(Color.objects.all())
 
-    for n in range(0, 100):
+    for n in range(0, 1):
         name = ''
         for i in range(0, random.randint(3, 5)):
             name += ' ' + s[random.randint(1, len(s) - 1)]
@@ -60,7 +60,7 @@ def add_products():
         product.save()
 
         
-        for color in random.sample(colors, random.randint(1, len(colors))):
+        for color in random.sample(colors, random.randint(1, 2)):
             variant = Variant(
                 parent = product,
                 color = color,
@@ -84,7 +84,7 @@ def add_products():
 
    
 def home(request, category=None):
-    # add_products()
+    add_products()
     page, on_page = 1, 12
    
     context, fltr = {'selected' : {}}, {}

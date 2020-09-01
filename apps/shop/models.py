@@ -8,7 +8,6 @@ from unidecode import unidecode
 from django.utils import timezone
 from project import settings
 import os, PIL, io, json
-from apps.core.fields import ImageField
 from django.core.files.storage import FileSystemStorage
 from django.contrib.postgres.fields import JSONField
 

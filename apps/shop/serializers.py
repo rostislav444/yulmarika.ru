@@ -48,7 +48,9 @@ class ProductSeriaziler(serializers.ModelSerializer):
         fields = ['pk','name','slug','price','old_price','image','add_image','status','url','length','width','height','weight']
 
     def get_image(self, obj):
-        return obj.imgs['image']
+        if 'image' in obj.imgs:
+            return obj.imgs['image']
+        return '/'
 
     def get_add_image(self, obj):
         if 'add_image' in obj.imgs.keys():
