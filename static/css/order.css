@@ -71,8 +71,8 @@
 }
 .order__main .products_list .order__product .color span {
     display: inline-block;
-    width: 24px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
     margin-left: 8px;
     border: 1px solid var(--grey-light);
 }

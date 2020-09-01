@@ -4,7 +4,7 @@
   const productsQty = document.querySelector('.catalogue_products_quantity_num')
   const productColumns = document.querySelectorAll('input[name=product_columns]') 
   const catalogueActions = document.querySelector('.catalogue__actions')
-  const loadMoreButton = document.querySelector('.load_more_btn')
+  var loadMoreButton = document.querySelector('.load_more_btn')
   const categoryBtns = document.querySelectorAll('.catalogue_category')
   const paginationButtons = document.querySelectorAll('.pagination_buton')
   // PAGES
@@ -139,8 +139,14 @@
     selectAllButtonupdate()
     PriceFilterUpdate(response)
     setChosenFilters()
-    
     upadateQTY(response['more'])
+
+    loadMoreButton = document.querySelector('.load_more_btn')
+    if (loadMoreButton) {
+      loadMoreButton.onclick = () => { loadMore() }
+    }
+    
+
   }
 
 
@@ -204,9 +210,11 @@
     data['page'] = parseInt(curentPage.innerHTML)
     preloader.classList.add('active')
     xhrOnLoad('POST', url, data=JSON.stringify(data), addMoreProducts)
+  } if (loadMoreButton) {
+    loadMoreButton.onclick = () => { loadMore() }
   }
-
-  loadMoreButton.onclick = () => { loadMore() }
+  
+  
 
 
   var filterActionButton = document.querySelectorAll('.catalogue_filter__action_button')

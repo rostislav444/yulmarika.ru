@@ -375,7 +375,9 @@ function formValidate(form) {
 
 // GET ALL FORMS ON PAGE
 for (let form of document.querySelectorAll('form')) {
+   if (form.noValidate) {
     formValidate(form)
+   }
 }
 
 

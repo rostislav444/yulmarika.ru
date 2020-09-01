@@ -118,9 +118,11 @@
         const SearchForm = document.querySelectorAll('.search_form')
         const headerSearchInput = document.querySelector('#header_search_input')
         const headerSearchButton = document.querySelector('#header_search_button')
+
         for (let form of SearchForm) {
             form.onsubmit = (e) => {
                let input = form.querySelector('input')
+               console.log(input);
                if (input.value.length == 0) {
                 e.preventDefault() 
                }

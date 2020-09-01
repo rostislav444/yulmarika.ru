@@ -435,15 +435,16 @@ input[type=number] {
 .smart_input_label .show_password {
     width: 24px;
     height: 24px;
-    background-color: rebeccapurple;
+    background-image: url(/static/img/ico/password_show.png);
+    background-size: contain;
     position: absolute;
     right: 8px;
     top: calc(50% - 12px);
     z-index: 999999;
     cursor: pointer;
 }
-.smart_input_label .show_password:hover {
-    background-color: red;
+.smart_input_label input[type='text'] ~ .show_password  {
+    background-image: url(/static/img/ico/password_hide.png);
 }
 .smart_input_label .help_text {
     font-size: var(--h6);
