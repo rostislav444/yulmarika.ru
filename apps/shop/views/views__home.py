@@ -60,20 +60,20 @@ def add_products():
         product.save()
 
         
-        # for color in random.sample(colors, random.randint(1, len(colors))):
-        #     variant = Variant(
-        #         parent = product,
-        #         color = color,
-        #         in_stock = random.randint(1, 10),
-        #     )
-        #     variant.save()
-        #     for photo in ['photo_1','photo_2','photo_3']:
-        #         img_name = 'img/img_' + str(random.randint(1, 14)) + '.jpeg'
-        #         image = PIL.Image.open(settings.MEDIA_ROOT + img_name).convert("RGB")
-        #         image_io = io.BytesIO()
-        #         image.save(image_io, format='JPEG')
-        #         getattr(variant, photo).save(img_name, image_io)
-        #     variant.save()
+        for color in random.sample(colors, random.randint(1, len(colors))):
+            variant = Variant(
+                parent = product,
+                color = color,
+                in_stock = random.randint(1, 10),
+            )
+            variant.save()
+            for photo in ['photo_1','photo_2','photo_3']:
+                img_name = 'img/img_' + str(random.randint(1, 14)) + '.jpeg'
+                image = PIL.Image.open(settings.MEDIA_ROOT + img_name).convert("RGB")
+                image_io = io.BytesIO()
+                image.save(image_io, format='JPEG')
+                getattr(variant, photo).save(img_name, image_io)
+            variant.save()
 
 
 
@@ -173,13 +173,13 @@ def home(request, category=None):
             fltr['objects'] = FilterSerializer(fltr['objects'].order_by('-selected'), many=True,).data
 
         # Pagisntion / display products
-        if 'display' in data.keys():
-            page = int(data['page'])
-            n = page * 12
-            products = products[n:n + 12]
-            if page + 1 <= pages:
-                context['page'] = page + 1
-        elif 'page' in data.keys():
+        # if 'display' in data.keys():
+        #     page = int(data['page'])
+        #     n = page * 12
+        #     products = products[n:n + 12]
+        #     if page <= pages:
+                # context['page'] = page
+        if 'page' in data.keys():
             page = int(data['page'])
             context['page'] = page
             pages = math.ceil(products_len / 12)
@@ -188,8 +188,9 @@ def home(request, category=None):
         else: products = products[:12]
 
 
+        context['more']  = True if products_len > page * on_page + len(products) - 12 else False
+        print(page, context['more'])
         
-        context['more']  = True if products_len > page * on_page else False
         context['products'] = json.loads(json.dumps(ProductSeriaziler(products, many=True).data))
         context['products_len'] = products_len
         context['pages'] = math.ceil(products_len / 12)

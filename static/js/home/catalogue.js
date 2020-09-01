@@ -17,14 +17,14 @@
   const maxPriceInput = document.querySelector('.max_price_input')
   const minPriceInput = document.querySelector('.min_price_input')
   
-  function upadateQTY(more=false) {
+  function upadateQTY(more=undefined) {
     ProductsLoaded = document.querySelectorAll('.product__wrapper').length
     ProductsTotal = parseInt(document.querySelector('.catalogue_products_quantity_num').innerHTML)
-    console.log(ProductsLoaded,ProductsTotal);
-    if (more == false) {
-      loadMoreButton.classList.add('disabled')
-    } else {
+    console.log('more', more);
+    if (more == true) {
       loadMoreButton.classList.remove('disabled')
+    } else {
+      loadMoreButton.classList.add('disabled')
     }
   }
 
@@ -187,7 +187,7 @@
     preloader.classList.remove('active')
     totalPages.innerHTML = response['pages']
     if (response['page'] != undefined) { curentPage.innerHTML = response['page'] }
-    upadateQTY()
+    upadateQTY(response['more'])
   }
 
 
@@ -207,7 +207,8 @@
     let url = catalogueURL()
     let data = GetFilterData()
     data['display'] = document.querySelectorAll('.product__wrapper').length
-    data['page'] = parseInt(curentPage.innerHTML)
+    data['page'] = parseInt(curentPage.innerHTML) + 1
+    console.log(data['page']);
     preloader.classList.add('active')
     xhrOnLoad('POST', url, data=JSON.stringify(data), addMoreProducts)
   } if (loadMoreButton) {
