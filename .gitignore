@@ -1,6 +1,6 @@
 __pycache__
 migrations
 media/
-.sqlite3
-.vscode
-local_settings
+*.sqlite3
+*.vscode
+local_settings.py
