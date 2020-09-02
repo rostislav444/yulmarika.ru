@@ -140,11 +140,13 @@
     PriceFilterUpdate(response)
     setChosenFilters()
     upadateQTY(response['more'])
+    makeBigNum()
 
     loadMoreButton = document.querySelector('.load_more_btn')
     if (loadMoreButton) {
       loadMoreButton.onclick = () => { loadMore() }
     }
+    window.scroll({top: scrollPosition,  behavior: 'smooth' });
     
 
   }

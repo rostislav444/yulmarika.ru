@@ -1,4 +1,4 @@
-function makeBigNum(num) {
+function BigNum(num) {
   num = num.toString()
   count = 0
   number = ''
@@ -12,8 +12,9 @@ function makeBigNum(num) {
   }
   return number.split("").reverse().join('')
 }
-
-
-for (let num of document.querySelectorAll('.big_num')) {
-  num.innerHTML = makeBigNum(num.innerHTML)
+function makeBigNum() {
+  for (let num of document.querySelectorAll('.big_num')) {
+    num.innerHTML = BigNum(num.innerHTML)
+  }
 }
+makeBigNum()

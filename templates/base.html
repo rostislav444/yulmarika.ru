@@ -36,13 +36,17 @@
         <img src="{% static 'img/ico/arrow.svg' %}" alt="top">
     </div>
     <script>
+        var scrollPosition = 0
+
+       
+
         const scrollTop = document.querySelector('.scroll_to_top')
         scrollTop.onclick = () => {
             window.scroll({top: 65,  behavior: 'smooth' });
         }
         window.addEventListener("scroll", (event) => {
-            var scroll = this.scrollY;
-            if (scroll > window.screen.height / 4) {
+            scrollPosition = this.scrollY;
+            if (scrollPosition > window.screen.height / 4) {
                 scrollTop.classList.add('active')
             } else {
                 scrollTop.classList.remove('active')
@@ -69,6 +73,7 @@
         const cartDataUrl = "{% url 'shop:cart_data' %}"
         const cartUpdateUrl = "{% url 'shop:cart_add' %}"
         const cartRemoveUrl = "{% url 'shop:cart_remove' %}"
+       
 
         function CartUpdate(data, dict=false) {
             if (dict == false) {
