@@ -25,5 +25,24 @@ if (swiperBanner) {
       mySwiper.autoplay.start();
     }
   }
-  swiperBanner.onmouseover = swiperBanner.onmouseout = handler;
+ 
+
+  var mediaQueryMatch = window.matchMedia('(max-width: 960px)');
+  function screenChange(e) {
+    if (e.matches) {
+      swiperBanner.removeEventListener('mouseover', handler)
+      swiperBanner.removeEventListener('mouseout', handler)
+    } else {
+      swiperBanner.addEventListener('mouseover', handler)
+      swiperBanner.addEventListener('mouseout', handler)
+    }
+  }
+
+  if (mediaQueryMatch.matches == false) {
+    swiperBanner.addEventListener('mouseover', handler)
+    swiperBanner.addEventListener('mouseout', handler)
+  }
+  
+  mediaQueryMatch.addListener(screenChange)
+  
 }
