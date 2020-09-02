@@ -10,6 +10,13 @@ import os, PIL, io, json, jsonfield
 from django.utils import timezone, dateformat
 import gzip
 from sh import pg_dump
+from project.local_settings import DATABASES
+import json
+import requests
+from django.contrib.postgres.fields import JSONField
+from zipfile import ZipFile 
+
+
 
 
 class BackUpDB(models.Model):
@@ -18,24 +25,61 @@ class BackUpDB(models.Model):
     date = models.DateTimeField(default=timezone.now, blank=True, null=True, verbose_name="Дата дампа базы")
     url =  models.CharField(max_length=1000, blank=True, null=True, verbose_name="Сслыка")
     loaded = models.BooleanField(default=False, verbose_name="Загружен в облако")
+    response = JSONField(default=dict, blank=True, null=True)
 
     def dump_db(self):
+        db = DATABASES['default']
         root = settings.MEDIA_ROOT
         if not os.path.isdir(root + 'backup'): 
             os.mkdir(root + 'backup')
         self.name = 'backup_' + dateformat.format(timezone.now(), 'Y-m-d_H-i-s')
-        path = f'media/backup/{self.name}.sql'
-        with gzip.open(path, 'wb') as f:
-            pg_dump('yulmarika', _out=f)
+
+        path = f'media/backup/{self.name}.zip'
+        with ZipFile(path, 'w') as zip_archive:
+            with zip_archive.open(self.name + '.sql', 'w') as dmp:
+                comand = f"host=localhost port={db['PORT']} dbname={db['NAME']} user={db['USER']} password={db['PASSWORD']}"
+                pg_dump(comand, _out=dmp)
         self.path = path
         super(BackUpDB, self).save()
+       
 
-    def server_load(self):
-        return ''
+    def get_upload_url(self):
+        disk_url = self.path.replace('media/','/')
+        self.url = disk_url
+        url = "https://cloud-api.yandex.net/v1/disk/resources/upload?"
+        url += 'path=' + disk_url.replace('/','%2F')
+        headers = {
+            "Authorization" : "AgAAAABEorK8AAaTQHTTaPICCEMIpMuk6JByluY",
+            "Content-Type" :  "application/json",
+        }
+        response = requests.get(url, headers=headers)
+        response = response.json()
+     
+        return response
 
     def save(self):
         self.dump_db()
+        headers = {
+            "Authorization" : "AgAAAABEorK8AAaTQHTTaPICCEMIpMuk6JByluY",
+            "Content-Type" :  "application/zip",
+        }
+        response =  self.get_upload_url()
+        url = None
+        if 'href' in response.keys():
+            url = response['href']
+
+        if url != None:
+            try:
+                r = requests.put(url, data=open(settings.BASE_DIR + '/' + self.path, 'rb'), headers=headers)
+                self.loaded = True
+            except: pass
+            if self.path:
+                try: os.remove(settings.BASE_DIR + '/' + self.path)
+                except: pass
+        
         super(BackUpDB, self).save()
+
+
 
 
 # Models

@@ -32,7 +32,7 @@ def add_products():
     gift_reason = list(GiftReason.objects.all())
     colors = list(Color.objects.all())
 
-    for n in range(0, 1):
+    for n in range(0, 1000):
         name = ''
         for i in range(0, random.randint(3, 5)):
             name += ' ' + s[random.randint(1, len(s) - 1)]
@@ -60,7 +60,7 @@ def add_products():
         product.save()
 
         
-        for color in random.sample(colors, random.randint(1, 2)):
+        for color in random.sample(colors, random.randint(1, 3)):
             variant = Variant(
                 parent = product,
                 color = color,
@@ -84,7 +84,7 @@ def add_products():
 
    
 def home(request, category=None):
-    add_products()
+    # add_products()
     page, on_page = 1, 12
    
     context, fltr = {'selected' : {}}, {}
@@ -183,9 +183,10 @@ def home(request, category=None):
             page = int(data['page'])
             context['page'] = page
             pages = math.ceil(products_len / 12)
-            n = int(data['page']) - 1
+            n = (int(data['page']) - 1) * 12
             products = products[n:n + 12]
-        else: products = products[:12]
+        else: 
+            products = products[:12]
 
 
         context['more']  = True if products_len > page * on_page + len(products) - 12 else False

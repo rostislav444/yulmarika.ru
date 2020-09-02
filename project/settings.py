@@ -29,7 +29,6 @@ INSTALLED_APPS = [
     'django.contrib.postgres',
     'colorfield',
     'rest_framework',
-    'dbbackup',
     'apps.core',
     'apps.user',
     'apps.security',

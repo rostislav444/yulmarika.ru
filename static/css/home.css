@@ -51,6 +51,9 @@
     font-weight: 600;
     margin-bottom: 8px;
 }
+.home .banner .swiper-slide .info .heading a:hover {
+    color: var(--clr-1);
+}
 .home .banner .swiper-slide .info .text {
     margin-bottom: 32px;
 }
@@ -64,8 +67,9 @@
     width: auto;
 }
 .home .banner .swiper-slide .info .button:hover {
-    background-color: black;
-    color: white;
+    background-color: white;
+    border-color: white;
+    color: black;
 }
 /* END BANNER */
 
