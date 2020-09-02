@@ -23,6 +23,7 @@ class Category(NameSlug):
     in_recomendation = models.BooleanField(default=False, verbose_name="Предлагать в рекомендованные")
 
     class Meta:
+        ordering = ['name']
         verbose_name = "Категория товара"
         verbose_name_plural = "Категории тоавров"
 
@@ -33,6 +34,7 @@ class Color(NameSlug):
     hex =   ColorField(verbose_name="Код цвета")
 
     class Meta:
+        ordering = ['name']
         verbose_name = "Цвет товара"
         verbose_name_plural = "Цвета товаров"
 
@@ -42,12 +44,14 @@ class Color(NameSlug):
 
 class WhoIntended(NameSlug):
     class Meta:
+        ordering = ['name']
         verbose_name = "Кому предназначен"
         verbose_name_plural = "Кому предназначен"
 
 
 class GiftReason(NameSlug):
     class Meta:
+        ordering = ['name']
         verbose_name = "Повод для подарка"
         verbose_name_plural = "Повод для подарка"
 
@@ -56,6 +60,7 @@ class ProductStatus(NameSlug):
     hex =  ColorField(verbose_name="Код цвета", default="#000000") 
 
     class Meta:
+        ordering = ['name']
         verbose_name = "Статус товара"
         verbose_name_plural = "Статус товара"
 

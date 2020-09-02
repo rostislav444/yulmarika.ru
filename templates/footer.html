@@ -7,7 +7,7 @@
         <div class="social">
             <ul>
                 {% for file in front_files.icons.all %}
-                    <a href="{{ file.url }}">
+                    <a class="social_link" href="{{ file.url }}">
                         <li>
                             <img src="{{ file.icon.url }}" alt="">
                         </li>

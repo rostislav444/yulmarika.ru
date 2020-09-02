@@ -32,17 +32,29 @@
 </script>
 <link rel="stylesheet" href="{% static 'lib/sumoselect/sumoselect.css' %}">
 <style>
-  .form-row *,
+
   .form-row.field-category,
   .form-row.field-who_intended,
   .form-row.field-gift_reason,
-  .form-row.field-status {
+  .form-row.field-status,
+  .form-row.field-category > * > *,
+  .form-row.field-who_intended > * > *,
+  .form-row.field-gift_reason > * > *,
+  .form-row.field-status > * > *,
+  .form-row > * > * > * > * > * 
+  {
     overflow: visible !important;
   }
 
-  .optWrapper {
+  .SumoSelect select {
+    display: none;
+  }
+  .SumoSelect.open select {
+    display: inline-block;
+  }
+
+  .SumoSelect > .optWrapper {
     overflow-y: auto !important;
-    overflow-x: hidden !important;
   }
  
   .form-row .help {

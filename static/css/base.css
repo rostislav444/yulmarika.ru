@@ -290,6 +290,9 @@ input[type=number] {
     object-position: center;
     object-fit: fill;
     transition: var(--transition);
+    transform: rotate(90deg);
+}
+.drop_button__wrapper.is_visible img {
     transform: rotate(-90deg);
 }
 .drop_button .arr {
@@ -297,9 +300,7 @@ input[type=number] {
     justify-content: center;
     align-items: center;
 }
-.drop_button__wrapper.is_visible img {
-    transform: rotate(90deg);
-}
+
 .drop_button__wrapper .data {
     visibility: hidden;
     opacity: 0;
@@ -684,3 +685,35 @@ form button[type=submit].load img {
 }
 /* END BUTTON SUBMIT */
 
+/* SCROLL TO TOP */
+.scroll_to_top {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background-color: var(--grey-light);
+    bottom: 24px;
+    right: 24px;
+    padding: 12px;
+    transition: var(--transition);
+    cursor: pointer;
+    visibility: hidden;
+    opacity: 0;
+}
+.scroll_to_top.active {
+    visibility: visible;
+    opacity: 1;
+}
+.scroll_to_top:hover {
+    padding: 8px;
+}
+.scroll_to_top img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    transform: rotate(270deg);
+}
+/* END SCROLL TO TOP */

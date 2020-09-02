@@ -193,9 +193,6 @@ ul.chosen_filters .chosen_filters_list.active {
     transition: var(--transition);
     z-index: 1000;
 }
-.home ul.filters li.is_visible img {
-    transform: rotate(90deg);
-}
 
 .home ul.filters li .data ul {
     max-height: 360px;

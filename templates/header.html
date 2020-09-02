@@ -30,7 +30,7 @@
     </nav>
     <div class="logo">
         <a href="/">
-            <img src="{% static 'img/logo.png' %}" alt="logo">
+            <img src="{{ front_files.logo.url }}" alt="logo">
         </a>
     </div>
     <div class="actions">
@@ -77,7 +77,7 @@
                 
             </div>
         </div>
-        <a href="viber://add?number=+380930403614" class="viber_icon">
+        <a href="viber://chat?number={{ front_files.phone }}" class="viber_icon">
             <img src="{% static 'img/ico/viber.png' %}" alt="viber">
         </a>
     </div>
