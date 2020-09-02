@@ -7,7 +7,6 @@ if (swiperBanner) {
     autoplay: true,
     autoplay: {
       delay: 5000,
-      disableOnInteraction: true,
     },
     pagination: {
       el: '.swiper-pagination',
