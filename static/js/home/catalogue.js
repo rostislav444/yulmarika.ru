@@ -28,6 +28,7 @@
     } else {
       loadMoreButton.classList.add('disabled')
     }
+    
   }
 
   for (let input of productColumns) {
@@ -148,9 +149,6 @@
     if (loadMoreButton) {
       loadMoreButton.onclick = () => { loadMore() }
     }
-    window.scroll({top: scrollPosition,  behavior: 'smooth' });
-    
-
   }
 
 
@@ -188,11 +186,14 @@
   function addMoreProducts(response) {
     response = JSON.parse(response)
     productsList.innerHTML += nunjucks.renderString(prductTpl, response)
+    window.scroll({top: lastScrollPosition});
+    
     preloader.classList.remove('active')
     totalPages.innerHTML = response['pages']
     if (response['page'] != undefined) { curentPage.innerHTML = response['page'] }
     upadateQTY(response['more'])
-    window.scroll({top: lastScrollPosition,  behavior: 'smooth' });
+    makeBigNum()
+    
   }
 
 
@@ -209,13 +210,15 @@
 
 
   function loadMore() {
+    lastScrollPosition = window.scrollY
     let url = catalogueURL()
     let data = GetFilterData()
     data['display'] = document.querySelectorAll('.product__wrapper').length
     data['page'] = parseInt(curentPage.innerHTML) + 1
     console.log(data['page']);
     preloader.classList.add('active')
-    lastScrollPosition = window.scrollY
+    
+    
     xhrOnLoad('POST', url, data=JSON.stringify(data), addMoreProducts)
   } if (loadMoreButton) {
     loadMoreButton.onclick = () => { loadMore() }
