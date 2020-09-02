@@ -16,6 +16,8 @@
   // PRICE INPUTS
   const maxPriceInput = document.querySelector('.max_price_input')
   const minPriceInput = document.querySelector('.min_price_input')
+
+  var lastScrollPosition = 0
   
   function upadateQTY(more=undefined) {
     ProductsLoaded = document.querySelectorAll('.product__wrapper').length
@@ -190,6 +192,7 @@
     totalPages.innerHTML = response['pages']
     if (response['page'] != undefined) { curentPage.innerHTML = response['page'] }
     upadateQTY(response['more'])
+    window.scroll({top: lastScrollPosition,  behavior: 'smooth' });
   }
 
 
@@ -212,6 +215,7 @@
     data['page'] = parseInt(curentPage.innerHTML) + 1
     console.log(data['page']);
     preloader.classList.add('active')
+    lastScrollPosition = window.scrollY
     xhrOnLoad('POST', url, data=JSON.stringify(data), addMoreProducts)
   } if (loadMoreButton) {
     loadMoreButton.onclick = () => { loadMore() }
