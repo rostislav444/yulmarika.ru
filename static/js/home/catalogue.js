@@ -137,7 +137,11 @@
     productsList.innerHTML = nunjucks.renderString(prductTpl, response)
     productsQty.innerHTML = response['products_len']
     totalPages.innerHTML = response['pages']
-    if (response['page'] != undefined) { curentPage.innerHTML = response['page'] }
+    if (response['page'] != undefined) { 
+      curentPage.dataset.value = response['page'] 
+      curentPage.value = response['page'] 
+      curentPage.max = response['pages']
+    }
     preloader.classList.remove('active')
     selectAllButtonupdate()
     PriceFilterUpdate(response)
@@ -190,7 +194,11 @@
     
     preloader.classList.remove('active')
     totalPages.innerHTML = response['pages']
-    if (response['page'] != undefined) { curentPage.innerHTML = response['page'] }
+    if (response['page'] != undefined) { 
+      curentPage.dataset.value = response['page'] 
+      curentPage.value = response['page'] 
+      curentPage.max = response['pages']
+    }
     upadateQTY(response['more'])
     makeBigNum()
     
@@ -199,7 +207,7 @@
 
   for (let btn of paginationButtons) {
     btn.onclick = () => {
-      let page = parseInt(curentPage.innerHTML)
+      let page = parseInt(curentPage.dataset.value)
       if (btn.dataset.action == 'prev' && page > 1) {
         catalogueRequest({page : page - 1})
       } else if (btn.dataset.action == 'next' && page + 1 <= parseInt(totalPages.innerHTML)) {
@@ -208,13 +216,32 @@
     }
   } 
 
+  curentPage.oninput = () => {
+    let input = curentPage
+    let re = /[^0-9.]/g
+    input.value =  input.value.replace(re, '');
+  }
+
+  curentPage.onchange = () => {
+    let input = curentPage
+    let value = parseInt(input.value)
+    if (value >= input.min && value <= input.max) {
+      input.value = value
+    } else if (value > input.max) {
+        input.value = input.max
+    } else  {
+        input.value = input.min
+    }
+    catalogueRequest({page : input.value})
+  }
+
 
   function loadMore() {
     lastScrollPosition = window.scrollY
     let url = catalogueURL()
     let data = GetFilterData()
     data['display'] = document.querySelectorAll('.product__wrapper').length
-    data['page'] = parseInt(curentPage.innerHTML) + 1
+    data['page'] = parseInt(curentPage.dataset.value) + 1
     console.log(data['page']);
     preloader.classList.add('active')
     

@@ -4,6 +4,7 @@ from django.template import Template
 from apps.banner.models import Banner
 from apps.shop.models import Category, Product, Variant, WhoIntended, GiftReason, Color
 from apps.shop.serializers import ProductSeriaziler, WhoIntendedSeriaziler, GiftReasonSeriaziler, ColorSeriaziler, FilterSerializer
+from apps.filecodes.models import FileCodes
 from django.http import JsonResponse
 import json
 import time
@@ -85,8 +86,11 @@ def add_products():
    
 def home(request, category=None):
     # add_products()
-    page, on_page = 1, 12
-   
+    fk = FileCodes.objects.last()
+    page = 1
+    try: on_page = fk.showcase
+    except: on_page = 12
+
     context, fltr = {'selected' : {}}, {}
     sort_by = [
         {'key' : 'price',    'name' : 'По цене',           'arg' : '-price'},
@@ -160,7 +164,7 @@ def home(request, category=None):
                     products = products.order_by('-created')
         products = products.filter(**product_filter)
         products_len = len(products)
-        pages = math.ceil(products_len / 12)
+        pages = math.ceil(products_len / on_page)
      
         # Annonante selected filed for selected filter objects
         for fltr in context['filters']:
@@ -172,6 +176,8 @@ def home(request, category=None):
             ))
             fltr['objects'] = FilterSerializer(fltr['objects'].order_by('-selected'), many=True,).data
 
+        print('PAGE',data['page'])
+
         # Pagisntion / display products
         # if 'display' in data.keys():
         #     page = int(data['page'])
@@ -182,27 +188,27 @@ def home(request, category=None):
         if 'page' in data.keys():
             page = int(data['page'])
             context['page'] = page
-            pages = math.ceil(products_len / 12)
-            n = (int(data['page']) - 1) * 12
-            products = products[n:n + 12]
+            pages = math.ceil(products_len / on_page)
+            n = (int(data['page']) - 1) * on_page
+            products = products[n:n + on_page]
         else: 
-            products = products[:12]
+            products = products[:on_page]
 
 
-        context['more']  = True if products_len > page * on_page + len(products) - 12 else False
+        context['more']  = True if products_len > page * on_page + len(products) - on_page else False
         print(page, context['more'])
         
         context['products'] = json.loads(json.dumps(ProductSeriaziler(products, many=True).data))
         context['products_len'] = products_len
-        context['pages'] = math.ceil(products_len / 12)
+        context['pages'] = math.ceil(products_len / on_page)
         return JsonResponse(context)
 
 
     products_len = len(products)
     context['more']  = True if products_len > page * on_page else False
-    context['products'] = json.loads(json.dumps(ProductSeriaziler(products[:12], many=True).data))
+    context['products'] = json.loads(json.dumps(ProductSeriaziler(products[:on_page], many=True).data))
     context['products_len'] = products_len
-    context['pages'] = math.ceil(context['products_len'] / 12)
+    context['pages'] = math.ceil(context['products_len'] / on_page)
     context['categories'] = Category.objects.filter(product__variants__isnull=False).distinct()
     context['banners'] = Banner.objects.all()
     context['sort_by'] = sort_by

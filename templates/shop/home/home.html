@@ -10,6 +10,11 @@
 
 {% block content %}
 <div class="home">
+    {% if front_files.title|length %}
+    <div class="greeting">
+      <p>{{ front_files.title }}</p>
+    </div>
+    {% endif %}
     {% include 'shop/home/filters/home__banner.html' %}
     <div class="catalogue">
       <div class="content">
@@ -162,11 +167,7 @@
             </div>
           </div>
           <ul class="chosen_filters">
-            
-            <div class="chosen_filters_list">
-              
-
-            </div>
+            <div class="chosen_filters_list"></div>
           </ul>
         </div>
        
@@ -186,9 +187,8 @@
          
           <div class="pagination">
             <div class="pages">
-              <p class="current curent_page">1</p>
+              <input type="number" class="current curent_page" data-value="1" min="1" max="{{ pages }}" value="1">
               <p class="total total_pages">{{ pages }}</p>
-
             </div>
             <div class="buttons">
               <button data-action="prev" class="pagination_buton prev"><</button>

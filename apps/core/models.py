@@ -2,18 +2,20 @@ from django.db import models
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from django.utils.text import slugify
-from project import settings
 from django.utils import timezone
+from django.utils import timezone, dateformat
+from django.core.files.storage import default_storage
+from django.contrib.postgres.fields import JSONField
+from project import settings
+from project.local_settings import DATABASES
+import os, PIL, io, json, jsonfield
 from PIL import Image
 from unidecode import unidecode
-import os, PIL, io, json, jsonfield
-from django.utils import timezone, dateformat
+import copy
 import gzip
 from sh import pg_dump
-from project.local_settings import DATABASES
 import json
 import requests
-from django.contrib.postgres.fields import JSONField
 from zipfile import ZipFile 
 
 
@@ -142,12 +144,12 @@ class ModelImages(models.Model):
                         break
         
         if not self.id:
-            last_obj = type(self).objects.last()
+            last_obj = type(self).objects.order_by('pk').last()
             if last_obj:
-                self.id = last_obj.id + 1
+                self.id = last_obj.pk + 1
             else:
                 self.id = 1
-        
+
         name_parts.append('id'+str(self.id))
         return '__'.join(name_parts)
 
@@ -168,6 +170,9 @@ class ModelImages(models.Model):
 
     def save(self):
         for field in self._meta.get_fields():
+            def format_jpeg():
+                pass
+
             # Get image field
             if field.get_internal_type() == 'FileField' and field.attr_class.__name__ == 'ImageFieldFile':
                 image_field = getattr(self, field.name)
@@ -181,14 +186,25 @@ class ModelImages(models.Model):
                     dirpath = self.get_path()
                     filename = self.human_name(field.name)
                     filepath = dirpath + filename
-                    ext = image_field.name.split('.')[-1]
+                    ext = image_field.name.split('.')[-1].lower()
                     self.delete_old(thmbs, dirpath, filename)
 
                     thmbs = {}
-                    image = PIL.Image.open(image_field.file).convert("RGB")
-                    image_io = io.BytesIO()
-                    image.save(image_io, format='JPEG')
-                    image.close()
+                    
+                    if ext in ['jpg','jpeg']:
+                        image_io = io.BytesIO()
+                        image = PIL.Image.open(image_field.file).convert("RGB")
+                        image.save(image_io, format='JPEG')
+                        image.close()
+                    elif ext == 'png':
+                        image_io = io.BytesIO()
+                        image = PIL.Image.open(image_field.file).convert("RGBA")
+                        image.save(image_io, format='PNG')
+                        image.close()
+                    elif ext == 'gif':
+                        image_io = io.BytesIO(image_field.file.read())
+                    else:
+                        break
                   
                     image_field.delete(save=True)
                     super(ModelImages, self).save()
@@ -197,15 +213,21 @@ class ModelImages(models.Model):
 
                     setattr(image_field, 'name', filepath + '.' + ext)
                     
-                 
-                    for key, size in IMAGES_SIZES.items():
-                        if key == 'l':  path = filepath + '.' + ext
-                        else:           path = filepath + '_' + key + '.' + ext
-                        media_path = settings.MEDIA_ROOT + path
-                        image = PIL.Image.open(image_io)
-                        image.thumbnail((size, size), PIL.Image.ANTIALIAS)
-                        image.save(media_path)
-                        thmbs[key] = path
+                    if ext in ['jpg','jpeg','png']:
+                        for key, size in IMAGES_SIZES.items():
+                            if key == 'l':  path = filepath + '.' + ext
+                            else:           path = filepath + '_' + key + '.' + ext
+                            media_path = settings.MEDIA_ROOT + path
+                            image = PIL.Image.open(image_io)
+                            image.thumbnail((size, size), PIL.Image.ANTIALIAS)
+                            image.save(media_path)
+                            thmbs[key] = path
+                    elif ext == 'gif':
+                        for key, size in IMAGES_SIZES.items():
+                            path = filepath + '.' + ext
+                            media_path = settings.MEDIA_ROOT + path
+                            default_storage.save(media_path, image_io)
+                            thmbs[key] = path
                     setattr(self, thmbs_name, thmbs)
         super(ModelImages, self).save()
 
@@ -226,6 +248,7 @@ class ModelImages(models.Model):
         return data
              
     def pre_delete(self):
+        print('predelete')
         for field in self._meta.get_fields():
             if field.get_internal_type() == 'FileField' and field.attr_class.__name__ == 'ImageFieldFile':
                 image_field = getattr(self, field.name)
