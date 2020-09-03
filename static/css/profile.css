@@ -110,7 +110,11 @@
 .form ul {
     margin-top: 16px;
     display: flex;
+    flex-direction: column;
     justify-content: flex-start;
+}
+.form ul.gender {
+    flex-direction: row;
 }
 .form ul label {
     display: flex;
@@ -284,7 +288,7 @@
 .profile_adress .title {
     margin-bottom: 24px;
 }
-.profile_adress ul {
+.profile_adress > ul {
     max-width: 640px;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -292,12 +296,12 @@
     grid-row-gap: 24px;
     margin-top: 16px;
 }
-.profile_adress ul li label {
+.profile_adress > ul li label {
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
 }
-.profile_adress ul li label input {
+.profile_adress > ul li label input {
     margin-right: 16px;
 }
 .profile_adress .adress__form {

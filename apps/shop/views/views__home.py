@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.db.models import BooleanField
 from django.template import Template
 from apps.banner.models import Banner
+from apps.delivery.models import DeliveryCities
 from apps.shop.models import Category, Product, Variant, WhoIntended, GiftReason, Color
 from apps.shop.serializers import ProductSeriaziler, WhoIntendedSeriaziler, GiftReasonSeriaziler, ColorSeriaziler, FilterSerializer
 from apps.filecodes.models import FileCodes

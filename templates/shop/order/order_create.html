@@ -11,7 +11,7 @@
 <div class="order__header">
     <div class="content">
         <div class="order__header__back_to_cart">
-            <a href="{% url 'order:cart' %}">Моя орзина</a> 
+            <a href="{% url 'order:cart' %}"><img src="{% static 'img/ico/arrow.svg' %}" alt=""> Моя корзина</a> 
         </div>
         <div class="logo">
             <a href="/">
@@ -80,8 +80,8 @@
         <div class="total_table">
             <div class="total_save"></div>
             <div class="row">
-                <span class="title">Стоисомть товаров</span>
-                <span class="data "><span class="number big_num total_products_price initial_total_price_num">0</span> RUB</span>
+                <span class="title">Стоимость товаров</span>
+                <span class="data "><span class="number big_num total_products_price initial_total_price_num">{{ order.products_cost }}</span> RUB</span>
             </div>
             <div class="row">
                 <span class="title">Скидка по купону</span>
@@ -90,7 +90,7 @@
                 </span>
             </div>
             <div class="row">
-                <span class="title">Дотсавка</span>
+                <span class="title">Доставка</span>
                 <span class="data "><span class="number big_num delivery_chosen_price">0</span> RUB</span>
             </div>
             <div class="total row">
@@ -135,6 +135,7 @@
 
 {% block js %}
 <script>
+    const orderBtnWrp =         document.querySelector('.create_order_btn_wrapper')
     const deliveryAdressForm =     `{% include "shop/order/forms/delivery_adress_form.html" %}`
     const deliveryAdressList =     `{% include "shop/order/forms/delivery_adress_list.html" %}`
     const deliveryAdressPreview =  `{% include "shop/order/forms/delivery_adress_preview.html" %}`
@@ -147,7 +148,7 @@
     const deliveryAdressUrlGet =    "{% url 'delivery:get_adress' %}"
     const citySearchUrl =           "{% url 'core:search_city' %}"
 </script>
-<script src="{% static 'js/order/cart.js' %}"></script>
+
 <script src="{% static 'js/order/delivery.js' %}"></script>
 <script src="{% static 'lib/form_validation.js' %}"></script>
 <script src="{% static 'lib/popup.js' %}"></script>

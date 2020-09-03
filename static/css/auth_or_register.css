@@ -17,8 +17,12 @@
     width: 50%;
     float: left;
     min-height: calc(100vh - 65px);
-    
 }
+.auth_or_register .message {
+    margin-top: 0;
+    margin-bottom: 24px;
+}
+
 @media(max-width: 1240px) {
     .auth_or_register > div {
         width: 100%;

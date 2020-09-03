@@ -7,7 +7,7 @@
         <div class="social">
             <ul>
                 {% for file in front_files.icons.all %}
-                    <a class="social_link" href="{{ file.url }}">
+                    <a class="social_link" href="{{ file.url }}" aria-label="{{ file.name }}" data-microtip-position="top" role="tooltip">
                         <li>
                             <img src="{{ file.icon.url }}" alt="">
                         </li>

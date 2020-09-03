@@ -21,10 +21,18 @@
     align-items: center;
     height: 65px;
 }
-.order__header .content >  .order__header__back_to_cart {
+.order__header .content > .order__header__back_to_cart,
+.order__header .content > .order__header__back_to_cart a {
     display: flex;
     justify-content: flex-start;
     align-items: center;
+}
+
+.order__header .content > .order__header__back_to_cart a img {
+    transform: rotate(180deg);
+    width: 16px;
+    height: 16px;
+    margin-right: 12px;
 }
 
 .order__header .content > .order__header__security {

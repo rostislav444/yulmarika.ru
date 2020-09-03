@@ -141,6 +141,7 @@ class UserProfile(viewsets.ViewSet):
         }
         if request.method == 'POST':
             data = request.data
+            UserAdress.objects.filter(user=request.user).update(selected = False)
             if len(data['id']):
                 UserAdress.objects.filter(pk=int(data['id'])).update(
                     name =      data['name'],
@@ -151,6 +152,7 @@ class UserProfile(viewsets.ViewSet):
                     house =     data['house'],
                     apartment = data['apartment'],
                     add_info =  data['add_info'],
+                    selected = True,
                 )
             else:
                 user_adress = UserAdress(
@@ -163,6 +165,7 @@ class UserProfile(viewsets.ViewSet):
                     house =     data['house'],
                     apartment = data['apartment'],
                     add_info =  data['add_info'],
+                    selected = True,
                 )
                 user_adress.save()
             adress_list = UserAdress.objects.filter(user=request.user)

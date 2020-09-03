@@ -36,8 +36,9 @@ class Delivery(models.Model):
        
 
 class DeliveryCities(models.Model):
-    parent = models.ForeignKey(Delivery, on_delete=models.CASCADE, related_name="cities")
-    name = models.CharField(max_length=255, verbose_name="Название города")
+    parent =     models.ForeignKey(Delivery, on_delete=models.CASCADE, related_name="cities")
+    name =       models.CharField(max_length=255, verbose_name="Название города")
+    name_lower = models.CharField(max_length=255, editable=False)
 
     def __str__(self):
         return self.name
@@ -45,3 +46,7 @@ class DeliveryCities(models.Model):
     class Meta:
         verbose_name = "Город"
         verbose_name_plural = "Города"
+
+    def save(self):
+        self.name_lower = self.name.lower()
+        super(DeliveryCities, self).save()

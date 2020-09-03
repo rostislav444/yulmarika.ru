@@ -229,7 +229,7 @@ header .search_icon {
     align-items: center;
     height: 65px;
 }
-@media(max-width: 640px) {
+@media(max-width: 960px) {
     header .search_icon {
         display: none;
     }

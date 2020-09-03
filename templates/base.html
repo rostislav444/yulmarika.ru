@@ -83,7 +83,7 @@
             if (cartHeader) {
                 cartProductsList.innerHTML = nunjucks.renderString(cartProductTpl, data);
                 cartQuantity.innerHTML = data['quantity']
-                cartTotal.innerHTML = makeBigNum(data['total'])
+                cartTotal.innerHTML = BigNum(data['total'])
                 cartTotalInner.innerHTML = cartTotal.innerHTML
                 if (data['quantity'] > 0) {
                     cartHeader.classList.add('active')
@@ -147,22 +147,21 @@
 
         for (let form of SearchForm) {
             form.onsubmit = (e) => {
-               let input = form.querySelector('input')
-               console.log(input);
-               if (input.value.length == 0) {
-                e.preventDefault() 
-               }
+                let input = form.querySelector('input')
+                if (input.value.length == 0) {
+                    e.preventDefault() 
+                   
+                    if (headerSearch.classList.contains('active')) {
+                        headerSearch.classList.remove('active')
+                    } else {
+                        clickListener(headerSearch, 'active')
+                    }
+                   
+                }
             }
         }
 
-        if (headerSearch) {
-            headerSearch.onclick = () => {
-            if (headerSearch.classList.contains('active') == false) {
-                clickListener(headerSearch, 'active')
-            }
-        }
-        }
-      
+
      
 
         

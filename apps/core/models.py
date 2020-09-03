@@ -170,19 +170,20 @@ class ModelImages(models.Model):
 
     def save(self):
         for field in self._meta.get_fields():
-            def format_jpeg():
-                pass
 
             # Get image field
             if field.get_internal_type() == 'FileField' and field.attr_class.__name__ == 'ImageFieldFile':
                 image_field = getattr(self, field.name)
                 thmbs_name = field.name + '_thmb'
                 thmbs = getattr(self,thmbs_name)
+                if type(thmbs) == str:
+                    thmbs = json.loads(thmbs.replace("'",'"'))
                 # Check old image
-                try:    old_image_path = thmbs['l']
+                try: old_image_path = thmbs['l']
                 except: old_image_path = None
+
                 # If image changed
-                if image_field.name and image_field.name != old_image_path:
+                if image_field.name != None and image_field.name != old_image_path:
                     dirpath = self.get_path()
                     filename = self.human_name(field.name)
                     filepath = dirpath + filename

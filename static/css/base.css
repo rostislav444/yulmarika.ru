@@ -385,7 +385,7 @@ input[type=number] {
 .smart_input_label input:valid ~ span,
 .smart_input_label input:invalid ~ span {
     font-size: var(--h6);
-    top: -12px;
+    top: -10px;
     color: var(--grey);
 }
 .smart_input_label input:placeholder-shown {
@@ -518,19 +518,20 @@ input[type=number] {
 .form .col2 {
     grid-column: span 2;
 }
-.form .message {
+.message {
     display: none;
     padding: 8px 12px;
     background-color: rgba(219, 40, 20, 0.2);
     color: rgb(100, 10, 0);
-    margin: 24px 0;
+    margin: 8px 0;
+    max-width: 640px;
 }
-.form .message.success {
-    display: block;
+.message.success {
+    display: none;
     background-color: rgba(20, 219, 63, 0.2);
     color: rgb(0, 100, 38)
 }
-.form .message.active {
+ .message.active {
     display: block;
 }
 /* END FORM */

@@ -13,7 +13,7 @@ cart = [
 ]
 
 urlpatterns = [
-    re_path(r'^category:(?P<category>[0-9a-zA-Z\&]*)/$', views.home, name="home"),
+    re_path(r'^category:(?P<category>[0-9a-zA-Z\&-_]*)/$', views.home, name="home"),
     path('', views.home, name="home"),
     path('product/<slug>/<product_id>/<color>/<variant_id>/', views.product, name="product"),
     path('cart/', include(cart)),

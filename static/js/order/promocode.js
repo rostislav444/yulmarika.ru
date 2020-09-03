@@ -43,8 +43,13 @@ pomoCodeBtn = document.querySelector('.pomo_code_button')
 pomoCodeData = document.querySelector('.pomo_code_data')
 pomoCodeBtn.onclick = () => {
     if (pomoCodeData.classList.contains('is_visible') == false) {
+        pomoCodeBtn.classList.add('active')
         pomoCodeData.classList.add('is_visible')
+        pomoCodeData.style.height = pomoCodeData.scrollHeight + 'px'
+
     } else {
+        pomoCodeBtn.classList.remove('active')
         pomoCodeData.classList.remove('is_visible')
+        pomoCodeData.style.height = 0
     }
 }

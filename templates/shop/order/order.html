@@ -26,7 +26,7 @@
             <div class="row">
                 <span class="title">Скидка по купону</span>
                 <span class="data coupon_total_discount">
-                    <span>нет</span> 
+                    <span>{{ order.discount_cost }}</span> 
                     <img class="info" src="{% static 'img/ico/info_black.svg' %}" alt="i">
                 </span>
             </div>
@@ -61,14 +61,17 @@
             <div class="pomo_code_data">
                
                 <form class="form" action="{% url 'coupon:coupon' %}" method="POST" id="promocode_form">
-                    <p class="prormocode_messages message"></p>
-                    <div class="smart_input_label">
-                        <label for="promocode__input h6">
-                            <input id="promocode__input" type="text" required>
-                            <span>Введите промокод</span>
-                        </label>
+                    <div>
+                        <p class="prormocode_messages message"></p>
+                        <div class="smart_input_label">
+                            <label for="promocode__input h6">
+                                <input id="promocode__input" type="text" required>
+                                <span>Введите промокод</span>
+                            </label>
+                        </div>
+                        <button class="button" type="submit">Добавить <img src="/static/img/preloader.gif" alt="*"></button>
                     </div>
-                    <button class="button" type="submit">Добавить <img src="/static/img/preloader.gif" alt="*"></button>
+                    
                 </form>
             </div>
         </div>

@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from apps.user.serializers import UserAdressSerializer
 from apps.shop.cart import Cart
+from apps.order.models import Order
 from apps.delivery.models import Delivery
 from apps.coupon.models import Coupon
 from apps.user.models import UserAdress
@@ -92,25 +93,25 @@ class UserAdressViewSet(viewsets.ViewSet):
 
     def dlivery_price(self, request):
         session = request.session
+        if 'delivery' not in session.keys(): session['delivery'] = {}
+        delivery_data = { 
+            'ruspost' : [], 'cdek' : [] 
+        }
         cart = Cart(request).data()
         delivery = Delivery.objects.first()
-        if 'delivery' not in session.keys():
-            session['delivery'] = {}
-        delivery_data = { 
-            'ruspost' : [], 
-            'cdek' : [] 
-        }
-        if int(cart['quantity']) > 0:
+        order = Order.objects.filter(pk=session['order'] if 'order' in session.keys() else 0).first()
+        
+        if order:
             data = {
                 'key' : delivery.api_key,
                 'q' : 'getPrice',
                 'arrivalDoor' : True,
                 'derivalDoor' : True,
                 'startCity' : 'Челябинск',
-                'weight' : cart['weight'],
-                'width' :  cart['width'],
-                'height' : cart['height'],
-                'length' : cart['length'],
+                'weight' : int(order.weight),
+                'width' :  int(order.width),
+                'height' : int(order.height),
+                'length' : int(order.length),
             }
             response = None
             if request.user.is_authenticated:
@@ -128,6 +129,7 @@ class UserAdressViewSet(viewsets.ViewSet):
                     response = delivery.send_request(data)
 
             if response:
+                print(response)
                 try: print(response['err'])
                 except:
                     for item in response:

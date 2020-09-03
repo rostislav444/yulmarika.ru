@@ -55,10 +55,8 @@ class Cart(object):
                 num = n
                 break
         if num != None:
-            if update:
-                products[num]['quantity'] = quantity
-            else:
-                products[num]['quantity'] = int(products[num]['quantity']) + quantity
+            if update: products[num]['quantity'] = quantity
+            else:      products[num]['quantity'] = int(products[num]['quantity']) + quantity
         else:
             products.append({
                 'product_id' : product_id, 'variant_id' : variant_id, 'quantity' : quantity,
@@ -104,8 +102,7 @@ class Cart(object):
     
 
     def data(self):
-        data = {'products' : [], 'total' : 0, 'quantity' : 0, 'total_save' : 0, 
-                'length' : [], 'width' : [], 'height' : [], 'weight' : []}
+        data = {'products' : [], 'total' : 0, 'quantity' : 0, 'total_save' : 0 }
 
         for item in self:
             serializer = None
@@ -121,22 +118,10 @@ class Cart(object):
                 quantity = int(item['quantity'])
                 data['quantity'] += quantity
                 data['total'] += quantity * price
-                if old_price:
-                    data['total_save'] += quantity * old_price - data['total']
+                if old_price and old_price > price:
+                    data['total_save'] += (quantity * old_price) - (quantity * price)
+                    print('OLD PRICE', data['total_save'])
                 data['products'].append(serializer)
-                
-
-                # Box size params
-                for param in ['length','width','height','weight']:
-                    param_data = serializer[param]
-                    data[param] += [param_data for n in range(0, quantity)]
-                   
-
-        if len(self.cart['products']):
-            data['width'] =  max(data['width'])
-            data['height'] = max(data['height'])
-            data['length'] = sum(data['length'])
-            data['weight'] = sum(data['weight'])
 
         if 'coupon' in self.session.keys():
             return self.set_coupon(data, self.session['coupon'])

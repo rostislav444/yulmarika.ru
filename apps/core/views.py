@@ -13,6 +13,6 @@ class SearchViewSet(viewsets.ViewSet):
     def city(self, request):
         data = request.data
         name = data['name']
-        cities = DeliveryCities.objects.filter(name__istartswith=name).values_list('name', flat=True)[:6]
+        cities = DeliveryCities.objects.filter(name_lower__startswith=name.lower()).values_list('name', flat=True)[:6]
         return Response({'success' : True, 'data' : {'list' : cities, 'request' : data}}) 
         

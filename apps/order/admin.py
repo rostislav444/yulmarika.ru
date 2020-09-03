@@ -60,13 +60,13 @@ class OrderAdmin(admin.ModelAdmin):
         'email',
         'coupon',
         'adress',
-        'delivey_type',
+        'delivery_type',
         'delivery_cost',
     ]
     list_filter = [
         'status',
         'created',
-        'delivey_type',
+        'delivery_type',
     ]
 
 

@@ -4,6 +4,7 @@
 {% block profile %}
 <div class="profile_adress">
     <p class="title">Адреса</p>
+    <div class="message success">Данные обновлены</div>
     <ul class="profile_adress_list">
         
     </ul>
@@ -20,6 +21,8 @@
 {% block js %}
 <script src="{% static 'lib/form_validation.js' %}"></script>
 <script>
+    const profileAdress = document.querySelector('.profile_adress')
+    const profileAdressMsg = profileAdress.querySelector('.message')
     const adressFormDiv = document.querySelector('.adress__form')
     const adressFormTpl = `{% include 'user/forms/adress_form.html' %}`
     const adressListTpl = `{% include 'user/forms/adress_list.html' %}`
@@ -29,8 +32,8 @@
     var chooseAdress = undefined
 
     function AdressList(data) {
+        profileAdressMsg.classList.add('active')
         adress_list = data
-        console.log(adress_list);
         AdressListUpdate()
     }
 
@@ -42,12 +45,14 @@
         for (let adress of chooseAdress) {
             let num = parseInt(adress.dataset.num)
             adress.onchange = () => {
+                profileAdressMsg.classList.remove('active')
                 if (adress.checked && num != 0) {
                     adressFormDiv.innerHTML = nunjucks.renderString(adressFormTpl, {url : url, adress : adress_list[num - 1]} );
                 } else if (adress.checked && num == 0) {
                     adressFormDiv.innerHTML = nunjucks.renderString(adressFormTpl, {url : url, adress : null});
                 }
-                let form = document.querySelector('form')
+                let form = document.querySelector('form.profile_adress_form')
+                console.log(form);
                 formValidate(form)
             }
             if (adress.checked && num != 0) {

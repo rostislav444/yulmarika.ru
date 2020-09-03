@@ -13,7 +13,7 @@ class Order(models.Model):
         ('at_delivry', 'Передан на доставку'),
         ('delivring',  'Доставляется'),
         ('delivred',   'Доставлен'),
-        ('cenceled',   'Отменен'),
+        ('declined',   'Отменен'),
     ]
     status_old =    models.CharField(max_length=255, editable=False, blank=True, null=True, choices=ORDER_STATUS, verbose_name="Статус заказа")
     status =        models.CharField(max_length=255, choices=ORDER_STATUS, verbose_name="Статус заказа")
@@ -29,9 +29,14 @@ class Order(models.Model):
     email =         models.EmailField(max_length=50, blank=True, null=True, verbose_name="Email")
     coupon =        models.ForeignKey(Coupon, on_delete=models.PROTECT, blank=True, null=True, verbose_name="Скидочный купон")
     adress =        models.TextField(verbose_name="Адрес доставки")
-    comments =      models.TextField(verbose_name="Примечания к заказу")
-    delivey_type =  models.CharField(max_length=24, verbose_name="Способ доставки")
+    comments =      models.TextField(verbose_name="Примечания к заказу", blank=True, null=True)
+    delivery_type =  models.CharField(max_length=24, verbose_name="Способ доставки")
     track_number =  models.CharField(max_length=500, unique=True, null=True, blank=True, verbose_name="Трэк-номер")
+
+    weight =        models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name="Вес коробки")
+    width  =        models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name="Ширина коробки")
+    height  =       models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name="Высота коробки")
+    length  =       models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name="Длина коробки")
     
 
     class Meta:
@@ -50,7 +55,14 @@ class Order(models.Model):
     def order_satus(self):
         return dict(self.__class__.ORDER_STATUS).get(self.status)
 
+    
+
     def save(self):
+        if self.customer:
+            self.customer.orders.filter(status__in=['new','created']).update(status='declined')
+               
+
+
         if self.status_old != self.status and self.email:
             status = OrderedDict(self.ORDER_STATUS)[self.status] 
             kwargs = {

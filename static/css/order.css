@@ -198,18 +198,36 @@
     width: 100%;
     margin-top: 48px;
 }
+.order .order__form .drop_button.active img {
+    transform: rotate(270deg);
+}
 .order .order__form .pomo_code_data {
-    margin-top: 24px;
-    display: none;
-}
-.order .order__form .pomo_code_data.is_visible {
+    position: relative;
     display: grid;
+    height: 0;
+    overflow-y: hidden;
+    transition: var(--transition);
 }
+
 .order .order__form .pomo_code_data form {
+    margin-top: 32px;
+}
+.order .order__form .pomo_code_data form div {
     display: grid;
     grid-template-columns: 1fr 120px;
     grid-gap: 16px;
 }
+.order .order__form .pomo_code_data form div .smart_input_label {
+    width: 100%;
+    display: block;
+    margin-top: 8px;
+}
+
+.order .order__form .pomo_code_data form div label {
+    
+    width: 100%;
+}
+
 
 .order .order__form .pomo_code form button {
     color: black;
@@ -253,7 +271,7 @@
 
 /* PAY TYPES */
 .pay_types {
-    margin-top: 48px;
+    margin-top: 24px;
 }
 .pay_types img {
     margin-top: 12px;
@@ -294,8 +312,9 @@
     }
     .order .order__main,
     .order .order__form {
-        padding: 48px;
+        padding: 48px var(--content-padding);
     }
+   
    
 }
 
@@ -316,3 +335,4 @@
 .coupon_total_discount.active * {
     color: blue;
 }
+
