@@ -9,6 +9,8 @@ function promoCodeField(data, field) {
             prormoCodeMessages.classList.add('active')
             if (data['success'] == true) {
                 prormoCodeMessages.classList.add('success')
+            } else {
+                prormoCodeMessages.classList.remove('success')
             }
         }
     } else {
@@ -46,10 +48,17 @@ pomoCodeBtn.onclick = () => {
         pomoCodeBtn.classList.add('active')
         pomoCodeData.classList.add('is_visible')
         pomoCodeData.style.height = pomoCodeData.scrollHeight + 'px'
+        setTimeout(function() {
+            pomoCodeData.style.height = 'auto'
+        }, 500);
 
     } else {
+        pomoCodeData.style.height = pomoCodeData.scrollHeight + 'px'
         pomoCodeBtn.classList.remove('active')
         pomoCodeData.classList.remove('is_visible')
-        pomoCodeData.style.height = 0
+        setTimeout(function() {
+            pomoCodeData.style.height = 0
+        }, 100);
+        
     }
 }

@@ -718,3 +718,52 @@ form button[type=submit].load img {
     transform: rotate(270deg);
 }
 /* END SCROLL TO TOP */
+
+/* RICHTEXT */
+.richtext * {
+    color: var(--grey);
+}
+.richtext strong {
+    font-weight: 800;
+}
+.richtext h1 {
+    margin-bottom: 24px;
+    font-weight: 800;
+}
+.richtext h2 {
+    margin: 24px 0;
+    font-weight: 600;
+}
+.richtext p {
+    line-height: 1.65;
+    
+    margin-bottom: 24px
+}
+.richtext p:last-child {
+    margin-bottom: 0px
+}
+.richtext ul {
+    display: grid;
+    grid-template-columns: 1fr !important;
+    grid-gap: 12px;
+    padding-left: 24px;
+    padding-bottom: 24px;
+}
+.richtext ul li {
+    position: relative;
+    line-height: 1.75;
+    font-size: var(--h5);
+}
+.richtext ul li::before {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 6px;
+    height: 6px;
+    left: 0;
+    margin-top: 8px;
+    margin-left: -24px;
+    background-color: var(--clr-1);
+    border-radius: 50%;
+}
+/* END RICHTEXT */

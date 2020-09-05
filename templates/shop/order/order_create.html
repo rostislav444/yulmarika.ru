@@ -85,8 +85,15 @@
             </div>
             <div class="row">
                 <span class="title">Скидка по купону</span>
-                <span class="data coupon_total_discount">
-                    <span>нет</span> 
+                    {% if order.discount_cost %}
+                        <span class="data coupon_total_discount active">
+                            <span>{{ order.discount_cost }} RUB</span>
+                        </span>
+                    {% else %}
+                        <span class="data coupon_total_discount">
+                            <span>нет</span>
+                        </span>
+                    {% endif %} 
                 </span>
             </div>
             <div class="row">
@@ -101,7 +108,7 @@
                 </div>
                 <span class="data bold h4">
                     <span class="number big_num total_price_with_delivery total_price_num">0</span>
-                    <span class="currency">руб</span>
+                    <span class="currency">rub</span>
                 </span>
             </div>
             <div class="create_order_btn_wrapper disabled tooltip">
@@ -110,7 +117,6 @@
                     <button class="button h4 bold create_order_btn">Перейти к оформлению</button>
                 </a>
             </div>
-            
         </div>
         <div class="products_list order__products_list">
             <!-- JS insert products here -->
@@ -118,10 +124,10 @@
         <div class="pay_types">
             <img src="{% static 'img/pay_types.png' %}" alt="Pay types">
             <ul class="h6 pay_rules">
-                <li>Минимальная сумма заказа - 500 руб.</li>
-                <li>Бесплатная доставка для заказов от 5000 руб</li>
+                <li>Минимальная сумма заказа - 500 RUB</li>
+                <li>Бесплатная доставка для заказов от 5000 rub</li>
             </ul>
-            <p class="pay_note">Выбор способа и расчет стоимости доставки, производится во время оформления заказа</p>
+            <p class="pay_note">Выбор способа и расчет стоимости доставки производится во время оформления заказа.</p>
         </div>
     </div>
 </div>

@@ -21,11 +21,13 @@
       <p class="title">Цвет</p>
       
       <div class="colors">
-        {% for color in product.variants.all %}
+        {% for color in product.get_variants %}
           <a {% if color.pk == variant.pk %}class="active"{% endif %} 
-            aria-label="{{ color.color.name }}" data-microtip-position="bottom" role="tooltip"
+            aria-label="{{ color.color.name }}" 
+            data-microtip-position="bottom" role="tooltip"
             href="{{color.get_absolute_url }}" 
-            style="background-color: {{ color.color.hex }};"></a>
+            style="{% if color.color.image %}background-image: url({{ color.color.imgs.image.xs }}){% else %}background-color: {{ color.color.hex }}{% endif %};">
+          </a>
         {% endfor %}
       </div>
     </div>

@@ -46,10 +46,12 @@ def imgView(self, fieldname, obj=None):
     return '-'
 
 
+
+
 class VariantInline(admin.TabularInline):
     model = Variant
-
-     # Product card
+    extra = 0
+    # Product card
     def photo_1_view(self, obj=None): return imgView(self, 'photo_1', obj)
     photo_1_view.short_description = ""
     def photo_2_view(self, obj=None): return imgView(self, 'photo_2', obj)
@@ -61,13 +63,14 @@ class VariantInline(admin.TabularInline):
 
     readonly_fields = ['photo_1_view','photo_2_view','photo_3_view','photo_4_view']
     fields = [
-       'color',
+       'first','color',
         ('photo_1','photo_1_view',),
         ('photo_2','photo_2_view',),
         ('photo_3','photo_3_view',),
         ('photo_4','photo_4_view',),
         'in_stock','hide'
     ]
+
    
 
 
@@ -77,22 +80,7 @@ class ProductAdmin(admin.ModelAdmin):
     change_list_template = 'admin/change_list.html'
 
     # If product have variant
-    def product_card(self, obj=None):
-        style = {
-            'position' : 'absolute',
-            'width' : '100%',
-            'height' : '100%',
-            'display' : 'block', 
-            'margin' : '0',
-            'pading' : '0',
-            'background-color' : '#cc1414',
-        }
-        if obj:
-            variants = obj.variants.all()
-            if len(variants) > 0:
-                style['background-color'] = '#14cc5a'
-        style = ' '.join([f"{k}:{v};" for k,v in style.items()])
-        return mark_safe(f"<div style='{style}'></div>")
+    def product_card(self, obj=None): return imgView(self, 'image', obj)
     product_card.short_description = 'Карточка товара'
     
     # Product card
@@ -116,6 +104,7 @@ class ProductAdmin(admin.ModelAdmin):
 
     search_fields = ['name','code']
     list_display = ['name','code','price','created','in_sell','is_popular','product_card']
+    list_display_links = ('name', 'product_card',)
     inlines = [VariantInline]
 
 

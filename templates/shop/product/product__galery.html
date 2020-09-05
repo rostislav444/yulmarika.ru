@@ -8,6 +8,15 @@
         <!-- Galery -->
         <div class="swiper-container slider galery ">
             <div class="swiper-wrapper">
+                {% if variant.first %}
+                    {% for field, image in product.imgs.items %}
+                        {% if image %}
+                            <div class="swiper-slide slide ">
+                                <img class="product_slider_image" src="{{ image.s }}" alt="">
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
                 {% if variant %}
                     {% for field, image in variant.imgs.items %}
                         {% if image %}
@@ -17,13 +26,7 @@
                         {% endif %}
                     {% endfor %}
                 {% endif %}
-                {% for field, image in product.imgs.items %}
-                    {% if image %}
-                        <div class="swiper-slide slide ">
-                            <img class="product_slider_image" src="{{ image.s }}" alt="">
-                        </div>
-                    {% endif %}
-                {% endfor %}
+               
             </div>
             <!-- Navigation -->
             <div class="home-banner-prev prev navigation arrow">
@@ -35,6 +38,13 @@
         </div>
         <!-- Thumbnails -->
         <div class="thumbs">
+            {% if variant.first %}
+                {% for field, image in product.imgs.items %}
+                    {% if image %}
+                        <div class="thumb" style="background-image: url({{ image.s }});"></div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
             {% if variant %}
                 {% for field, image in variant.imgs.items %}
                     {% if image %}
@@ -42,11 +52,7 @@
                     {% endif %}
                 {% endfor %}
             {% endif %}
-            {% for field, image in product.imgs.items %}
-                {% if image %}
-                    <div class="thumb" style="background-image: url({{ image.s }});"></div>
-                {% endif %}
-            {% endfor %}
+           
            
         </div>
     </div>

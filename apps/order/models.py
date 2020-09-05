@@ -82,12 +82,13 @@ class Order(models.Model):
 
 class OrderProduct(models.Model):
     parent =   models.ForeignKey(Order, on_delete=models.CASCADE, related_name="products")
-    product =  models.ForeignKey('shop.Product', on_delete=models.CASCADE, blank=True, null=True, related_name="orders")
+    product =  models.ForeignKey('shop.Product', on_delete=models.CASCADE, blank=True, null=True, related_name="orders", verbose_name="Продукт")
+    variant =  models.ForeignKey('shop.Variant', on_delete=models.PROTECT, blank=True, null=True, verbose_name="Вариант")
     name =     models.CharField(max_length=255, verbose_name="Название")
     code =     models.CharField(max_length=255, verbose_name="Артикул")
     quantity = models.PositiveIntegerField(verbose_name="Количесвто, шт", default=1, blank=False)
     price =    models.PositiveIntegerField(verbose_name="Цена за шт", null=True, blank=True)
-    color =    models.ForeignKey('shop.Variant', on_delete=models.SET_NULL, blank=True, null=True)
+    color =    models.ForeignKey('shop.Color', on_delete=models.PROTECT, blank=True, null=True, verbose_name="Цвет")
 
     class Meta:
         verbose_name = "Товар в заказе"

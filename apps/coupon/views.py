@@ -8,8 +8,6 @@ import json
 def coupon_activate(request, coupon):
     cart = Cart(request)
     cart_data = cart.data()
-    if 'coupon' in request.session.keys():
-        return JsonResponse({'success' : False, 'msg' : 'Купон уже активирован'})
     if coupon.expired:
         return JsonResponse({'success' : False, 'msg' : 'Срок действия купона истек'})
     if coupon.used:

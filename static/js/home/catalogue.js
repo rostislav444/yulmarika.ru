@@ -19,6 +19,8 @@
 
   var lastScrollPosition = 0
   
+
+
   function upadateQTY(more=undefined) {
     ProductsLoaded = document.querySelectorAll('.product__wrapper').length
     ProductsTotal = parseInt(document.querySelector('.catalogue_products_quantity_num').innerHTML)
@@ -54,11 +56,15 @@
           } 
           data[input.dataset.slug].push(input.dataset.id)
         } else if (input.type == 'radio') {
-          data[input.name] = input.dataset.key
+          if (input.dataset.key != 'default') {
+            data[input.name] = input.dataset.key
+          }
+          
         }
       } else if (input.type == 'number') {
-        if (parseInt(input.value) !== 0) {
-          data[input.dataset.slug] = input.value
+        if (input.value) {
+
+          data[input.dataset.slug] = parseInt(input.value)
         }
       }
     }
@@ -148,11 +154,11 @@
     setChosenFilters()
     upadateQTY(response['more'])
     makeBigNum()
-
     loadMoreButton = document.querySelector('.load_more_btn')
     if (loadMoreButton) {
       loadMoreButton.onclick = () => { loadMore() }
     }
+    changeImageOnHover()
   }
 
 
@@ -168,6 +174,12 @@
     if (categories.length) {
       url += 'category:' + categories.join('&') + '/'
     }
+    let filterData = GetFilterData()
+    let params = new URLSearchParams(filterData).toString()
+    if (params.length > 0) {
+      url += '?' + params
+    }
+    history.pushState({}, null, window.location.origin + url);
     return url
   }
 
@@ -286,3 +298,4 @@ if (clearFilters) {
     }
   }
 }
+setChosenFilters()

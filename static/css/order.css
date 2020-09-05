@@ -165,7 +165,7 @@
 }
 .order .order__form .total_table .row {
     display: grid;
-    grid-template-columns: 1fr 96px;
+    grid-template-columns: 1fr 140px;
     text-transform: uppercase;
 }
 .order .order__form .total_table .row .title {
@@ -192,8 +192,6 @@
     grid-template-columns: 1fr;
     grid-gap: 2px;
 }
-
-
 .order .order__form .drop_button {
     width: 100%;
     margin-top: 48px;
@@ -208,7 +206,6 @@
     overflow-y: hidden;
     transition: var(--transition);
 }
-
 .order .order__form .pomo_code_data form {
     margin-top: 32px;
 }
@@ -224,11 +221,8 @@
 }
 
 .order .order__form .pomo_code_data form div label {
-    
     width: 100%;
 }
-
-
 .order .order__form .pomo_code form button {
     color: black;
     background-color: rgba(0, 0, 0, 0);

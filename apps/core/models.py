@@ -176,6 +176,7 @@ class ModelImages(models.Model):
                 image_field = getattr(self, field.name)
                 thmbs_name = field.name + '_thmb'
                 thmbs = getattr(self,thmbs_name)
+                
                 if type(thmbs) == str:
                     thmbs = json.loads(thmbs.replace("'",'"'))
                 # Check old image

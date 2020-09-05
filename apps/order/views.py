@@ -42,82 +42,44 @@ def yandex_pay_confirm(total, description="Заказ"):
     return json.loads(payment.json())
 
 
-
-
-
 def save_order(request):
     cart = Cart(request)
-    cartData = cart.data()
-    if len(cartData['products']):
-        # rqstData = json.loads(request.body.decode('utf-8'))
-        # session = request.session
-
-        # delivery = {
-        #     "ruspost" : "Почта России",
-        #     "cdek" : "CDEK",
-        # }
-        # delivery_type = delivery[rqstData['delivery']]
-        # delivery_cost = session['delivery'][rqstData['delivery']]
-
-        try:    coupon = Coupon.objects.get(pk=int(session['coupon']))
+    cart_data = cart.data()
+    if len(cart_data['products']):
+        try:    coupon = Coupon.objects.get(pk=int(request.session['coupon']))
         except: coupon = None
-        
         order = Order(
             status = "new",
-            products_cost = cartData['total'],
-            discount_cost = cartData['coupon_discount'] if 'coupon_discount' in cartData else 0,
-            # delivery_cost = delivery_cost,
-            # delivery_type =  delivery_type,
+            products_cost = cart_data['total'],
+            discount_cost = cart_data['coupon_discount'] if 'coupon_discount' in cart_data else 0,
             coupon = coupon,
         )
-
-        if request.user.is_authenticated:
-            try:
-                adress = request.user.adress.get(selected=True)
-            except:
-                adress = request.user.adress.all()[0]
-            order.customer = request.user
-            order.customer_name = f'{adress.name} {adress.surname}'
-            order.phone = adress.phone
-            order.adress = f'{adress.city}, {adress.street} д.{adress.house} кв.{adress.apartment}'
-            order.comments = adress.add_info
-            
-        else:
-            adress = request.session['adress'][0]
-            order.customer = None
-            order.customer_name = f"{adress['name']} {adress['surname']}"
-            order.phone = adress['phone']
-            order.adress = f"{adress['city']}, {adress['street']} д.{adress['house']} кв.{adress['apartment']}"
-            order.comments = adress['add_info']
         order.save()
-
-        box = {
-            'width' : [], 'height' : [], 'weight' : [], 'length' : [], 
-        }        
-        products = 0
-        for item in cartData['products']:
+        box = {'width' : [], 'height' : [], 'weight' : [], 'length' : [], }        
+        for item in cart_data['products']:
+            product = Product.objects.get(pk=int(item['product_id']))
+            variant = Variant.objects.get(pk=int(item['variant_id']))
+            color =   variant.color if variant else None
+            
             product = OrderProduct(
                 parent =   order,
-                product =  Product.objects.filter(pk=item['product_id']).first(),
-                color =    Variant.objects.filter(pk=item['variant_id']).first(),
+                product =  product,
+                variant =  variant,
+                color =    color,
                 name =     item['name'],
                 price =    item['price'],
                 code =     item['code'],
                 quantity = item['quantity'],
             )
             product.save()
-            products += 1
-          
             for key in box.keys():
                 box[key].append(getattr(product.product, key))
-
-        if products > 0:
-            order.width =  max(box['width'])
-            order.height = max(box['height'])
-            order.length = sum(box['length'])
-            order.weight = sum(box['weight'])
-            order.save()
-            
+        # Calculate box size and weight
+        order.width =  max(box['width'])
+        order.height = max(box['height'])
+        order.length = sum(box['length'])
+        order.weight = sum(box['weight'])
+        order.save()
         cart.clear()
         request.session['order'] = order.pk
     return request.session['order'] if 'order' in request.session.keys() else None
@@ -139,6 +101,7 @@ def order(request):
         return render(request, 'shop/order/order.html')
     return redirect('/')
 
+
 def order_create(request):
     context = {'header' : False}
     order_pk = save_order(request)
@@ -152,6 +115,28 @@ def make_order(request):
     context = {}
     order = Order.objects.filter(pk=request.session['order'] if 'order' in request.session.keys() else 0).first()
     if order:
+        if request.user.is_authenticated:
+            order.customer = request.user
+            try:    adress = request.user.adress.get(selected=True)
+            except: adress = request.user.adress.all().first()
+            if adress:
+                order.customer_name = f'{adress.name} {adress.surname}'
+                order.phone = adress.phone
+                order.adress = f'{adress.city}, {adress.street} д.{adress.house} кв.{adress.apartment}'
+                order.comments = adress.add_info
+            else:
+                context['success'] = False
+                context['msg'] = "Адресов не найдено"
+                return JsonResponse(context)
+            
+        else:
+            adress = request.session['adress'][0]
+            order.customer = None
+            order.customer_name = f"{adress['name']} {adress['surname']}"
+            order.phone = adress['phone']
+            order.adress = f"{adress['city']}, {adress['street']} д.{adress['house']} кв.{adress['apartment']}"
+            order.comments = adress['add_info']
+
         session = request.session
         data = json.loads(request.body.decode('utf-8'))
         delivery = {"ruspost" : "Почта России", "cdek" : "CDEK"}

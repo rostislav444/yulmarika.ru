@@ -129,7 +129,8 @@ function set_delivery_price(input)  {
     if (delivery != undefined) {
         console.log(input.dataset.key);
         chosenPrice.innerHTML = delivery[input.dataset.key];
-        totalPiceWithDelivery.innerHTML = parseInt(totalProductsPrice.innerHTML) + parseInt(chosenPrice.innerHTML)
+        console.log(parseInt(totalProductsPrice.innerHTML),parseInt(chosenPrice.innerHTML));
+        totalPiceWithDelivery.innerHTML = parseInt(totalProductsPrice.innerHTML.replace(' ','')) + parseInt(chosenPrice.innerHTML.replace(' ',''))
     }
 }
 

@@ -15,6 +15,8 @@ class Delivery(models.Model):
         self.set_cities()
 
     def send_request(self, data):
+        data['arrivalDoor'] = False
+        data['derivalDoor'] = False
         url = '?'.join(['http://api.c6v.ru/', urlencode(data)])
         headers = {"Content-Type": "application/json",}
         response = requests.post(url=url, headers=headers)

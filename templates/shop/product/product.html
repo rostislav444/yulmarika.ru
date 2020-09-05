@@ -20,24 +20,24 @@
             
             <div class="product__info">
                 {% if product.description %}
-                <div class="description">
-                    <p class="title h4">Описание</p>
-                    <p class="text">{{ product.description }}</p>
+                <div class="description product__info__description">
+                    <p onclick="opendDescription(this)" class="title active h4"><span>Описание</span> <img src="{% static 'img/ico/arrow.svg' %}" alt=">"></p>
+                    <div class="text richtext">{{ product.description|safe }}</div>
                 </div>
                 {% endif %}
                 {% if product.preferences %}
-                <div class="preferences">
-                    <p class="title h4">Характеристики</p>
-                    <p class="text">{{ product.preferences }}</p>
+                <div class="preferences product__info__preferences">
+                    <p onclick="opendDescription(this)" class="title h4"><span>Характеристики</span> <img src="{% static 'img/ico/arrow.svg' %}" alt=">"></p>
+                    <div class="text richtext">{{ product.preferences|safe  }}</div>
                 </div>
                 {% endif %}
             </div>
         </div>
         {% include 'shop/product/product__actions.html' %}
     </div>
-    
-    {% include 'shop/product/product__recomendations.html' %}
-    
+    {% if recomendations|length %}
+        {% include 'shop/product/product__recomendations.html' %}
+    {% endif %}
     
 </div>
 {% include 'shop/product/product__added_to_cart.html' %}
@@ -120,4 +120,33 @@
     }
 </script>
 <script src="{% static 'lib/popup.js' %}"></script>
+<script>
+     function divStatus(parent, active=false) {
+        let title = parent.querySelector('.title')
+        let text = parent.querySelector('.text')
+        if (active) {
+            title.classList.add('active')
+            text.style.height = text.scrollHeight + 'px'
+        } else {
+            title.classList.remove('active')
+            text.style.height = 0
+        }
+    }
+    function opendDescription(obj) {
+        let parent = obj.parentNode
+        let block = parent.parentNode
+        
+        
+        if (obj.classList.contains('active')) {
+            divStatus(parent, active=false)
+        } else {
+            for (let div of block.children) {divStatus(div)}
+            divStatus(parent, active=true)
+            
+        }
+        
+    }
+
+
+</script>
 {% endblock %}

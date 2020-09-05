@@ -30,7 +30,7 @@
                   data-slug="{{ category.slug }}" 
                   data-id="{{ category.pk }}"
                 
-                  {% if category.slug in selected.categories %}checked=true{% endif %}>
+                  {% if category.slug in selected.categories or category.selected %}checked=true{% endif %}>
                   
                 <li data-id="{{ category.id }}">{{ category.name }} </li>
               </label>
@@ -49,6 +49,7 @@
           <div class="filters__outer">
             <div class="filters__wrapper">
               <div class="heading">
+                
                 <div class="actions">
                   <p>Фильтры</p> 
                   <p class="clear_filters">Очистить фильтры</p>
@@ -143,7 +144,10 @@
           
           <div class="view">
             <div class="products_qty">
-              <p class="catalogue_products_quantity">Товары: <span class="quantity catalogue_products_quantity_num">{{ products_len }}</span></p>
+              <p class="catalogue_products_quantity">
+                Товары: <span class="quantity catalogue_products_quantity_num">{{ products_len }}</span>
+                <span class="total_products_len"> из {{ total_products }}</span>
+              </p>
             </div>
             <div class="columns">
               <span>Вид:</span>

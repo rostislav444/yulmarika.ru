@@ -10,7 +10,7 @@ from project import settings
 import os, PIL, io, json
 from django.core.files.storage import FileSystemStorage
 from django.contrib.postgres.fields import JSONField
-
+from ckeditor.fields import RichTextField
 
 
 # Globals
@@ -28,10 +28,11 @@ class Category(NameSlug):
         verbose_name_plural = "Категории тоавров"
 
 
-class Color(NameSlug):
-    name =  models.CharField(max_length=300, blank=False, verbose_name="Название цвета")
-    image = models.ImageField(verbose_name="Фото цвета",  null=True, blank=True)
-    hex =   ColorField(verbose_name="Код цвета")
+class Color(NameSlug, ModelImages):
+    name =       models.CharField(max_length=300, blank=False, verbose_name="Название цвета")
+    image =      models.ImageField(blank=True, null=True, upload_to='', verbose_name="Фото цвета")
+    image_thmb = JSONField(editable=False, null=True, blank=True, default=dict)
+    hex =        ColorField(verbose_name="Код цвета")
 
     class Meta:
         ordering = ['name']
@@ -86,8 +87,8 @@ class Product(ModelImages):
     width =          models.PositiveIntegerField(verbose_name="Ширина (см)", null=True, blank=False)
     height =         models.PositiveIntegerField(verbose_name="Высота (см)", null=True, blank=False)
     weight =         models.PositiveIntegerField(verbose_name="Вес (см)",    null=True, blank=False)
-    description =    models.TextField(verbose_name="Описание", null=True, blank=True)
-    preferences =    models.TextField(verbose_name="Характеристики", null=True, blank=True)
+    description =    RichTextField(verbose_name="Описание", null=True, blank=True)
+    preferences =    RichTextField(verbose_name="Характеристики", null=True, blank=True)
     created =        models.DateTimeField(default=timezone.now, blank=True, null=True, verbose_name="Дата создания")
     updated =        models.DateTimeField(default=timezone.now, blank=True, null=True, verbose_name="Последнее изменение")
 
@@ -97,6 +98,9 @@ class Product(ModelImages):
 
     def __str__(self):
         return f'{self.name} - {self.code}'
+
+    def get_variants(self):
+        return self.variants.filter(hide=False, in_stock__gte=1)
 
     @property
     def get_absolute_url(self):
@@ -126,12 +130,13 @@ class Product(ModelImages):
 
 class Variant(ModelImages):
     parent =       models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="Продукт", related_name="variants")
+    first =        models.BooleanField(default=False)
     color =        models.ForeignKey(Color,   on_delete=models.PROTECT, blank=False, null=True, related_name="variants", verbose_name="Цвет")
     photo_1 =      models.ImageField(verbose_name="Фото 1")
     photo_1_thmb = JSONField(editable=False, null=True, blank=True, default=dict)
     photo_2 =      models.ImageField(verbose_name="Фото 2", null=True, blank=True)
     photo_2_thmb = JSONField(editable=False, null=True, blank=True, default=dict)
-    photo_3 =      models.ImageField(verbose_name="Фото 1", null=True, blank=True)
+    photo_3 =      models.ImageField(verbose_name="Фото 3", null=True, blank=True)
     photo_3_thmb = JSONField(editable=False, null=True, blank=True, default=dict)
     photo_4 =      models.ImageField(verbose_name="Фото 4", null=True, blank=True)
     photo_4_thmb = JSONField(editable=False, null=True, blank=True, default=dict)
@@ -139,8 +144,10 @@ class Variant(ModelImages):
     hide =     models.BooleanField(default=False)
 
     class Meta:
+        ordering = ['-first', 'color__name']
         verbose_name = "Цвет товара"
         verbose_name_plural = "Цвета товаров"
+       
 
     @property
     def get_absolute_url(self):
@@ -162,6 +169,9 @@ class Variant(ModelImages):
 
     def save(self):
         self.slug = self.make_slug
+        first = self.parent.variants.filter(first=True).first()
+        if first == None:
+            self.first = True
         super(Variant, self).save()
 
    

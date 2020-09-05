@@ -4,7 +4,15 @@
         {% for item in items %}
             <li>
                 <label class="checkbox">{{ item.name }}
-                    <input class="catalogue_filter__input" type="checkbox" data-label="{{ item.name }}" data-slug="{{ slug }}" data-id="{{ item.pk }}">
+                    <input 
+                        class="catalogue_filter__input" 
+                        type="checkbox" 
+                        data-label="{{ item.name }}" 
+                        data-slug="{{ slug }}" 
+                        data-id="{{ item.pk }}"
+                        {% if item.selected %}
+                            checked=true
+                        {% endif %}>
                     <span class="checkmark"></span>
                 </label>
             </li>
