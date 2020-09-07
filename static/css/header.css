@@ -102,6 +102,7 @@ header .actions .auth p {
 
 header .actions img {
     width: 65px;
+    min-width: 65px;
     height: 65px;
     padding: 16px;
     cursor: pointer;
@@ -251,6 +252,7 @@ header .search_icon button {
 
 header .search_icon.active input {
     display: block;
+    max-width: 120px;
 }
 header .search_icon button img {
     width: 100%;
@@ -258,7 +260,7 @@ header .search_icon button img {
     object-fit: contain;
     display: block;
     margin: 0;
-    padding: 6px;
+    padding: 8px;
 }
 header nav .data .close {
     display: none;

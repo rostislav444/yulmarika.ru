@@ -46,7 +46,7 @@ validation = {
         },
         msg : {
             re : 'Пароль имеет не верный формат',
-            length : 'Пароль не может быть меньше 6-ти символов латиницы или цифр', 
+            length : 'Пароль не может быть меньше 6-ти символов латиницы и цифр', 
         },
         replace : /[^0-9a-zA-ZА]/g
     },
@@ -104,8 +104,6 @@ function showMsg(input, errors=[]) {
             msg.innerHTML += err
             if (i < errors.length - 1) {
                 msg.innerHTML += ', '
-            } else {
-                msg.innerHTML += '.'
             }
         }
         msg.classList.add('active')

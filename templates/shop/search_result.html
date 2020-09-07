@@ -11,9 +11,9 @@
         <div class="content">
             <form class="search_form" action="{% url 'shop:search' %}" method="GET">
                 <p>Результатов: <span class="catalogue_products_quantity_num">{{ products_len }}</span></p>
-                <p class="h4 grey">Плиск по запросу:</p>
+                <p class="h4 grey">Поиск по запросу:</p>
                 <div class="actions">
-                    <input type="search" name="input" id="" value="{{ search_input }}">
+                    <input type="search" name="input" id="" maxlength="50" value="{{ search_input }}">
                     <button class="button" type="submit">Найти</button>
                 </div>
             </form>
@@ -31,15 +31,15 @@
                 </div>
                 {% if products_len > 12 %}
                 <div class="products_list__pagination">
-                    <button class="load_more_btn button">Показать еще</button>
+                    <button data-url="/search" class="load_more_btn button">Показать еще</button>
                     <div class="pagination">
                         <div class="pages">
-                            <p class="current curent_page">1</p>
-                            <p class="total total_pages">{{ pages }}</p>
+                          <input type="number" class="current curent_page" data-value="1" min="1" max="{{ pages }}" value="1">
+                          <p class="total total_pages">{{ pages }}</p>
                         </div>
                         <div class="buttons">
-                        <button data-action="prev" class="pagination_buton prev"><</button>
-                        <button data-action="next" class="pagination_buton next">></button>
+                          <button data-url="/search" data-action="prev" class="pagination_buton prev"><</button>
+                          <button data-url="/search" data-action="next" class="pagination_buton next">></button>
                         </div>
                     </div>
                 </div>

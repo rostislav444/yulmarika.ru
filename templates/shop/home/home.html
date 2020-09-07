@@ -19,7 +19,7 @@
     <div class="catalogue">
       <div class="content">
         <div class="categories">
-          <span>Выберите то, что именно интеренсно Вам:</span>
+          <span>Выберите то, что интересно вам:</span>
           <ul>
             {% for category in categories %}
               <label for="category_{{ category.pk }}">
@@ -207,14 +207,15 @@
 {% endblock %}
 
 {% block js %}
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-<script src="{% static 'lib/nunjuncks/nunjucks.js' %}"></script>
-<script src="{% static 'js/home/banner.js' %}"></script>
-<script src="{% static 'js/catalogue/catalogue_filters_ui.js' %}"></script>
 <script>
   const prductTpl = `{% include 'shop/catalogue/catalogue__product_tpl.html' %}`
   const filterTpl = `{% include 'shop/home/filters/filter_tpl.html' %}`
 </script>
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script src="{% static 'lib/nunjuncks/nunjucks.js' %}"></script>
+<script src="{% static 'js/home/banner.js' %}"></script>
+<script src="{% static 'js/catalogue/catalogue__filters_ui.js' %}"></script>
+<script src="{% static 'js/catalogue/catalogue__columns.js' %}"></script>
 <script src="{% static 'js/home/catalogue.js' %}"></script>
 <script src="{% static 'js/home/open_mobile_filters.js' %}"></script>
 {% endblock %}

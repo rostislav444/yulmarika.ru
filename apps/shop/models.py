@@ -11,25 +11,27 @@ import os, PIL, io, json
 from django.core.files.storage import FileSystemStorage
 from django.contrib.postgres.fields import JSONField
 from ckeditor.fields import RichTextField
-
+import re
 
 # Globals
 
 
 
 class Category(NameSlug):
-    name =  models.CharField(max_length=300, blank=False, unique=True, verbose_name="Название категории")
-    in_catalogue = models.BooleanField(default=False, verbose_name="Показывать на витрине по умолчанию")
+    name =            models.CharField(max_length=300, blank=False, unique=True, verbose_name="Название категории")
+    in_catalogue =     models.BooleanField(default=False, verbose_name="Показывать на витрине по умолчанию")
     in_recomendation = models.BooleanField(default=False, verbose_name="Предлагать в рекомендованные")
 
     class Meta:
         ordering = ['name']
         verbose_name = "Категория товара"
-        verbose_name_plural = "Категории тоавров"
+        verbose_name_plural = "Категории товаров"
+
+    
 
 
 class Color(NameSlug, ModelImages):
-    name =       models.CharField(max_length=300, blank=False, verbose_name="Название цвета")
+    name =       models.CharField(max_length=300, blank=False, unique=True, verbose_name="Название цвета")
     image =      models.ImageField(blank=True, null=True, upload_to='', verbose_name="Фото цвета")
     image_thmb = JSONField(editable=False, null=True, blank=True, default=dict)
     hex =        ColorField(verbose_name="Код цвета")
@@ -44,6 +46,8 @@ class Color(NameSlug, ModelImages):
 
 
 class WhoIntended(NameSlug):
+    name =  models.CharField(max_length=300, blank=False, unique=True, verbose_name="Название")
+
     class Meta:
         ordering = ['name']
         verbose_name = "Кому предназначен"
@@ -51,6 +55,8 @@ class WhoIntended(NameSlug):
 
 
 class GiftReason(NameSlug):
+    name =  models.CharField(max_length=300, blank=False, unique=True, verbose_name="Название")
+
     class Meta:
         ordering = ['name']
         verbose_name = "Повод для подарка"
@@ -58,6 +64,7 @@ class GiftReason(NameSlug):
 
 
 class ProductStatus(NameSlug):
+    name =  models.CharField(max_length=300, blank=False, unique=True, verbose_name="Название")
     hex =  ColorField(verbose_name="Код цвета", default="#000000") 
 
     class Meta:
@@ -73,20 +80,21 @@ class Product(ModelImages):
     slug =           models.SlugField(max_length=255, editable=False, null=True, blank=True)
     price =          models.PositiveIntegerField(verbose_name="Цена")
     old_price =      models.PositiveIntegerField(verbose_name="Прежняя цена", null=True, blank=True)
+    discount =       models.PositiveIntegerField(verbose_name="Размер скидки", null=True, blank=True)
     category =       models.ManyToManyField(Category,      verbose_name="Категория товарв",  related_name="product", blank=True)
     who_intended =   models.ManyToManyField(WhoIntended,   verbose_name="Кому предназначен", related_name="product", blank=True)
     gift_reason =    models.ManyToManyField(GiftReason,    verbose_name="Повод для подарка", related_name="product", blank=True)
     status =         models.ManyToManyField(ProductStatus, verbose_name="Статус товара",     related_name="product", blank=True)
     in_sell =        models.BooleanField(default=True, verbose_name="В продаже")
     is_popular =     models.BooleanField(default=False, verbose_name="Популярный")
-    image =          models.ImageField(blank=True, null=True, upload_to='', verbose_name="Карточка товара (основная)")
+    image =          models.FileField(blank=True, null=True, upload_to='', verbose_name="Карточка товара (основная)")
     image_thmb =     JSONField(editable=True, null=True, blank=True, default=dict)
-    add_image =      models.ImageField(blank=True, null=True, upload_to='', verbose_name="Карточка товара (дополнительная)")
+    add_image =      models.FileField(blank=True, null=True, upload_to='', verbose_name="Карточка товара (дополнительная)")
     add_image_thmb = JSONField(editable=True, null=True, blank=True, default=dict)
     length =         models.PositiveIntegerField(verbose_name="Длина (см)",  null=True, blank=False)
     width =          models.PositiveIntegerField(verbose_name="Ширина (см)", null=True, blank=False)
     height =         models.PositiveIntegerField(verbose_name="Высота (см)", null=True, blank=False)
-    weight =         models.PositiveIntegerField(verbose_name="Вес (см)",    null=True, blank=False)
+    weight =         models.PositiveIntegerField(verbose_name="Вес (кг)",    null=True, blank=False)
     description =    RichTextField(verbose_name="Описание", null=True, blank=True)
     preferences =    RichTextField(verbose_name="Характеристики", null=True, blank=True)
     created =        models.DateTimeField(default=timezone.now, blank=True, null=True, verbose_name="Дата создания")
@@ -103,6 +111,11 @@ class Product(ModelImages):
         return self.variants.filter(hide=False, in_stock__gte=1)
 
     @property
+    def get_discount(self):
+        if self.old_price > self.price:
+            return self.old_price - self.price
+        return 0
+
     def get_absolute_url(self):
         variant = self.variants.all().first()
         if variant:
@@ -112,8 +125,7 @@ class Product(ModelImages):
                 'color':       variant.color.slug, 
                 'variant_id' : variant.pk
             })
-        else:
-            return '/'
+        else: return '/'
 
 
     @property
@@ -121,10 +133,13 @@ class Product(ModelImages):
         return slugify(unidecode('-'.join([self.name, self.code])))
 
     def save(self):
+        if self.old_price < 0:
+            self.old_price = 0
+        self.discount = self.get_discount
         self.slug = self.make_slug
         self.updated = timezone.now()
         super(Product, self).save()
-    
+      
     
 
 
@@ -149,7 +164,6 @@ class Variant(ModelImages):
         verbose_name_plural = "Цвета товаров"
        
 
-    @property
     def get_absolute_url(self):
         return reverse('shop:product', kwargs={
             'slug' : self.parent.slug, 
@@ -169,10 +183,12 @@ class Variant(ModelImages):
 
     def save(self):
         self.slug = self.make_slug
-        first = self.parent.variants.filter(first=True).first()
-        if first == None:
-            self.first = True
         super(Variant, self).save()
+        if self.first == True:
+            self.parent.variants.exclude(pk=self.pk).update(first=False)
+        elif len(self.parent.variants.filter(first=True)) == 0:
+            self.first = True
+            super(Variant, self).save()
 
    
 

@@ -17,8 +17,7 @@ from sh import pg_dump
 import json
 import requests
 from zipfile import ZipFile 
-
-
+import re
 
 
 class BackUpDB(models.Model):
@@ -96,6 +95,8 @@ class NameSlug(models.Model):
         return self.name
 
     def save(self):
+        self.name = re.sub('[^0-9a-zA-Zа-яА-Я -_,.]', '', self.name) 
+        print(self.name)
         self.slug = slugify(unidecode(self.name))
         super(NameSlug, self).save()
 
@@ -155,11 +156,11 @@ class ModelImages(models.Model):
 
 
     def delete_old(self, thmbs, dirpath, filename):
-        for address, dirs, files in os.walk(settings.MEDIA_ROOT + dirpath):
-            for file in files:
-                if filename in file:
-                    try: os.remove(address+file)
-                    except: pass
+        # for address, dirs, files in os.walk(settings.MEDIA_ROOT + dirpath):
+        #     for file in files:
+        #         if filename in file:
+        #             try: os.remove(address+file)
+        #             except: pass
         if thmbs:
             if type(thmbs) == str:
                 thmbs = json.loads(thmbs.replace("'", '"'))
@@ -172,7 +173,8 @@ class ModelImages(models.Model):
         for field in self._meta.get_fields():
 
             # Get image field
-            if field.get_internal_type() == 'FileField' and field.attr_class.__name__ == 'ImageFieldFile':
+            if field.get_internal_type() == 'FileField':
+                print('FIELD', field.name)
                 image_field = getattr(self, field.name)
                 thmbs_name = field.name + '_thmb'
                 thmbs = getattr(self,thmbs_name)
@@ -181,9 +183,13 @@ class ModelImages(models.Model):
                     thmbs = json.loads(thmbs.replace("'",'"'))
                 # Check old image
                 try: old_image_path = thmbs['l']
-                except: old_image_path = None
+                except: 
+                    try: old_image_path = thmbs['main']
+                    except: old_image_path = None
 
                 # If image changed
+               
+                
                 if image_field.name != None and image_field.name != old_image_path:
                     dirpath = self.get_path()
                     filename = self.human_name(field.name)
@@ -203,12 +209,12 @@ class ModelImages(models.Model):
                         image = PIL.Image.open(image_field.file).convert("RGBA")
                         image.save(image_io, format='PNG')
                         image.close()
-                    elif ext == 'gif':
+                    elif ext in ['gif','mp4']:
                         image_io = io.BytesIO(image_field.file.read())
                     else:
                         break
                   
-                    image_field.delete(save=True)
+                    image_field.delete(save=False)
                     super(ModelImages, self).save()
 
                     image_field = getattr(self, field.name)
@@ -224,12 +230,22 @@ class ModelImages(models.Model):
                             image.thumbnail((size, size), PIL.Image.ANTIALIAS)
                             image.save(media_path)
                             thmbs[key] = path
-                    elif ext == 'gif':
+                        thmbs['ext'] = ext
+                    elif ext in ['gif']:
+                        # Main image 
+                        main_path = filepath + '.' + ext
+                        default_storage.save(settings.MEDIA_ROOT +  main_path, image_io)
+                        thmbs['main'] = main_path
+                        preview_path = filepath + '_preview.' + ext
+                        thmbs['preview'] = preview_path
+                        image = PIL.Image.open(image_io)
+                        image.thumbnail((2000, 2000), PIL.Image.ANTIALIAS)
+                        image.save(settings.MEDIA_ROOT + preview_path)
                         for key, size in IMAGES_SIZES.items():
-                            path = filepath + '.' + ext
-                            media_path = settings.MEDIA_ROOT + path
-                            default_storage.save(media_path, image_io)
-                            thmbs[key] = path
+                            thmbs[key] = main_path
+                       
+                        thmbs['ext'] = ext
+
                     setattr(self, thmbs_name, thmbs)
         super(ModelImages, self).save()
 

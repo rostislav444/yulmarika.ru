@@ -38,10 +38,15 @@ def imgView(self, fieldname, obj=None):
             thmbs = getattr(obj, fieldname + '_thmb')
             if thmbs is not None and type(thmbs) is not dict:
                 thmbs = json.loads(thmbs)
-            if thmbs.get('s'):
+            if 's' in thmbs.keys():
                 url =  settings.MEDIA_URL + thmbs.get('s')
-                img = mark_safe("""<img object-fit: cover; object-position: center; border: 1px solid #ededed;" 
+                img = mark_safe("""<img style="object-fit: cover; object-position: center; border: 1px solid #ededed;" 
                 src="{url}" width="{width}" height={height} />""".format(url=url, height=120, width=90))
+                return img
+            elif 'main' in thmbs.keys():
+                url =  settings.MEDIA_URL + thmbs.get('main')
+                img = mark_safe("""<img style="object-fit: cover; object-position: center; border: 1px solid #ededed;" 
+                src="{url}" width="{width}" height={height} />""".format(url=url, height=120, width=120))
                 return img
     return '-'
 

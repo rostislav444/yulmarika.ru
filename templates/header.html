@@ -15,7 +15,7 @@
                 {% endfor %}
                 <li class="search">
                     <form class="search_form" action="{% url 'shop:search' %}" method="GET">
-                        <input type="search" name="input" id="header_search_input" placeholder="Поиск">
+                        <input type="search" name="input" id="header_search_input" maxlength="50" placeholder="Поиск">
                         <button type="submit">
                             <img src="{% static 'img/ico/search.svg' %}" alt="search" id="header_search_button"  >
                         </button>
@@ -38,7 +38,7 @@
             {% if user.is_authenticated %}
                 <a href="{% url 'user:profile_orders' %}" class="auth">
                     <p>{{ user.name }}</p>
-                    <img class="user_icon" src="{% static 'img/ico/user.svg' %}" alt="user">
+                    <img class="user_icon" src="{% static 'img/ico/user_authenticated.svg' %}" alt="user">
                 </a>
             {% else %}
                 <a href="{% url 'user:login' %}" class="auth">
@@ -48,9 +48,9 @@
             {% endif %}
             
         </div>
-      
+        
         <form class="search_icon search_form" id="header_search_form" action="{% url 'shop:search' %}" method="GET">
-            <input type="search" name="input" id="header_search_input" placeholder="Поиск">
+            <input type="search" name="input" id="header_search_input" maxlength="50" placeholder="Поиск">
             <button type="submit">
                 <img src="{% static 'img/ico/search.svg' %}" alt="search" id="header_search_button">
             </button>

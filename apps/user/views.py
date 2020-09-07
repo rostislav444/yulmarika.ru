@@ -59,12 +59,9 @@ class UserViewSet(viewsets.ViewSet):
                 if user is not None:
                     login(request, user)
                 
-                return Response({'success' : True,  'msg' : 'Вы зарегестрированы в системе', 'redirect' : '/'})
+                return Response({'success' : True,  'msg' : 'Вы зарегистрированы в системе', 'redirect' : '/'})
             except:
                 return Response({'success' : False, 'msg' : 'Произошла ошибка'})
-
-
-
 
 
 

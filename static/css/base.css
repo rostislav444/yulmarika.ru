@@ -515,8 +515,20 @@ input[type=number] {
     width: 100%;
     margin: 0;
 }
+
 .form .col2 {
     grid-column: span 2;
+}
+
+@media(max-width: 960px) {
+    .form .data {
+        grid-template-columns: repeat(1, 1fr);
+        grid-row-gap: 32px;
+    }
+    
+    .form .col2 {
+        grid-column: span 1;
+    }
 }
 .message {
     display: none;
@@ -681,9 +693,7 @@ form button[type=submit].load img {
     display: block;
 } 
 
-.num, .number {
-    margin-right: 4px;
-}
+
 /* END BUTTON SUBMIT */
 
 /* SCROLL TO TOP */

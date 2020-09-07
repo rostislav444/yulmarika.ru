@@ -5,7 +5,9 @@
     
     <div class="product">
       <a href="{{ product.url }}" class="image product_image">
+         
           {% if product.add_image.s %}
+          
             <img class="product_image_main"      src="{{ product.image.s }}" alt="">
             <img class="product_image_secondary" src="{{ product.add_image.s }}" alt="">
           {% else %} 

@@ -11,7 +11,7 @@
    
         <div class="auth">
            
-                <p class="h3 title">Уже зарегестрированы?</p>
+                <p class="h3 title">Уже зарегистрированы?</p>
                 <form class="form" id="form_auth" action="{% url 'user:auth' %}" method="POST" novalidate>
                     
                     <div class="message col2"></div>
@@ -88,7 +88,7 @@
                             
                         </div>
                         <button type="submit" class="col2 button h4 bold">Создать аккаунт <img src="/static/img/preloader.gif" alt="*"></button>
-                        <p class="center col2">Нажимая на кнопку Создать аккаунт, Вы соглашаетесь с <a class="bold" href="/">условия и положениями</a></p>
+                        <p class="center col2">Нажимая на кнопку Создать аккаунт, Вы соглашаетесь с <a class="bold" href="{% url 'pages:page' 'usloviia-i-polozheniia' %}">условия и положениями</a></p>
                     </div>
                     
                 </form>

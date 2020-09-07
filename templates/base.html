@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
     <link rel="stylesheet" href="{% static 'css/colors.css' %}">
     <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/microtip/microtip.css">
     <link rel="stylesheet" href="{% static 'css/footer.css' %}">
     {% block links %}
     {% endblock %}
@@ -150,13 +151,13 @@
                 let input = form.querySelector('input')
                 if (input.value.length == 0) {
                     e.preventDefault() 
-                   
+                   if (form == headerSearch) {
                     if (headerSearch.classList.contains('active')) {
                         headerSearch.classList.remove('active')
                     } else {
                         clickListener(headerSearch, 'active')
                     }
-                   
+                   }
                 }
             }
         }

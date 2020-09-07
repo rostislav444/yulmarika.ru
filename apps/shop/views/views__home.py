@@ -80,7 +80,6 @@ def add_products():
 
    
 def home(request, category=None):
-    # add_products()
     page = 1
     try: on_page = FileCodes.objects.last().showcase
     except: on_page = 12
@@ -182,6 +181,8 @@ def home(request, category=None):
             products = products.order_by('-created')
         elif sort_by_key == 'popular':
             products = products.order_by('-is_popular')
+        elif sort_by_key == 'discount':
+            products = products.order_by('-discount')
     
     products_len = len(products)
     pages = math.ceil(products_len / on_page)
@@ -211,7 +212,7 @@ def home(request, category=None):
     context['products'] = json.loads(json.dumps(ProductSeriaziler(products, many=True).data))
     context['pages'] = math.ceil(products_len / on_page)
     context['more']  = True if products_len > page * on_page else False
-    print(context['more'], products_len,  page * on_page)
+ 
 
     if request.method == 'GET':
         context['banners'] = Banner.objects.all()

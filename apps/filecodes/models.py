@@ -12,9 +12,9 @@ class FileField(models.FileField):
 
 
 class FileCodes(models.Model):
-    logo =      FileField(upload_to="file_codes", verbose_name="Логотип сайта")
-    favicon =   FileField(upload_to="file_codes", verbose_name="Fav icon")
-    css =       FileField(upload_to="file_codes",  verbose_name="Файлы стилей")
+    logo =      FileField(upload_to="file_codes", blank=True, null=True, verbose_name="Логотип сайта")
+    favicon =   FileField(upload_to="file_codes", blank=True, null=True, verbose_name="Fav icon")
+    css =       FileField(upload_to="file_codes", blank=True, null=True,  verbose_name="Файлы стилей")
     showcase =  models.PositiveIntegerField(default=12, blank=False,  verbose_name="Колличесвто товаров на витрине")
     recomend =  models.PositiveIntegerField(default=24, blank=False,  verbose_name="Колличесвто товаров в блоке рекомендуем")
     phone =     models.CharField(max_length=255)

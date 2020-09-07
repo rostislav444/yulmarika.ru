@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
     <link rel="stylesheet" href="{% static 'css/product.css' %}">
-    <link rel="stylesheet" href="https://unpkg.com/microtip/microtip.css">
+
 
 {% endblock %}
 
@@ -148,5 +148,14 @@
     }
 
 
+</script>
+<script>
+    for (let play of document.querySelectorAll('.play')) {
+        play.onclick = () => {
+            let img = play.parentElement.querySelector('.product_slider_image')
+            img.src = img.dataset.src
+            play.remove()
+        }
+    }
 </script>
 {% endblock %}
