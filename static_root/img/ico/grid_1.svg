@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <defs>
+        <style>
+            .prefix__cls-1,.prefix__cls-3{fill:none}.prefix__cls-1{stroke:#040405;stroke-miterlimit:10;stroke-width:1.5px}.prefix__cls-2{stroke:none}
+        </style>
+    </defs>
+    <g id="prefix__icon_column" data-name="icon column" transform="translate(-4 -48)">
+        <g id="prefix__Rectangle_61" class="prefix__cls-1" data-name="Rectangle 61">
+            <path d="M0 0H7V7H0z" class="prefix__cls-2" transform="translate(4 48)"/>
+            <path d="M0.75 0.75H6.25V6.25H0.75z" class="prefix__cls-3" transform="translate(4 48)"/>
+        </g>
+        <g id="prefix__Rectangle_62" class="prefix__cls-1" data-name="Rectangle 62">
+            <path d="M0 0H7V7H0z" class="prefix__cls-2" transform="translate(13 48)"/>
+            <path d="M0.75 0.75H6.25V6.25H0.75z" class="prefix__cls-3" transform="translate(13 48)"/>
+        </g>
+        <g id="prefix__Rectangle_63" class="prefix__cls-1" data-name="Rectangle 63">
+            <path d="M0 0H7V7H0z" class="prefix__cls-2" transform="translate(4 57)"/>
+            <path d="M0.75 0.75H6.25V6.25H0.75z" class="prefix__cls-3" transform="translate(4 57)"/>
+        </g>
+        <g id="prefix__Rectangle_64" class="prefix__cls-1" data-name="Rectangle 64">
+            <path d="M0 0H7V7H0z" class="prefix__cls-2" transform="translate(13 57)"/>
+            <path d="M0.75 0.75H6.25V6.25H0.75z" class="prefix__cls-3" transform="translate(13 57)"/>
+        </g>
+    </g>
+</svg>

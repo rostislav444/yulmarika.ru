@@ -1,0 +1,28 @@
+.pages {
+    position: relative;
+}
+.pages .content {
+    position: relative;
+    width: calc(100% - 24px);
+    max-width: 960px;
+    margin-bottom: 96px;
+}
+.pages .content > .title {
+    font-size: var(--h2);
+    text-align: center;
+    margin-bottom: 24px;
+    margin-top: 24px;
+    font-weight: 600;
+}
+.pages .content > img {
+    width: 100%;
+}
+.pages .content .block {
+    padding: 24px 0;
+    border-bottom: 1px solid var(--grey-light);
+}
+.pages .content .block .title {
+    font-size: var(--h4);
+    font-weight: 600;
+    margin-bottom: 16px;
+}

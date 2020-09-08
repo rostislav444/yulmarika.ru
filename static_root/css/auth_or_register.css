@@ -1,0 +1,99 @@
+.auth_or_register {
+    width: 100%;
+    position: relative;
+}
+.auth_or_register > div > .title {
+    margin-bottom: 48px;
+}
+
+.auth_or_register > div {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 10vw;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+    width: 50%;
+    float: left;
+    min-height: calc(100vh - 65px);
+}
+.auth_or_register .message {
+    margin-top: 0;
+    margin-bottom: 24px;
+}
+
+@media(max-width: 1240px) {
+    .auth_or_register > div {
+        width: 100%;
+        height: auto;
+        min-height: auto;
+        float: unset !important;
+        padding-top: 48px;
+        padding-bottom: 64px;
+    }
+    .auth_or_register > div:last-child {
+        margin-top: 48px;
+       
+    }
+}
+
+.auth_or_register .action_wrapper,
+.auth_or_register .form_wrapper {
+    position: relative;
+    width: auto;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+}
+.auth_or_register .action_wrapper {
+    display: flex
+}
+
+
+
+.auth_or_register .form,
+.auth_or_register .action {
+    width: 480px;
+    max-width: calc(100% - 96px);
+}
+
+.auth_or_register .title {
+    /* margin-bottom: 36px; */
+    text-align: center;
+}
+
+input[type=radio] {
+    display: block;
+    position: absolute;
+    top: 80px;
+}
+input[type=radio]:first-child {
+    left: 80px;
+}
+input[type=radio]:last-child {
+    right: 80px;
+    z-index: 10000;
+}
+/* input[type=radio] ~ div {
+    width: 40%;
+}
+input[type=radio]:checked ~ div {
+    width: 60%;
+} */
+
+input[type=radio]:checked ~ div.form_wrapper {
+    display: flex !important;
+}
+input[type=radio]:checked ~ div.action_wrapper {
+    display: none !important;
+}
+/* REGISTER */
+.register {
+    background-color: var(--grey-extra-light);
+}
+
+
+/* END REGISTER */

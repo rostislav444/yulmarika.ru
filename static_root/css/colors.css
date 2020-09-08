@@ -1,0 +1,29 @@
+:root {
+    --clr-1: rgb(131, 0, 207);
+    --clr-1-light: #c96dff;
+    --clr-1-extra-light: rgb(248, 236, 255);
+    --clr-1-dark: rgb(90, 0, 143);
+    --clr-1-extra-dark: rgb(63, 0, 99);
+   
+
+    --clr-2: #fff;
+    --clr-3: #fff;
+    --clr-4: #fff;
+
+    
+
+    --grey: #7f8081;
+    --grey-light: rgb(204, 204, 207);
+    --grey-extra-light: rgb(243, 243, 245);
+    --grey-dark: #383838;
+
+    --green: #45da77;
+    --red: #f12132;
+    --blue: rgb(25, 25, 206);
+
+}
+.black { color: black; }
+.grey  { color: var(--grey); }
+.blue  { color: var(--blue); }
+.red   { color: var(--red); }
+.green { color: var(--green); }

@@ -36,18 +36,21 @@ def imgView(self, fieldname, obj=None):
     if obj:
         if getattr(obj, fieldname).name:
             thmbs = getattr(obj, fieldname + '_thmb')
+            
             if thmbs is not None and type(thmbs) is not dict:
                 thmbs = json.loads(thmbs)
+         
+            # if 'main' in thmbs.keys():
+            #     url =  settings.MEDIA_URL + thmbs.get('main')
+            #     img = mark_safe("""<img style="object-fit: cover; object-position: center; border: 1px solid #ededed;" 
+            #     src="{url}" width="{width}" height={height} />""".format(url=url, height=120, width=120))
+            #     return img
             if 's' in thmbs.keys():
                 url =  settings.MEDIA_URL + thmbs.get('s')
                 img = mark_safe("""<img style="object-fit: cover; object-position: center; border: 1px solid #ededed;" 
                 src="{url}" width="{width}" height={height} />""".format(url=url, height=120, width=90))
                 return img
-            elif 'main' in thmbs.keys():
-                url =  settings.MEDIA_URL + thmbs.get('main')
-                img = mark_safe("""<img style="object-fit: cover; object-position: center; border: 1px solid #ededed;" 
-                src="{url}" width="{width}" height={height} />""".format(url=url, height=120, width=120))
-                return img
+           
     return '-'
 
 
@@ -101,7 +104,7 @@ class ProductAdmin(admin.ModelAdmin):
     fields = [
         'name','code','price','old_price','category','who_intended','gift_reason','status',
         'in_sell','is_popular',
-        ('image','image_view',),('add_image','add_image_view',),
+        ('image','image_view','image_thmb',),('add_image','add_image_view',),
         'length','width','height','weight',
         'description','preferences',
         'created','updated'

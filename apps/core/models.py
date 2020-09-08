@@ -18,6 +18,8 @@ import json
 import requests
 from zipfile import ZipFile 
 import re
+import cv2
+from django.core.exceptions import ValidationError
 
 
 class BackUpDB(models.Model):
@@ -27,6 +29,9 @@ class BackUpDB(models.Model):
     url =  models.CharField(max_length=1000, blank=True, null=True, verbose_name="Сслыка")
     loaded = models.BooleanField(default=False, verbose_name="Загружен в облако")
     response = JSONField(default=dict, blank=True, null=True)
+
+    def __str__(self):
+        return 'База загружена в:' + str(self.loaded)
 
     def dump_db(self):
         db = DATABASES['default']
@@ -146,12 +151,11 @@ class ModelImages(models.Model):
         
         if not self.id:
             last_obj = type(self).objects.order_by('pk').last()
-            if last_obj:
-                self.id = last_obj.pk + 1
-            else:
-                self.id = 1
-
-        name_parts.append('id'+str(self.id))
+            if last_obj: id = last_obj.pk + 1
+            else: id = 1
+        else:
+            id = self.id
+        name_parts.append('id'+str(id))
         return '__'.join(name_parts)
 
 
@@ -170,26 +174,42 @@ class ModelImages(models.Model):
     
 
     def save(self):
+        def make_thumbs(image_file, filepath, ext):
+            thmbs = {}
+            if type(image_file) == str:
+                print('STRING')
+            if ext == 'png':  img_convert, img_format = "RGBA","PNG"
+            else:             img_convert, img_format = "RGB","JPEG"
+            for key, size in IMAGES_SIZES.items():
+                if key == 'l': path = filepath + '.' + ext
+                else:          path = filepath + '_' + key + '.' + ext
+                media_path = settings.MEDIA_ROOT + path
+                image = PIL.Image.open(image_file).convert(img_convert)
+                image.thumbnail((size, size), PIL.Image.ANTIALIAS)
+                image.save(media_path, img_format)
+                thmbs[key] = path
+            return thmbs
+
+
         for field in self._meta.get_fields():
 
             # Get image field
             if field.get_internal_type() == 'FileField':
-                print('FIELD', field.name)
                 image_field = getattr(self, field.name)
-                thmbs_name = field.name + '_thmb'
-                thmbs = getattr(self,thmbs_name)
+                thmbs_name =  field.name + '_thmb'
+                thmbs =       getattr(self, thmbs_name)
                 
                 if type(thmbs) == str:
                     thmbs = json.loads(thmbs.replace("'",'"'))
                 # Check old image
-                try: old_image_path = thmbs['l']
+                try: old_image_path = thmbs['main']
                 except: 
-                    try: old_image_path = thmbs['main']
-                    except: old_image_path = None
+                    try: old_image_path = thmbs['video']
+                    except:
+                        try: old_image_path = thmbs['l']
+                        except: old_image_path = None
 
                 # If image changed
-               
-                
                 if image_field.name != None and image_field.name != old_image_path:
                     dirpath = self.get_path()
                     filename = self.human_name(field.name)
@@ -199,55 +219,59 @@ class ModelImages(models.Model):
 
                     thmbs = {}
                     
-                    if ext in ['jpg','jpeg']:
+                    if ext in ['jpg','jpeg','png']:
                         image_io = io.BytesIO()
-                        image = PIL.Image.open(image_field.file).convert("RGB")
-                        image.save(image_io, format='JPEG')
-                        image.close()
-                    elif ext == 'png':
-                        image_io = io.BytesIO()
-                        image = PIL.Image.open(image_field.file).convert("RGBA")
-                        image.save(image_io, format='PNG')
+                        if ext == 'png': 
+                            img_convert, img_format = "RGBA","PNG"
+                        else:            
+                            img_convert, img_format = "RGB","JPEG"
+                        image = PIL.Image.open(image_field.file).convert(img_convert)
+                        image.save(image_io, format=img_format)
                         image.close()
                     elif ext in ['gif','mp4']:
                         image_io = io.BytesIO(image_field.file.read())
                     else:
                         break
-                  
+                    # Delte existing image field object
                     image_field.delete(save=False)
+                    # Save model with blank image field
                     super(ModelImages, self).save()
-
-                    image_field = getattr(self, field.name)
-
-                    setattr(image_field, 'name', filepath + '.' + ext)
-                    
+                    # Set file path in file field
+                
                     if ext in ['jpg','jpeg','png']:
-                        for key, size in IMAGES_SIZES.items():
-                            if key == 'l':  path = filepath + '.' + ext
-                            else:           path = filepath + '_' + key + '.' + ext
-                            media_path = settings.MEDIA_ROOT + path
-                            image = PIL.Image.open(image_io)
-                            image.thumbnail((size, size), PIL.Image.ANTIALIAS)
-                            image.save(media_path)
-                            thmbs[key] = path
+                        thmbs = make_thumbs(image_io, filepath, ext)
                         thmbs['ext'] = ext
-                    elif ext in ['gif']:
-                        # Main image 
-                        main_path = filepath + '.' + ext
-                        default_storage.save(settings.MEDIA_ROOT +  main_path, image_io)
-                        thmbs['main'] = main_path
-                        preview_path = filepath + '_preview.' + ext
-                        thmbs['preview'] = preview_path
-                        image = PIL.Image.open(image_io)
-                        image.thumbnail((2000, 2000), PIL.Image.ANTIALIAS)
-                        image.save(settings.MEDIA_ROOT + preview_path)
-                        for key, size in IMAGES_SIZES.items():
-                            thmbs[key] = main_path
-                       
-                        thmbs['ext'] = ext
+                        setattr(getattr(self, field.name), 'name', filepath + '.' + ext)
+                    elif ext in ['gif','mp4']:
+                        if ext == 'mp4': tag = 'video'
+                        else:            tag = 'main'
+                        main_path = filepath + '__' + tag + '.' + ext
+                        default_storage.save(settings.MEDIA_ROOT + main_path, image_io)
+                        setattr(getattr(self, field.name), 'name', main_path)
 
+                        if ext == 'mp4':
+                            path = settings.MEDIA_ROOT + filepath + '.jpg'
+                            video = cv2.VideoCapture(settings.MEDIA_ROOT + main_path) 
+                            while(True): 
+                                ret,frame = video.read() 
+                                if ret: 
+                                    cv2.imwrite(path,frame)
+                                    break
+                                else: break
+                            image_io = path
+                        thmbs = make_thumbs(image_io, filepath, 'jpg')
+                        thmbs[tag], thmbs['ext'] = main_path, ext
                     setattr(self, thmbs_name, thmbs)
         super(ModelImages, self).save()
+
+    def clean(self):
+        for field in self._meta.get_fields():
+            if field.get_internal_type() == 'FileField':
+                filename = getattr(self, field.name).name
+                if filename:
+                    ext = filename.split('.')[-1]
+                    if ext not in ['jpg', 'jpeg', 'png', 'gif', 'mp4']:
+                        raise ValidationError({field.name : f'Файл формата ."{ext}" не допустим для этого поля',})
 
 
     @property

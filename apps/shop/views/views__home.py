@@ -14,6 +14,13 @@ from project import settings
 import os, PIL, io, json
 import math
 from django.db.models import F, Value, Case, When
+from django.db.models.functions import Lower
+
+def sms_process():
+    print('sms')
+
+def email_process():
+    print('email')
 
 
 def add_products():
@@ -23,11 +30,12 @@ def add_products():
 
     models = [Category, WhoIntended, GiftReason]
 
-    # for cat in set(s):
-    #     model = models[random.randint(0, len(models)-1)]
-    #     print(model)
-    #     obj = model(name = cat)
-    #     obj.save()
+    for cat in set(s):
+        model = models[random.randint(0, len(models)-1)]
+        
+        obj = model(name = cat)
+        try: obj.save()
+        except: pass
 
     category_list = list(Category.objects.all())
     who_intended = list(WhoIntended.objects.all())
@@ -35,47 +43,49 @@ def add_products():
     colors = list(Color.objects.all())
 
     for n in range(0, 1000):
-        name = ''
-        for i in range(0, random.randint(3, 5)):
-            name += ' ' + s[random.randint(1, len(s) - 1)]
-        print(n)
-        img_name = 'img/img_' + str(random.randint(1, 14)) + '.jpeg'
-        image = PIL.Image.open(settings.MEDIA_ROOT + img_name).convert("RGB")
-        image_io = io.BytesIO()
-        image.save(image_io, format='JPEG')
-        
-        product = Product(
-            name = name[:80],
-            code = str(random.randint(1000, 10000)),
-            price = random.randint(10, 10000),
-            old_price = random.randint(10, 10000),
-            length = random.randint(10, 50),
-            width = random.randint(10, 50),
-            height = random.randint(10, 50),
-            weight = random.randint(1, 8),
-        )
-        product.save()
-        product.image.save(img_name, image_io)
-        product.category.add(*list(set([category_list[random.randint(1, len(category_list) - 1)] for n in range(1,3)])))
-        product.who_intended.add(*list(set([who_intended[random.randint(1, len(who_intended) - 1)] for n in range(1,3)])))
-        product.gift_reason.add(*list(set([gift_reason[random.randint(1, len(gift_reason) - 1)] for n in range(1,3)])))
-        product.save()
-
-        
-        for color in random.sample(colors, random.randint(1, 3)):
-            variant = Variant(
-                parent = product,
-                color = color,
-                in_stock = random.randint(1, 10),
+        try:
+            name = ''
+            for i in range(0, random.randint(3, 5)):
+                name += ' ' + s[random.randint(1, len(s) - 1)]
+            print(n)
+            img_name = 'img/img_' + str(random.randint(1, 14)) + '.jpeg'
+            image = PIL.Image.open(settings.MEDIA_ROOT + img_name).convert("RGB")
+            image_io = io.BytesIO()
+            image.save(image_io, format='JPEG')
+            
+            product = Product(
+                name = name[:80],
+                code = str(random.randint(1000, 10000)),
+                price = random.randint(10, 10000),
+                old_price = random.randint(10, 10000),
+                length = random.randint(10, 50),
+                width = random.randint(10, 50),
+                height = random.randint(10, 50),
+                weight = random.randint(1, 8),
             )
-            variant.save()
-            for photo in ['photo_1','photo_2','photo_3']:
-                img_name = 'img/img_' + str(random.randint(1, 14)) + '.jpeg'
-                image = PIL.Image.open(settings.MEDIA_ROOT + img_name).convert("RGB")
-                image_io = io.BytesIO()
-                image.save(image_io, format='JPEG')
-                getattr(variant, photo).save(img_name, image_io)
-            variant.save()
+            product.save()
+            product.image.save(img_name, image_io)
+            product.category.add(*list(set([category_list[random.randint(1, len(category_list) - 1)] for n in range(1,3)])))
+            product.who_intended.add(*list(set([who_intended[random.randint(1, len(who_intended) - 1)] for n in range(1,3)])))
+            product.gift_reason.add(*list(set([gift_reason[random.randint(1, len(gift_reason) - 1)] for n in range(1,3)])))
+            product.save()
+
+            
+            for color in random.sample(colors, random.randint(1, 3)):
+                variant = Variant(
+                    parent = product,
+                    color = color,
+                    in_stock = random.randint(1, 10),
+                )
+                variant.save()
+                for photo in ['photo_1','photo_2','photo_3']:
+                    img_name = 'img/img_' + str(random.randint(1, 14)) + '.jpeg'
+                    image = PIL.Image.open(settings.MEDIA_ROOT + img_name).convert("RGB")
+                    image_io = io.BytesIO()
+                    image.save(image_io, format='JPEG')
+                    getattr(variant, photo).save(img_name, image_io)
+                variant.save()
+        except: pass
 
 
    
@@ -112,8 +122,9 @@ def home(request, category=None):
         context['selected']['categories'] = categories
     elif category==None and request.method=='GET' and len(dict(request.GET).keys()) == 0:
         categories = Category.objects.filter(in_catalogue=True).values_list('slug',flat=True)
-        fltr['category__slug__in'] = categories
-        context['selected']['categories'] = categories
+        if len(categories):
+            fltr['category__slug__in'] = categories
+            context['selected']['categories'] = categories
 
     products =     all_products.filter(**fltr).distinct()
     variants =     Variant.objects.filter(parent__in=products)
@@ -204,7 +215,7 @@ def home(request, category=None):
             default=Value(False),
             output_field=BooleanField(),
         ))
-        fltr['objects'] = FilterSerializer(fltr['objects'].order_by('-selected'), many=True,).data
+        fltr['objects'] = FilterSerializer(fltr['objects'].order_by('-selected', Lower('name')), many=True,).data
 
     products = products[product_start:product_end]
     

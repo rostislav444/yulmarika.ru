@@ -405,7 +405,7 @@ header .viber_icon img {
     }
     header nav .data ul li a{
         display: block;
-        font-size: var(--h4);
+        font-size: var(--h5);
         padding: 16px 16px 16px 16px;
         width: 100%;
         border-bottom: 1px solid var(--grey-light);
@@ -423,8 +423,8 @@ header .viber_icon img {
         transform: rotate(180deg);
     }
     header nav .data .close img {
-        width: 32px;
-        height: 32px;
+        width: 28px;
+        height: 28px;
     }
     header nav .data.active .close {
         display: block;

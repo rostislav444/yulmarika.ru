@@ -3,6 +3,7 @@ footer {
     width: 100%;
     background-color: black;
     padding: 12px 0;
+    overflow: hidden;
 }
 footer .content {
     position: relative;

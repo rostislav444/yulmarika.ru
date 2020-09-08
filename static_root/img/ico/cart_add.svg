@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+        "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:serif="http://www.serif.com/" width="100%" height="100%" viewBox="0 0 14 14"
+     version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve"
+     style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;"><rect id="icon-shopping-bag" serif:id="icon shopping bag" x="0" y="0" width="14" height="14" style="fill:none;"/>
+    <clipPath id="_clip1"><rect x="0" y="0" width="14" height="14"/></clipPath>
+    <g clip-path="url(#_clip1)"><path d="M3.75,2.211l0,-0.369c0,-1.015 0.911,-1.842 2.031,-1.842l2.438,0c1.12,0 2.031,0.827 2.031,1.842l0,0.369l2.844,0c0.224,0 0.406,0.165 0.406,0.368l0,11.421l-13,0l0,-11.421c0,-0.203 0.182,-0.368 0.406,-0.368l2.844,0Zm4.469,-1.474l-2.438,0c-0.672,0 -1.219,0.496 -1.219,1.105l0,3.684c0,0.204 0.182,0.369 0.407,0.369c0.224,0 0.406,-0.165 0.406,-0.369l0,-3.315l3.25,0l0,3.315c0,0.204 0.182,0.369 0.406,0.369c0.224,0 0.406,-0.165 0.406,-0.369l0,-3.684c0,-0.609 -0.546,-1.105 -1.218,-1.105Z" style="fill:#fff;fill-rule:nonzero;"/></g></svg>

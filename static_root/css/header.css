@@ -1,0 +1,438 @@
+header {
+    position: relative;
+    background-color: white;
+    height: 65px;
+    width: 100%;
+    border-bottom: 1px solid #ededed;
+    display: grid;
+    grid-template-columns: 1fr minmax(90px, 160px) 1fr;
+    grid-auto-rows: 100%;
+    align-items: center;
+}
+
+header nav {
+    height: 100%;
+    top: 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+header nav .burger {
+    position: relative;
+    display: none;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+header nav .burger div {
+    position: relative;
+    display: block;
+    background-color: black;
+    width: 100%;
+    height: 4px;
+    margin-bottom: 4px;
+    transition: var(--transition);
+}
+header nav .burger:hover {
+    background-color: black;
+}
+header nav .burger:hover div {
+    background-color: white;
+}
+
+header nav .burger div:last-child {
+    margin-bottom: 0px;
+}
+
+header nav ul {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 24px;
+}
+
+header nav ul li {
+    margin-right: 16px;
+    text-transform: uppercase;
+    cursor: pointer;
+    
+}
+header nav ul li > * {
+    color: var(--grey);
+}
+
+
+header .logo {
+    width: 100%;
+    height: 100%;
+    font-size: var(--h2);
+    text-transform: uppercase;
+    font-weight: 600;
+    padding-left: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header .actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    
+}
+header .actions .auth {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    max-width: 380px;
+    float: right;
+}
+header .actions .auth p {
+    margin-left: 16px;
+}
+
+header .actions img {
+    width: 65px;
+    min-width: 65px;
+    height: 65px;
+    padding: 16px;
+    cursor: pointer;
+}
+header .actions > * {
+    transition: var(--transition);
+}
+header .actions > *:hover {
+    box-shadow: inset 0 3px var(--grey-dark);
+}
+header .actions .auth{
+    color: var(--grey)
+}
+
+
+header .cart_icon {
+    position: relative;
+    z-index:10;
+    display: block;
+    color: white;
+    font-weight: 500;
+    background-color: black;
+}
+
+header .cart_icon a {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    z-index:10;
+}
+
+
+header .cart_icon .total {
+    display: none;
+    padding-right: 24px;
+}
+header .cart_icon .total .number {
+    margin-right: 6px;
+}
+header .cart_icon  .quantity {
+    width: 24px;
+    width: auto;
+    padding: 0 4px;
+    min-width: 20px;
+    background-color: var(--red);
+    position: absolute;
+    text-align: center;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    right: 0;
+    bottom: 0;
+}
+
+
+header .cart_data {
+    position: absolute;
+    display: none;
+    right: 0;
+    top: 65px;
+    width: 264px;
+    height: auto;
+    background-color: black;   
+    padding: 16px;
+   
+}
+
+header .cart_icon.active .total {display: flex;}
+header .cart_icon.active .quantity {display: block;}
+header .cart_icon.active:hover .cart_data {display: block;}
+
+header .cart_data button {
+    width: 100%;
+    border: 1px solid var(--grey);
+    color: var(--grey);
+    transition: var(--transition);
+    cursor: pointer;
+}
+header .cart_data button:hover {
+    background-color: var(--grey);
+    color: black;
+}
+header .cart_data button:active {
+    border-color: white;
+    background-color: white;
+}
+header .cart_data .cart_products__list {
+    display: block;
+    border-bottom: 1px solid var(--grey);
+    margin-bottom: 16px;
+}
+header .cart_data .cart_products__list .cart__product {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    grid-gap: 16px;
+    margin-bottom: 16px;
+}
+header .cart_data .cart_products__list .cart__product .image div {
+    padding-top: 133%;
+    background-size: cover;
+    background-position: center;
+}
+header .cart_data .inner_total {
+    margin-bottom: 16px;
+}
+header .cart_data .inner_total .inner_total_word {
+    color: var(--grey);
+    margin-right: 8px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+header .cart_data  .product_quntity {
+    font-size: var(--h6);
+    color: var(--grey);
+    margin-top: 8px;
+}
+header .search_icon {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 65px;
+}
+@media(max-width: 960px) {
+    header .search_icon {
+        display: none;
+    }
+    
+}
+header .search_icon input {
+    position: relative;
+    display: none;
+    height: 32px;
+    border: none;
+    border-bottom: 1px solid var(--grey-light);
+}
+header .search_icon button {
+    width: 52px;
+    height: 52px;
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+header .search_icon.active input {
+    display: block;
+    max-width: 120px;
+}
+header .search_icon button img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    margin: 0;
+    padding: 8px;
+}
+header nav .data .close {
+    display: none;
+}
+header nav .data .search {
+    display: none;
+}
+
+header .viber_icon {
+    position: relative;
+    display: none;
+    width: 52px;
+    height: 52px;
+    background-color: purple;
+    
+}
+header .viber_icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    padding: 10px !important;
+}
+
+
+@media(max-width: 960px) {
+    header {
+        position: fixed;
+        top: 0;
+        height: 52px;
+        grid-template-columns: 52px minmax(96px, 160px) minmax(168px, 1fr);
+        grid-gap: 0px;
+        z-index: 999999;
+    }
+    header .cart_data {
+        top: 52px;
+        width: 264px;
+       
+    }
+    header nav .burger {
+        display: flex;
+    }
+    header .search_icon {
+        height: 52px;
+    }
+    header .logo {
+        width: 100%;
+        height: 100%;
+        text-transform: uppercase;
+        font-weight: 600;
+        padding-left: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    header .actions .auth p {
+        display: none;  
+    }
+    header .cart_icon.active .total {
+        display: none;
+    }
+    
+    
+    header .actions img {
+        width: 52px;
+        height: 52px;
+        padding: 12px;
+        cursor: pointer;
+    }
+    header .logo {
+        justify-content: flex-start;
+    }
+    header nav .data {
+        position: fixed;
+        display: flex;
+        justify-content:flex-start;
+        align-items: flex-start;
+        width: 100%;
+        height: calc(100vh - 52px);
+        background-color: white;
+        top: 52px;
+        right: 0;
+        left: -100%;
+        z-index: 999999;
+        transition: left 0.3s ease-in-out;
+    }
+    header nav .data.active {
+        left: 0;
+    }
+
+    header nav .data ul {
+       position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: centers;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    header nav .data ul li {
+        font-size: var(--h4);
+        width: 100%;
+        margin: 0;
+    }
+    header nav .data ul li.search {
+        display: block;
+        border-bottom: 1px solid var(--grey-light);
+    }
+    header nav .data ul li.search form {
+        width: 100%;
+        height: 48px;
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr 48px;
+        grid-template-rows: 48px;
+        
+    }
+
+    
+    header nav .data ul li.search form input {
+        border: none;
+        background-color: var(--grey-extra-light);
+        padding-left: 16px;
+
+    }
+    header nav .data ul li.search form button {
+        background-color:var(--grey-light);
+        border: none;
+    }
+    
+    header nav .data ul li.search form button img {
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
+        padding: 4px;
+        position: relative;
+        display: block;
+        margin: 0;
+        
+        
+    }
+    header nav .data ul li a{
+        display: block;
+        font-size: var(--h4);
+        padding: 16px 16px 16px 16px;
+        width: 100%;
+        border-bottom: 1px solid var(--grey-light);
+        margin: 0;
+    }
+
+    header nav .data .close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        transition: all 0.3s ease-in-out;
+        cursor: pointer;
+    }
+    header nav .data .close:hover {
+        transform: rotate(180deg);
+    }
+    header nav .data .close img {
+        width: 32px;
+        height: 32px;
+    }
+    header nav .data.active .close {
+        display: block;
+    }
+    header .viber_icon {
+        display: flex;
+    }
+    
+
+}
+

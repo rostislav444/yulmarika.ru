@@ -37,7 +37,7 @@
         <div class="user_cabinet">
             {% if user.is_authenticated %}
                 <a href="{% url 'user:profile_orders' %}" class="auth">
-                    <p>{{ user.name }}</p>
+                    <p>{% if user.name %}{{ user.name }}{% else %}Кабинет{% endif %}</p>
                     <img class="user_icon" src="{% static 'img/ico/user_authenticated.svg' %}" alt="user">
                 </a>
             {% else %}

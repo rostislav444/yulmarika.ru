@@ -1,0 +1,75 @@
+.auth_register_or_order {
+    width: 100%;
+    position: relative;
+    
+}
+.auth_register_or_order > div {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 10vw;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+    width: 50%;
+    float: left;
+    min-height: calc(100vh - 65px);
+    
+}
+
+.auth_register_or_order > div:first-child {padding-left: 120px;}
+.auth_register_or_order > div:last-child {padding-right: 120px;}
+
+.auth_register_or_order > div > div {
+    width: 480px;
+    max-width: calc(100% - 96px);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+}
+.auth_register_or_order > div > div > a {
+    width: 100%;
+}
+.auth_register_or_order > div > div .title {
+    margin-bottom: 48px;
+}
+
+.auth_register_or_order > div > div .button {
+    border-width: 2px;
+}
+
+.auth_register_or_order > div > div .help_text {
+    font-size: var(--h4);
+    color: var(--grey);
+    margin-top: 24px;
+    margin-bottom: 24px;
+    font-weight: 600;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.auth_register_or_order .auth_register .help_text {
+    padding-left: 24px;
+}
+.auth_register_or_order .auth_register ul {
+    padding-left: 24px;
+    width: 100%;
+    display: grid;
+    justify-content: flex-start;
+    grid-gap: 24px;
+}
+.auth_register_or_order .auth_register ul li {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    justify-content: center;
+    align-items: flex-start;
+    grid-gap: 24px;
+    font-size: var(--h4);
+}
+
+
+/* REGISTER */
+.auth_register_or_order .order {
+    background-color: var(--grey-extra-light);
+}

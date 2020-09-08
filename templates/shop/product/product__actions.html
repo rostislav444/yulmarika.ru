@@ -37,7 +37,7 @@
         data-product_id="{{ product.pk }}" 
         data-variant_id="{{ variant.pk }}" 
         class="product_card_counter_quantity" 
-        min="1" max="99" value="1" 
+        min="1" max="{{ variant.in_stock }}" value="1" 
         type="number">
       <button>+</button>
     </div>

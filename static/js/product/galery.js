@@ -42,9 +42,11 @@ function slideScrollCenter() {
 }
 
 sliderGalery.on('slideChange', function () {
+    playInitial()
     setThumbActive(sliderGalery.realIndex)
     slideScrollCenter()
-}); setThumbActive(sliderGalery.realIndex)
+}); 
+setThumbActive(sliderGalery.realIndex)
 
 
 

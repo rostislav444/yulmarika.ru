@@ -6,9 +6,11 @@
                 {% for banner in banners %}
                     <div class="swiper-slide" style="background-image: url({{ banner.image.url }});">
                     <div class="info">
-                        <p class="h1 heading"><a href="{{ banner.url }}">{{ banner.name }}</a></p>
-                        <p class="h4 text"><a href="{{ banner.url }}">{{ banner.description }}</a></p>
-                        <a class="button" href="{{ banner.url }}">Подробнее</a>
+                        <p class="h1 heading"><a href="{% if banner.url %}{{ banner.url }}{% endif %}">{{ banner.name }}</a></p>
+                        <p class="h4 text"><a href="{% if banner.url %}{{ banner.url }}{% endif %}">{{ banner.description }}</a></p>
+                        {% if banner.url %}
+                            <a class="button" href="{{ banner.url }}">Подробнее</a>
+                        {% endif %}
                     </div>
                     </div>
                 {% endfor %}

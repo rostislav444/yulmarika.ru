@@ -1,18 +1,18 @@
 from django.db import models
 from apps.core.models import ModelImages
-import os, PIL, io, json, jsonfield
+import os, PIL, io, json
 from django.utils.text import slugify
 from unidecode import unidecode
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-
-
+from ckeditor.fields import RichTextField
+from django.contrib.postgres.fields import JSONField
 
 class Page(ModelImages):
     name =       models.CharField(max_length=255, verbose_name="Название странциы")
     slug =       models.SlugField(max_length=255, editable=False, null=True, blank=True)
-    image =      models.ImageField(verbose_name="Карточка товара (основная)", null=True, blank=True)
-    image_thmb = jsonfield.JSONField(editable=False, null=True, blank=True, default='{}')
+    image =      models.FileField(verbose_name="Карточка товара (основная)", null=True, blank=True)
+    image_thmb = JSONField(editable=True, null=True, blank=True, default=dict)
     menu_hide =  models.BooleanField(default=True)
 
     class Meta:
@@ -36,7 +36,7 @@ class Page(ModelImages):
 class PageBlock(models.Model):
     parent = models.ForeignKey(Page, on_delete=models.CASCADE, related_name="blocks")
     name = models.CharField(max_length=255, verbose_name="Название блока")
-    text = models.TextField(verbose_name="Текст блока") 
+    text = RichTextField(verbose_name="Текст блока") 
 
     class Meta:
         verbose_name = "Информационный блок"
