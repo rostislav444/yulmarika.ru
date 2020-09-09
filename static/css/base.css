@@ -19,6 +19,7 @@
 }
 
 body {
+    padding-top: 65px;
     position: relative;
     background-color: rgb(250, 250, 250);
    

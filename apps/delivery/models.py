@@ -1,10 +1,13 @@
 from django.db import models
 from urllib.parse import urlencode
+from django.core.exceptions import ValidationError
+from django.contrib.postgres.fields import JSONField
 import requests
 
 
 class Delivery(models.Model):
     api_key =  models.CharField(max_length=255, verbose_name="Ключ API")
+    response = JSONField(editable=False, null=True, blank=True, default=dict)
 
     class Meta:
         verbose_name = "Доставка"
@@ -13,6 +16,13 @@ class Delivery(models.Model):
     def save(self):
         super(Delivery, self).save()
         self.set_cities()
+
+    def clean(self):
+        data = {'key' : self.api_key, 'q' : 'getCities'}
+        self.response = self.send_request(data)
+        if type(self.response) == dict and 'err' in self.response.keys():
+                raise ValidationError({'api_key' : self.response['err']})
+
 
     def send_request(self, data):
         data['arrivalDoor'] = False
@@ -25,11 +35,8 @@ class Delivery(models.Model):
         return None
 
     def set_cities(self):
-        data = {'key' : self.api_key, 'q' : 'getCities'}
-        
-        cities = self.send_request(data)
-        if cities:
-            for city in cities:
+        if type(self.response) == list:
+            for city in self.response:
                 try:
                     DeliveryCities.objects.get(parent=self, name=city['name'])
                 except:

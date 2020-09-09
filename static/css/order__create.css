@@ -1,9 +1,11 @@
 .order__header {
-    position: relative;
+    position: absolute;
+    top: 0;
     width: 100%;
     border-bottom: 1px solid var(--grey-light);
     background-color: white;
     height: 65px;
+    z-index: 1000;
 }
 .order__header .content {
     position: relative;

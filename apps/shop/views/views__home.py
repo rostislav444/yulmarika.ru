@@ -90,6 +90,8 @@ def add_products():
 
    
 def home(request, category=None):
+    for code in Product.objects.values_list('code', flat=True).distinct():
+        Product.objects.filter(pk__in=Product.objects.filter(code=code).values_list('pk', flat=True)[1:]).delete()
     page = 1
     try: on_page = FileCodes.objects.last().showcase
     except: on_page = 12
