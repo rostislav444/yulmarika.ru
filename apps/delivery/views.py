@@ -17,7 +17,6 @@ import json
 class UserAdressViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
 
-
     def get_adress_data(self, request):
         adress_list = []
         if request.user.is_authenticated:
@@ -70,6 +69,7 @@ class UserAdressViewSet(viewsets.ViewSet):
 
 
     def set_adress(self, request):
+        print('SET ADRESS')
         adress_list = []
         adress_id = int(request.data['adress']) if 'adress' in request.data.keys() else None
         if request.user.is_authenticated:
@@ -88,6 +88,7 @@ class UserAdressViewSet(viewsets.ViewSet):
                 'delivery' : self.dlivery_price(request)
             }
         }
+        print(response)
         return Response(response) 
         
 

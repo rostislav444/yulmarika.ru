@@ -176,6 +176,10 @@
     width: 16px;
     height: 16px;
     margin-left: 8px;
+    display: none;
+}
+.order .order__form .total_table .row img.info.active {
+    display: inline-block;
 }
 .order .order__form .total_table .row .data {
     display: flex;
@@ -330,3 +334,6 @@
     color: blue;
 }
 
+.promocode_info_active[aria-label][role~="tooltip"]::after {
+    content: attr(aria-label) ': ' attr(data-total) ' RUB' !important;
+}

@@ -1,22 +1,20 @@
 
 
 const chosenPrice = document.querySelector('.delivery_chosen_price')
+const chosenPriceParent = chosenPrice.parentElement
 const totalProductsPrice =     document.querySelector('.total_products_price')
 const totalPiceWithDelivery =  document.querySelector('.total_price_with_delivery')
 var adressList = []
 var delivery = undefined
-
 const cdekPrice =    document.getElementById('cdek_price')
 const ruspostPrice = document.getElementById('ruspost_price')
 
 const deliveryMethods =      document.querySelectorAll('.delivery_methods__item')
 const deliveryMethodInputs = document.querySelectorAll('input[name="order_delivery_method"]') 
-
-
+const minimalFreeDeliveryTotal = parseInt(document.querySelector('.free_delivery_price').dataset.price)
 
 function adressListOnLoad(data) {
     let adressPreview = undefined
-    console.log(data);
     
     if (data['adress_list'].length > 0) {
         adressList = data['adress_list']
@@ -70,13 +68,29 @@ function AdressUpdate(data) {
 }
 
 function AdressSet(data) {
+
     adressList = data['adress_list']
     let template = nunjucks.renderString(deliveryAdressPreview, {adress :  adressList[0]});
+
     for (let prev of adressPrev) {
         prev.innerHTML = template
     }
+    if (data['delivery']) {
+        delivery = data['delivery']
+        ruspostPrice.innerHTML = delivery['ruspost']
+        cdekPrice.innerHTML =    delivery['cdek']
+        for (let input of document.querySelectorAll('input[name="order_delivery_method"]')) {
+            if (input.checked) {
+                set_delivery_price(input)
+                break
+            }
+        }
+    } 
+
     AdressDataList()
     popupClose()
+
+
 }
 
 
@@ -86,19 +100,16 @@ function AdressDataList() {
         PopupInner.innerHTML = nunjucks.renderString(deliveryAdressList, {adress_list : adressList, url : deliveryAdressURlSet});
         PopupWrapper.classList.add('active')
         form = PopupInner.querySelector('form')
+       
         formValidate(form)
        
         let changeButton = PopupInner.querySelectorAll('.change')
         for (let i = 0; i < changeButton.length; i++) {
             let change = changeButton[i];
-            change.onclick = () => {
-                AdressChange(i)
-            }
+                change.onclick = () => { AdressChange(i) }
         }
         let addAdress = PopupInner.querySelector('.add_adress')
-        addAdress.onclick = () => {
-            AdressBlankForm() 
-        }
+            addAdress.onclick = () => { AdressBlankForm() }
     } else {
         if (adressList.length > 0) {
             AdressChange(0)
@@ -127,10 +138,14 @@ function deliveryMethodSelected(i) {
 
 function set_delivery_price(input)  {
     if (delivery != undefined) {
-        console.log(input.dataset.key);
-        chosenPrice.innerHTML = delivery[input.dataset.key];
-        console.log(parseInt(totalProductsPrice.innerHTML),parseInt(chosenPrice.innerHTML));
-        totalPiceWithDelivery.innerHTML = parseInt(totalProductsPrice.innerHTML.replace(' ','')) + parseInt(chosenPrice.innerHTML.replace(' ',''))
+        if (freeDelivery == false) {
+            chosenPrice.innerHTML = delivery[input.dataset.key];
+            totalPiceWithDelivery.innerHTML = parseInt(totalProductsPrice.dataset.price) + parseInt(chosenPrice.innerHTML.replace(' ',''))
+        } else {
+            chosenPriceParent.innerHTML = 'Бесплатно'
+            console.log(totalProductsPrice.innerHTML);
+            totalPiceWithDelivery.innerHTML = parseInt(totalProductsPrice.dataset.price)
+        }
     }
 }
 
@@ -160,6 +175,7 @@ for (let i = 0; i < deliveryMethodInputs.length; i++) {
             input.checked = false
         } 
         deliveryMethodSelected(i)
+        makeBigNum()
     }
     if (input.checked) {
         

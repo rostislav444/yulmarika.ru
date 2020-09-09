@@ -3,6 +3,7 @@ from django.utils import timezone
 from apps.coupon.models import Coupon
 from apps.core.function import send_mail
 from collections import OrderedDict
+from apps.filecodes.models import FileCodes
 
 class Order(models.Model):
     ORDER_STATUS = [
@@ -21,6 +22,7 @@ class Order(models.Model):
     products_cost = models.PositiveIntegerField(blank=True, default=0, verbose_name="Стоимость товаров")
     discount_cost = models.PositiveIntegerField(blank=True, default=0, verbose_name="Скидка по купону")
     delivery_cost = models.PositiveIntegerField(blank=True, default=0, verbose_name="Стоимость доставки")
+    free_delivery = models.BooleanField(default=False, verbose_name="Бесплатная доставка")
     created =       models.DateTimeField(blank=True, null=True, verbose_name="Время заказа", default=timezone.now)
     payed =         models.DateTimeField(blank=True, null=True, verbose_name="Время оплыта", default=timezone.now)
     customer =      models.ForeignKey('user.CustomUser', on_delete=models.SET_NULL, editable=False, blank=True, null=True, verbose_name="Покупатель", related_name="orders")
@@ -32,7 +34,6 @@ class Order(models.Model):
     comments =      models.TextField(verbose_name="Примечания к заказу", blank=True, null=True)
     delivery_type =  models.CharField(max_length=24, verbose_name="Способ доставки")
     track_number =  models.CharField(max_length=500, unique=True, null=True, blank=True, verbose_name="Трэк-номер")
-
     weight =        models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name="Вес коробки")
     width  =        models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name="Ширина коробки")
     height  =       models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name="Высота коробки")
@@ -58,11 +59,14 @@ class Order(models.Model):
     
 
     def save(self):
+        fk = FileCodes.objects.first()
+        if fk:
+            if self.products_cost >= fk.free_delivery:
+                self.free_delivery = True
+
         if self.customer:
             self.customer.orders.filter(status__in=['new','created']).update(status='declined')
-               
-
-
+    
         if self.status_old != self.status and self.email:
             status = OrderedDict(self.ORDER_STATUS)[self.status] 
             kwargs = {
@@ -78,6 +82,8 @@ class Order(models.Model):
             last_order = Order.objects.all().order_by('order_id').last()
             self.order_id = last_order.order_id + 1 if last_order else 1
         super(Order, self).save()
+
+
 
 
 class OrderProduct(models.Model):

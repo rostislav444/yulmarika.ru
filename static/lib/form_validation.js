@@ -206,6 +206,22 @@ function formResponse(form, data) {
     
 }
 
+function AjaxFieldChanged(data, field=undefined) {
+    data = JSON.parse(data)['data']['list']
+    if (data.length == 1) {
+        field.value = data[0]
+        document.querySelector('.ajax_input_values_list').remove()
+    } else if (data.includes(field.value) == false) {
+        field.value = ''
+        alert('Выберите значение из списка доступных')
+    }
+}
+
+function AjaxFieldOnChange(e) {
+    input = e.target
+    xhrOnLoad('POST', input.dataset.ajax, data, AjaxFieldChanged, input)
+}
+
 
 function AjaxFieldUpdate(data, field=undefined) {
     data = JSON.parse(data)['data']
@@ -217,6 +233,7 @@ function AjaxFieldUpdate(data, field=undefined) {
             parent.appendChild(ul)
         } 
         ul.innerHTML = ''
+        ul.classList.add('ajax_input_values_list')
         for (let item of data['list']) {
             li = document.createElement('li')
             li.innerHTML = item
@@ -224,14 +241,17 @@ function AjaxFieldUpdate(data, field=undefined) {
         }
         let list = ul.querySelectorAll('li')
         function set_value(value) {
+            field.removeEventListener('change', AjaxFieldOnChange, false)
             field.value = value
             checkInputType(field)
             ul.remove()
         }
 
         for (let li of list) {
-            li.onclick = () => { set_value(li.innerHTML) } 
+            li.addEventListener('mousedown',  function () { set_value(li.innerHTML) }, false )
         }
+        field.removeEventListener('change', AjaxFieldOnChange, false)
+        field.addEventListener('change', AjaxFieldOnChange, false)
 
         function set_active(n, enter=false) {
             if (n == -1 && enter==true && list.length > 0) {
@@ -323,15 +343,21 @@ function formValidate(form) {
     function formInputsValidate(form) {
         currnetForm = form
         for (let input of form.fields) {
-            input.onchange = () => { 
+        
+            input.onchange = (e) => { 
                 checkInputType(input) 
                 input.classList.remove('virgin')
+                if ('ajax' in input.dataset) {
+                    input.addEventListener('change', AjaxFieldOnChange, false)
+                }
             }
+        
             input.oninput = (e) =>  { 
                 checkInputType(input) 
                 if ('ajax' in input.dataset) {
                     data = JSON.stringify({'name' : input.value})
                     xhrOnLoad('POST', input.dataset.ajax, data, AjaxFieldUpdate, input)
+                  
                 }
             }
         }

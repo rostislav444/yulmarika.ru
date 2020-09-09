@@ -328,10 +328,12 @@ header .viber_icon img {
     
     header .actions img {
         width: 52px;
+        min-width: 52px;
         height: 52px;
         padding: 12px;
         cursor: pointer;
     }
+
     header .logo {
         justify-content: flex-start;
     }

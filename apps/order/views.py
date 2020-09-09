@@ -146,6 +146,9 @@ def make_order(request):
         order.save()
 
         context['success'] = True
+        order_total = order.products_cost
+        if order.free_delivery == False:
+            order_total = order.products_cost + order.delivery_cost
         context['payment'] = yandex_pay_confirm(order.products_cost + order.delivery_cost)
        
     context['success'] = False

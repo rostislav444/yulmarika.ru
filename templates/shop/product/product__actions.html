@@ -47,7 +47,7 @@
     </button>
 
     
-    <a href="{% if varint %}{% url 'shop:fast_buy' product.pk variant.pk %}{% else %}{% url 'shop:fast_buy' product.pk %}{% endif %}" class="action_button one_click_buy">
+    <a href="{% url 'shop:fast_buy' product.pk variant.pk %}" class="action_button one_click_buy">
       <img src="{% static 'img/ico/wallet.svg' %}" alt="[]">
       <span>Купить в 1 клик</span>
     </a>

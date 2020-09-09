@@ -7,7 +7,10 @@
             </div>
             
             <div class="info">
-                <p class="name">{{ product.name }}</p>
+                <a href="{{ product.url }}">
+                    <p class="name">{{ product.name }}</p>
+                </a>
+                
                 {% if product.color %}
                     <p class="color">Цвет: <span style="background-color: {{ product.color }};"></span></p>
                 {% endif %}
@@ -29,7 +32,7 @@
                 <p class="product_price {% if product.old_price > product.price %}discount{% endif %}">
                     <span class="currnet_price"><span class="number big_num">{{ product.price }}</span> RUB</span>
                     {% if product.old_price > product.price %}
-                    <span class="old_price big_num">{{ product.old_price }} RUB</span>
+                        <span class="old_price"><span class="number big_num">{{ product.old_price }}</span> RUB</span>
                     {% endif %}
                 </p>
 

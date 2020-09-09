@@ -6,11 +6,15 @@ const orderTotalPrice =     document.querySelector('.total_price_num')
 const orderBtnWrp =         document.querySelector('.create_order_btn_wrapper')
 const totalSaveDiv =        document.querySelector('.total_save')
 const initialTotalPrice =   document.querySelector('.initial_total_price_num')
+const minimalOrderTotal = parseInt(document.querySelector('.minimal_order_price').dataset.price)
+
+const promocodeInfoBlack = document.querySelector('.promocode_info_black')
+const promocodeInfoBlue =  document.querySelector('.promocode_info_blue')
 
 function orderBtnState(total) {
     total = parseInt(total)
     let state = false
-    if (total > 500) {
+    if (total >= minimalOrderTotal) {
         let deliveryMethods = document.querySelectorAll('input[name="order_delivery_method"]') 
         if (deliveryMethods.length > 0) {
             for (let method of deliveryMethods) {
@@ -34,6 +38,7 @@ function cartInit() {
     for (let remove of document.querySelectorAll('.order_item__remove')) {
         remove.onclick = () => { RemoveFromCart(remove) }; 
     }
+    makeBigNum()
 }
 
 
@@ -43,9 +48,14 @@ function setPromocode(data=null) {
     if (data) {
         couponTotalDiscount.classList.add('active')
         couponTotalDiscountSpan.innerHTML = data + ' RUB'
+        promocodeInfoBlack.classList.remove('active')
+        promocodeInfoBlue.classList.add('active')
+        document.querySelector('.promocode_info_active').dataset.total = data
     } else {
         couponTotalDiscount.classList.remove('active')
         couponTotalDiscountSpan.innerHTML = 'нет'
+        promocodeInfoBlack.classList.add('active')
+        promocodeInfoBlue.classList.remove('active')
     }
     
 }

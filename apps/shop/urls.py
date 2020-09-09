@@ -9,7 +9,7 @@ cart = [
     path('data/',   views.CartViewSet.as_view({'get': 'data'}),    name='cart_data'),
     path('clear/',  views.CartViewSet.as_view({'get': 'clear'}),   name='cart_clear'),
     path('fast_buy/<product_id>/<variant_id>/', views.CartViewSet.as_view({'get': 'fast_buy'}), name='fast_buy'),
-    path('fast_buy/<product_id>/',              views.CartViewSet.as_view({'get': 'fast_buy'}), name='fast_buy'),
+   
 ]
 
 urlpatterns = [

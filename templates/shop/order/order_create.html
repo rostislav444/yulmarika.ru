@@ -47,7 +47,7 @@
                 </label>
                 <div class="adress">
                     <p class="h5 upper title">Адрес доставки</p>
-                    <div class="adress_prev adress_prev__ruspost"></div>
+                    <div data-key="ruspost" class="adress_prev adress_prev__ruspost"></div>
                 </div>
             </div>
 
@@ -69,7 +69,7 @@
                 </label>
                 <div class="adress">
                     <p class="h5 upper title">Адрес доставки</p>
-                    <div class="adress_prev adress_prev__cdektk"></div>
+                    <div data-key="cdek" class="adress_prev adress_prev__cdektk"></div>
                 </div>
             </div>
         </div>
@@ -81,7 +81,7 @@
             <div class="total_save"></div>
             <div class="row">
                 <span class="title">Стоимость товаров</span>
-                <span class="data "><span class="number big_num total_products_price initial_total_price_num">{{ order.products_cost }}</span> RUB</span>
+                <span class="data "><span data-price="{{ order.products_cost }}" class="number big_num total_products_price initial_total_price_num">{{ order.initial_cost }}</span> RUB</span>
             </div>
             <div class="row">
                 <span class="title">Скидка по купону</span>
@@ -107,7 +107,7 @@
                     </p>
                 </div>
                 <span class="data bold h4">
-                    <span class="number big_num total_price_with_delivery total_price_num">0</span>
+                    <span class="number big_num total_price_with_delivery total_price_num">{{ order.products_cost }}</span>
                     <span class="currency">rub</span>
                 </span>
             </div>
@@ -124,8 +124,8 @@
         <div class="pay_types">
             <img src="{% static 'img/pay_types.png' %}" alt="Pay types">
             <ul class="h6 pay_rules">
-                <li>Минимальная сумма заказа - 500 RUB</li>
-                <li>Бесплатная доставка для заказов от 5000 rub</li>
+                <li data-price="{{ front_files.minimal_order }}" class="minimal_order_price">Минимальная сумма заказа - {{ front_files.minimal_order }} RUB</li>
+                <li data-price="{{ front_files.free_delivery }}" class="free_delivery_price">Бесплатная доставка для заказов от {{ front_files.free_delivery }} RUB</li>
             </ul>
             <p class="pay_note">Выбор способа и расчет стоимости доставки производится во время оформления заказа.</p>
         </div>
@@ -153,6 +153,7 @@
     const deliveryAdressURlSet =    "{% url 'delivery:set_adress' %}"
     const deliveryAdressUrlGet =    "{% url 'delivery:get_adress' %}"
     const citySearchUrl =           "{% url 'core:search_city' %}"
+    const freeDelivery = {{ order.free_delivery|lower|safe }}
 </script>
 
 <script src="{% static 'js/order/delivery.js' %}"></script>

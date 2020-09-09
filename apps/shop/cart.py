@@ -120,7 +120,6 @@ class Cart(object):
                 data['total'] += quantity * price
                 if old_price and old_price > price:
                     data['total_save'] += (quantity * old_price) - (quantity * price)
-                    print('OLD PRICE', data['total_save'])
                 data['products'].append(serializer)
 
         if 'coupon' in self.session.keys():

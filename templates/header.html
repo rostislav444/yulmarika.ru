@@ -30,7 +30,7 @@
     </nav>
     <div class="logo">
         <a href="/">
-            <img src="{{ front_files.logo.url }}" alt="logo">
+            <img src="{% if front_files.logo %}{{ front_files.logo.url }}{% endif %}" alt="logo">
         </a>
     </div>
     <div class="actions">

@@ -27,7 +27,13 @@
                 <span class="title">Скидка по купону</span>
                 <span class="data coupon_total_discount">
                     <span>{{ order.discount_cost }}</span> 
-                    <img class="info" src="{% static 'img/ico/info_black.svg' %}" alt="i">
+                    <div class="promocode_info_inactive" aria-label="Используйте промокод купона для получения дополнительной скидки" data-microtip-size="medium" data-microtip-position="left" role="tooltip">
+                        <img class="info promocode_info_black" src="{% static 'img/ico/info_black.svg' %}" alt="i" >
+                    </div>
+                    <div class="promocode_info_active" data-total="0" aria-label="Дополнительная скидка по купону составляет" data-microtip-size="medium" data-microtip-position="left" role="tooltip">
+                        <img class="info promocode_info_blue" src="{% static 'img/ico/info.svg' %}" alt="i" >
+                    </div>
+                    
                 </span>
             </div>
             <div class="total row">
@@ -79,20 +85,23 @@
             <span class="h5 upper">Способы оплаты</span>
             <img src="{% static 'img/pay_types.png' %}" alt="Pay types">
             <ul class="h6 pay_rules">
-                <li>Минимальная сумма заказа - 500 RUB</li>
-                <li>Бесплатная доставка для заказов от 5000 rub</li>
+                <li data-price="{{ front_files.minimal_order }}" class="minimal_order_price">Минимальная сумма заказа - {{ front_files.minimal_order }} RUB</li>
+                <li data-price="{{ front_files.free_delivery }}" class="free_delivery_price">Бесплатная доставка для заказов от {{ front_files.free_delivery }} RUB</li>
             </ul>
             <p class="pay_note">Выбор способа и расчет стоимости доставки, производится во время оформления заказа</p>
         </div>
     </div>
 </div>
+{% include 'ui/popup.html' %}
 {% endblock %}
 
 {% block js %}
+<script src="{% static 'lib/popup.js' %}"></script>
 <script>
     const orderProductsList =   document.querySelector('.order__main_list')
     const orderProductTpl = `{% include 'shop/order/order_product__tpl.html' %}`
 </script>
 <script src="{% static 'js/order/cart.js' %}"></script>
 <script src="{% static 'js/order/promocode.js' %}"></script>
+
 {% endblock %}
