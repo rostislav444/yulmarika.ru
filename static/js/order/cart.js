@@ -1,27 +1,49 @@
 // Templates
-const totalSaveTpl = "<p class='you_save'>Вы экономите {{ total_save }} RUB</p>"
+const totalSaveTpl = "<p class='you_save'>Вы экономите <span class='number big_num'>{{ total_save }}</span> RUB</p>"
 // Selectors
 const orderQuantityNumber = document.querySelector('.order_quantity_number')
 const orderTotalPrice =     document.querySelector('.total_price_num') 
 const orderBtnWrp =         document.querySelector('.create_order_btn_wrapper')
 const totalSaveDiv =        document.querySelector('.total_save')
 const initialTotalPrice =   document.querySelector('.initial_total_price_num')
-const minimalOrderTotal = parseInt(document.querySelector('.minimal_order_price').dataset.price)
+const minimalOrderTotal =   document.querySelector('.minimal_order_price')
+const minimalFreeDelivery = document.querySelector('.free_delivery_price')
 
 const promocodeInfoBlack = document.querySelector('.promocode_info_black')
 const promocodeInfoBlue =  document.querySelector('.promocode_info_blue')
 
+
+
+
+
+
+
 function orderBtnState(total) {
     total = parseInt(total)
     let state = false
-    if (total >= minimalOrderTotal) {
+    if (total >= parseInt(minimalOrderTotal.dataset.price)) {
         let deliveryMethods = document.querySelectorAll('input[name="order_delivery_method"]') 
         if (deliveryMethods.length > 0) {
             for (let method of deliveryMethods) {
                 if (method.checked) { state = true  }
             }
         } else {  state = true }
-    } 
+        minimalOrderTotal.classList.add('active')
+    } else {
+        minimalOrderTotal.classList.remove('active')
+    }
+    // Check images 
+    if (total >= parseInt(minimalFreeDelivery.dataset.price)) {
+        minimalFreeDelivery.classList.add('active')
+    } else {
+        minimalFreeDelivery.classList.remove('active')
+    }
+    
+
+
+
+
+
     if (state == false) {
         orderBtnWrp.classList.add('disabled') 
     } else if (state == true) {
@@ -101,4 +123,5 @@ function updateCartQuantity(counter) {
     let input = counter.querySelector('input')
     AddToCart(input)
 }
+
 

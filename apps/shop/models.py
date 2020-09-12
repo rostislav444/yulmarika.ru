@@ -28,6 +28,10 @@ class Category(NameSlug):
         verbose_name = "Категория товара"
         verbose_name_plural = "Категории товаров"
 
+    def save(self):
+        self.name = re.sub('[^0-9a-zA-Zа-яА-Я -_,.]', '', self.name) 
+        super(Category, self).save()
+
     
 
 
@@ -103,13 +107,14 @@ class Product(ModelImages):
     length =         models.PositiveIntegerField(verbose_name="Длина (см)",  null=True, blank=False)
     width =          models.PositiveIntegerField(verbose_name="Ширина (см)", null=True, blank=False)
     height =         models.PositiveIntegerField(verbose_name="Высота (см)", null=True, blank=False)
-    weight =         models.PositiveIntegerField(verbose_name="Вес (кг)",    null=True, blank=False)
+    weight =         models.DecimalField(max_digits=12, decimal_places=2, verbose_name="Вес (кг)", null=True, blank=False)
     description =    RichTextField(verbose_name="Описание", null=True, blank=True)
     preferences =    RichTextField(verbose_name="Характеристики", null=True, blank=True)
     created =        models.DateTimeField(default=timezone.now, blank=True, null=True, verbose_name="Дата создания")
     updated =        models.DateTimeField(default=timezone.now, blank=True, null=True, verbose_name="Последнее изменение")
 
     class Meta:
+        ordering = ['-created']
         verbose_name = "Список товаров"
         verbose_name_plural = "Список товаров"
 
@@ -141,9 +146,17 @@ class Product(ModelImages):
     def make_slug(self):
         return slugify(unidecode('-'.join([self.name, self.code])))
 
+    def clean(self):
+        if self.old_price != 0 and self.old_price != None:
+            if self.old_price < self.price:
+                raise ValidationError({
+                    'old_price' : 'Прежняя цена не может быть ниже текущей.',
+                })
+
     def save(self):
-        if self.old_price < 0:
-            self.old_price = 0
+        if self.old_price ==  None:       self.old_price = 0
+        elif self.old_price < self.price: self.old_price = 0
+        
         self.discount = self.get_discount
         self.slug = self.make_slug
         self.updated = timezone.now()

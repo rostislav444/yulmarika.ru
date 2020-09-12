@@ -41,7 +41,7 @@
                     <div class="info">
                         <p>Отделение Почты России</p>
                         <p class="grey">Доставка от 3 дней</p>
-                        <p class="cost"><span id="ruspost_price">0</span> RUB</p>
+                        <p class="cost"><span class="method_price" id="ruspost_price">0</span> RUB</p>
                     </div>
                     
                 </label>
@@ -63,7 +63,7 @@
                     <div class="info">
                         <p>Пункт самовывоза</p>
                         <p class="grey">Доставка от 2 дней</p>
-                        <p class="cost"><span id="cdek_price">0</span> RUB</p>
+                        <p class="cost"><span class="method_price" id="cdek_price">0</span> RUB</p>
                     </div>
                     
                 </label>
@@ -87,7 +87,7 @@
                 <span class="title">Скидка по купону</span>
                     {% if order.discount_cost %}
                         <span class="data coupon_total_discount active">
-                            <span>{{ order.discount_cost }} RUB</span>
+                            <span class="number big_num">{{ order.discount_cost }}</span><span> RUB</span>
                         </span>
                     {% else %}
                         <span class="data coupon_total_discount">
@@ -119,7 +119,36 @@
             </div>
         </div>
         <div class="products_list order__products_list">
-            <!-- JS insert products here -->
+            {% for product in order.products.all %}
+                <div class="order__product">
+                    <a href="{{ product.url }}" class="image">
+                        <img src="{{ product.variant.imgs.photo_1.s }}" alt="">
+                    </a>
+                    <div class="info">
+                        <p class="name bold h5">{{ product.name }}</p>
+                      
+                        <div class="product_color">
+                            <span>Цвет: </span>
+                            <span class="color" 
+                                style="{% if product.color.image %}background-image: url({{ product.color.imgs.image.xs }}){% else %}background-color: {{ product.color.hex }}{% endif %};">
+                            </span>
+                        </div>
+                            
+                        
+                        <p class="code">Артикул: {{ product.code }}</p>
+                        <p class="quantity">Кол-во: {{ product.quantity }} шт.</p>
+                        <div data-product_id="{{ product.product_id }}" data-variant_id="{{ product.variant_id }}" class="remove order_item__remove"></div>
+                        
+                        <p class="product_price {% if product.old_price > product.price %}discount{% endif %}">
+                            <span class="currnet_price"><span class="number big_num">{{ product.price }}</span> RUB</span>
+                            {% if product.old_price > product.price %}
+                            <span class="old_price big_num">{{ product.old_price }} RUB</span>
+                            {% endif %}
+                        </p>
+
+                    </div>
+                </div>
+            {% endfor %}
         </div>
         <div class="pay_types">
             <img src="{% static 'img/pay_types.png' %}" alt="Pay types">
@@ -141,6 +170,9 @@
 
 {% block js %}
 <script>
+   
+    const userBaseData = JSON.parse(`{{ user_data|safe }}`)
+    
     const orderBtnWrp =         document.querySelector('.create_order_btn_wrapper')
     const deliveryAdressForm =     `{% include "shop/order/forms/delivery_adress_form.html" %}`
     const deliveryAdressList =     `{% include "shop/order/forms/delivery_adress_list.html" %}`

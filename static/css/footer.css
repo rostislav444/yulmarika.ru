@@ -1,9 +1,10 @@
 footer {
     position: relative;
+    display: block;
     width: 100%;
     background-color: black;
     padding: 12px 0;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 footer .content {
     position: relative;

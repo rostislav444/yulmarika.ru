@@ -20,13 +20,13 @@
         
         <div class="total_table">
             <div class="row">
-                <span class="title">Стоисомть товаров</span>
+                <span class="title">Стоимость товаров</span>
                 <span class="data "><span class="number big_num initial_total_price_num">0</span> RUB</span>
             </div>
             <div class="row">
                 <span class="title">Скидка по купону</span>
                 <span class="data coupon_total_discount">
-                    <span>{{ order.discount_cost }}</span> 
+                    <span class="number big_num">{{ order.discount_cost }}</span> 
                     <div class="promocode_info_inactive" aria-label="Используйте промокод купона для получения дополнительной скидки" data-microtip-size="medium" data-microtip-position="left" role="tooltip">
                         <img class="info promocode_info_black" src="{% static 'img/ico/info_black.svg' %}" alt="i" >
                     </div>
@@ -49,7 +49,7 @@
                 </span>
             </div>
             <div class="create_order_btn_wrapper tooltip">
-                <span class="tooltiptext">Сумма вашего заказа слишком мала</span>
+                <span class="tooltiptext">Минимальная сумма для заказа {{ front_files.minimal_order }} RUB</span>
                 <a href="{% url 'order:order_or_register' %}">
                     <button class="button h4 bold create_order_btn">Перейти к оформлению</button>
                 </a>
@@ -85,10 +85,19 @@
             <span class="h5 upper">Способы оплаты</span>
             <img src="{% static 'img/pay_types.png' %}" alt="Pay types">
             <ul class="h6 pay_rules">
-                <li data-price="{{ front_files.minimal_order }}" class="minimal_order_price">Минимальная сумма заказа - {{ front_files.minimal_order }} RUB</li>
-                <li data-price="{{ front_files.free_delivery }}" class="free_delivery_price">Бесплатная доставка для заказов от {{ front_files.free_delivery }} RUB</li>
+                <li data-price="{{ front_files.minimal_order }}" class="minimal_order_price">
+                    <img class="no"  src="{% static 'img/ico/close.svg' %}" alt="-">
+                    <img class="yes" src="{% static 'img/ico/checkbox.svg' %}" alt="+">
+                    <span>Минимальная сумма заказа - {{ front_files.minimal_order }} RUB</span>
+                </li>
+                <li data-price="{{ front_files.free_delivery }}" class="free_delivery_price">
+                    <img class="no"  src="{% static 'img/ico/close.svg' %}" alt="-">
+                    <img class="yes" src="{% static 'img/ico/checkbox.svg' %}" alt="+">
+                    <span>Бесплатная доставка для заказов от {{ front_files.free_delivery }} RUB</span>
+                    
+                </li>
             </ul>
-            <p class="pay_note">Выбор способа и расчет стоимости доставки, производится во время оформления заказа</p>
+            <p class="pay_note">Выбор способа и расчет стоимости доставки производится во время оформления заказа</p>
         </div>
     </div>
 </div>

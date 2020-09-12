@@ -350,17 +350,23 @@
     height: auto;
 }
 .order__products_list .name {
-    font-size: var(--h6);
+    font-size: var(--h5);
     margin-top: 8px;
     margin-bottom: 4px;
 }
-.order__products_list .code {
+.order__products_list .code,
+.order__products_list .product_color,
+.order__products_list .quantity {
     font-size: var(--h6);
     margin-bottom: 4px;
 }
-.order__products_list .price * {
-    font-size: var(--h6) !important;
+.order__products_list .product_color {
+    font-size: var(--h6);
 }
+.order__products_list .product_price * {
+    font-size: var(--h5) !important;
+}
+
 
 .order__products_list .order__product {
     position: relative;

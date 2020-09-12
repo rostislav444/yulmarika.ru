@@ -77,6 +77,7 @@ class CartVaraintSerializer(serializers.ModelSerializer):
     product_id = serializers.CharField(source="parent.pk")
     variant_id = serializers.CharField(source="pk")
     
+    
     length =  serializers.IntegerField(source="parent.length")
     width =   serializers.IntegerField(source="parent.width")
     height =  serializers.IntegerField(source="parent.height")
@@ -89,7 +90,7 @@ class CartVaraintSerializer(serializers.ModelSerializer):
             'pk','name','code','slug','color',
             'price','old_price','image','url',
             'product_id','variant_id',
-            'length','width','height','weight'
+            'length','width','height','weight', 'in_stock'
         ]
 
     def get_image(self, obj):

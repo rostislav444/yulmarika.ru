@@ -22,8 +22,18 @@ function adressListOnLoad(data) {
     }
     if (data['delivery']) {
         delivery = data['delivery']
-        ruspostPrice.innerHTML = delivery['ruspost']
-        cdekPrice.innerHTML =    delivery['cdek']
+       
+        for (let meth of deliveryMethods) {
+            if (adressList.length > 0) {
+                if (parseInt(delivery[meth.dataset.key]) == 0) {
+                    meth.style.display = 'none'
+                } else {
+                    meth.style.display = 'grid'
+                }
+            }
+            
+            meth.querySelector('.method_price').innerHTML = delivery[meth.dataset.key]
+        }
     } 
 
     function set_method_adress(method, html) {
@@ -37,13 +47,12 @@ function adressListOnLoad(data) {
         
     for (let method of deliveryMethods) {
         set_method_adress(method, adressPreview)
-    }
-    
+    }    
 }
 
 function AdressBlankForm() {
     popupOpen()
-    PopupInner.innerHTML = nunjucks.renderString(deliveryAdressForm, {change : false, url : deliveryAdressURlUpdate});
+    PopupInner.innerHTML = nunjucks.renderString(deliveryAdressForm, {change : false, url : deliveryAdressURlUpdate, adress : userBaseData});
     let form = PopupInner.querySelector('form')
     formValidate(form)
 }
@@ -168,12 +177,14 @@ function checkDeliveryChecked() {
 for (let i = 0; i < deliveryMethodInputs.length; i++) {
     let input = deliveryMethodInputs[i];
     input.onchange = () => {
-        checkDeliveryChecked()
+        
         set_delivery_price(input)
         if (adressList.length == 0) {
             AdressBlankForm()
             input.checked = false
-        } 
+        } else {
+            checkDeliveryChecked()
+        }
         deliveryMethodSelected(i)
         makeBigNum()
     }

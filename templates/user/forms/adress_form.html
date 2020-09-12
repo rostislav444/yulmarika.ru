@@ -8,7 +8,7 @@
             <input id="profile_adres_name_field"   name="name"     data-type="text" type="text" value="{{ adress.name }}" required>
         </div>
         <div class="form_field">
-            <label for="profile_adres_surname_field">Имя</label>
+            <label for="profile_adres_surname_field">Фамилия</label>
             <input id="profile_adres_surname_field" name="surname" data-type="text" type="text" value="{{ adress.surname }}" required>
         </div>
         <div class="form_field phone">
@@ -41,5 +41,8 @@
     </div>
     
     <button class="button" type="submit">{% if adress %}Обновить{% else %}Добавить адрес{% endif %}</button>
+    {% if adress.pk %}
+        <button onclick="DeleteAdress({{ adress.pk }})"  class="button delete" type="button">Удалить</button>
+    {% endif %}
 </form>
 {% endverbatim %}

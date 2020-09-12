@@ -4,6 +4,7 @@ const body =  document.querySelector('body')
 
 const sliderGalery = new Swiper('.galery', {
     loop: true,
+    spaceBetween: 2,
     pagination: {
         el: '.swiper-pagination',
     },

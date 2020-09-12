@@ -22,9 +22,9 @@ class Cart(object):
         products = self.cart['products']
         for i, item in enumerate(products):
             try:
-                product = Product.objects.get(pk = int(item['product_id']))
+                product = Product.objects.get(pk = int(item['product_id']), in_sell=True)
                 if item['variant_id'] is not None:
-                    variant = Variant.objects.get(pk = int(item['variant_id']))
+                    variant = Variant.objects.get(pk = int(item['variant_id']), hide=False, in_stock__gte=1)
                 else:
                     variant = None
                 items.append({'product':product, 'variant':variant, 'quantity':int(item['quantity'])})

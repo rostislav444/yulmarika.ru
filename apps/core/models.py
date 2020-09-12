@@ -101,7 +101,7 @@ class NameSlug(models.Model):
 
     def save(self):
         self.name = re.sub('[^0-9a-zA-Zа-яА-Я -_,.]', '', self.name) 
-        print(self.name)
+       
         self.slug = slugify(unidecode(self.name))
         super(NameSlug, self).save()
 

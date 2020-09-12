@@ -23,8 +23,7 @@
       <div class="colors">
         {% for color in product.get_variants %}
           <a {% if color.pk == variant.pk %}class="active"{% endif %} 
-            aria-label="{{ color.color.name }}" 
-            data-microtip-position="bottom" role="tooltip"
+            data-tippy-content="{{ color.color.name }}" tabindex="0"
             href="{{color.get_absolute_url }}" 
             style="{% if color.color.image %}background-image: url({{ color.color.imgs.image.xs }}){% else %}background-color: {{ color.color.hex }}{% endif %};">
           </a>

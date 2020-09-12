@@ -27,7 +27,6 @@ class OrderProductInline(admin.TabularInline):
 
     def image(self, obj=None):
         if obj.pk:
-            print('OBJ', obj)
             img = mark_safe(
                 """<img style="width:160px; height:160px; object-fit: contain; object-position: center; border: 1px solid #ededed;" 
                 src="{url}" width="{width}" height={height} />""".format(url = obj.product.imgs['image']['s'], width=240, height=240))
@@ -35,13 +34,19 @@ class OrderProductInline(admin.TabularInline):
         return '-'
 
     def color_image(self, obj=None):
-        # if obj.pk:
-        #     if obj.color:
-        #         img = mark_safe(
-        #             """<img style="width:160px; height:160px; object-fit: contain; object-position: center; border: 1px solid #ededed;" 
-        #             src="{url}" width="{width}" height={height} />""".format(url = obj.color.imgs['image']['s'], width=240, height=240))
-        #         return img
+        if obj.pk:
+            if obj.color:
+                if obj.color.image:
+                    img = mark_safe(f"""<img src={obj.color.imgs['image']['s']} style='object-fit: contain; object-position: center; border: 1px solid #ededed;'width="24" height=24 />""")
+                    return img
+                elif obj.color.hex:
+                    img = mark_safe(f"""<img style='background-color: {obj.color.hex}; object-fit: contain; object-position: center; border: 1px solid #ededed;' width=24 height=24/>""")
+                    return img
+
+                print(obj.color, obj.color.hex, obj.color.image)
+               
         return '-'
+    color_image.short_description = "Изображение цвета"
 
     readonly_fields = ['image','color_image']
     fields = ['image','product','name','code','quantity','price','color_image','color']
@@ -55,6 +60,7 @@ class OrderAdmin(admin.ModelAdmin):
         'order_id',
         'products_cost',
         'created',
+        'customer',
         'customer_name',
         'phone',
         'email',

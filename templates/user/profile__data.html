@@ -6,7 +6,7 @@
     <div class="profile_messages message"></div>
     <p class="title">Мои данные</p>
     <p class="grey h6">* обязательные поля</p>
-    <form action="/" method="POST"  data-name="userdata" class="form">
+    <form action="/" class="form" method="POST" data-name="userdata" novalidate>
         <div class="userdata_messages message"></div>
         <div class="data">
             <ul class="gender col2">
@@ -44,14 +44,14 @@
             </div>
             <div class="form_field">
                 <label for="profile_birthday_field">Дата рождения</label>
-                <input id="profile_birthday_field" name="birthday"  data-type="text" type="text" value="{{ user.birthday|date:"d.m.Y" }}" required>
+                <input id="profile_birthday_field" name="birthday" data-type="text" type="date" value="{{ user.birthday|date:"Y-m-d" }}" required>
             </div>
         </div>
     </form>
 
 <div class="password_change">
     <p class="title">Смена пароля</p>
-    <form class="form" data-name="password" action="/">
+    <form class="form" data-name="password" action="/" novalidate>
         <div class="password_messages message"></div>
         <div class="data">
             <div class="form_field">
@@ -116,11 +116,20 @@
        
         if (valid) {
             let response = XHR('POST',profileUpdateURL, JSON.stringify(data))
+            profileMessages.classList.remove('active')
             if (response.status == '403') {
                 document.location.reload(true);
             }
             if (response['errors'].length == 0) {
+                profileMessages.classList.add('active')
+                profileMessages.classList.add('success')
                 profileMessages.innerHTML = "Данные обновлены"
+            } else {
+                profileMessages.innerHTML = ''
+                for (let err of response['errors']) {
+                    profileMessages.classList.add('active')
+                    profileMessages.innerHTML += err
+                }
             }
            
         }

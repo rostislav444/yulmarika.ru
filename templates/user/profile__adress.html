@@ -4,7 +4,7 @@
 {% block profile %}
 <div class="profile_adress">
     <p class="title">Адреса</p>
-    <div class="message success">Данные обновлены</div>
+    <div class="message">Данные обновлены</div>
     <ul class="profile_adress_list">
         
     </ul>
@@ -31,17 +31,31 @@
     var adress_list =  JSON.parse(`{{ adress_list_json|safe }}`)
     var chooseAdress = undefined
 
-    function AdressList(data) {
-        profileAdressMsg.classList.add('active')
+    function AdressList(data, action = undefined) {
+        if (action == true) {
+            profileAdressMsg.classList.add('active')
+            profileAdressMsg.classList.add('success')
+            profileAdressMsg.innerHTML = 'Данные обновлены'
+        } else if (action == 'delete') {
+            profileAdressMsg.classList.add('active')
+            profileAdressMsg.classList.remove('success')
+            profileAdressMsg.innerHTML = 'Адрес удален'
+        } 
         adress_list = data
         AdressListUpdate()
+    }
+
+    function DeleteAdress(pk) {
+        let url = "{% url 'user:delete_adress' %}"
+        response = XHR('POST', url, JSON.stringify({'pk':pk})) 
+        AdressList(response['data'], 'delete')
     }
 
 
     function AdressListUpdate() {
         profileAdressList.innerHTML = nunjucks.renderString(adressListTpl, {adress_list : adress_list});
         chooseAdress = document.querySelectorAll('input[type=radio][name=adress]')
-
+        checked = false
         for (let adress of chooseAdress) {
             let num = parseInt(adress.dataset.num)
             adress.onchange = () => {
@@ -56,12 +70,18 @@
                 formValidate(form)
             }
             if (adress.checked && num != 0) {
-                adressFormDiv.innerHTML = nunjucks.renderString(adressFormTpl, {url : url, adress :  adress_list[0]} );
+                checked = true
+                adressFormDiv.innerHTML = nunjucks.renderString(adressFormTpl, {url : url, adress : adress_list[0]});
                 formValidate(document.querySelector('form.profile_adress_form'))
-            }
+            } 
 
         }
-        let form = document.querySelector('form')
+        if (checked == false && chooseAdress.length == 1) {
+            chooseAdress[0].checked = true
+            adressFormDiv.innerHTML = nunjucks.renderString(adressFormTpl, {url : url, adress : null});
+        }
+
+        let form = document.querySelector('.profile_adress_form')
         formValidate(form)
        
     } AdressListUpdate()

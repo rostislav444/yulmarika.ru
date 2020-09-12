@@ -90,8 +90,6 @@ def add_products():
 
    
 def home(request, category=None):
-    for code in Product.objects.values_list('code', flat=True).distinct():
-        Product.objects.filter(pk__in=Product.objects.filter(code=code).values_list('pk', flat=True)[1:]).delete()
     page = 1
     try: on_page = FileCodes.objects.last().showcase
     except: on_page = 12
@@ -112,7 +110,7 @@ def home(request, category=None):
     ]
     context['sort_by'] = sort_by
 
-    all_products = Product.objects.filter(in_sell=True, variants__in_stock__gte=1, variants__isnull=False).distinct()
+    all_products = Product.objects.filter(in_sell=True, variants__in_stock__gte=1, variants__hide=False, variants__isnull=False).distinct()
     context['total_products'] = len(all_products)
     if all_products.first() is not None:
         context['max_price'] =  all_products.order_by('-price').first().price
@@ -225,6 +223,7 @@ def home(request, category=None):
     context['products'] = json.loads(json.dumps(ProductSeriaziler(products, many=True).data))
     context['pages'] = math.ceil(products_len / on_page)
     context['more']  = True if products_len > page * on_page else False
+    print('MORE', context['more'])
  
 
     if request.method == 'GET':

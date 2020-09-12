@@ -16,6 +16,8 @@ class FileCodes(models.Model):
     favicon =   FileField(upload_to="file_codes", blank=True, null=True, verbose_name="Fav icon")
     css =       FileField(upload_to="file_codes", blank=True, null=True,  verbose_name="Файлы стилей")
     free_delivery = models.PositiveIntegerField(default=5000, blank=True,  verbose_name="Бесплатная доставка от")
+    base_delivery = models.PositiveIntegerField(default=400, blank=True,  verbose_name="Базовая стоимость доставки")
+
     minimal_order = models.PositiveIntegerField(default=500,  blank=True,  verbose_name="Минимальная сумма заказа")
     showcase =  models.PositiveIntegerField(default=12, blank=False,  verbose_name="Колличесвто товаров на витрине")
     recomend =  models.PositiveIntegerField(default=24, blank=False,  verbose_name="Колличесвто товаров в блоке рекомендуем")

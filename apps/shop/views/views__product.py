@@ -14,9 +14,8 @@ def product(request, slug, product_id, variant_id, color=None):
     variant = Variant.objects.get(pk=int(variant_id))
     if variant.hide or variant.in_stock < 1:
         variant = product.variants.filter(hide=False, in_stock__gte=1).first()
-        print(variant)
         if variant:
-            return redirect(variant.get_absolute_url)
+            return redirect(variant.get_absolute_url())
         else:
             return redirect('/')
 

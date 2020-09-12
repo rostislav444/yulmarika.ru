@@ -3,6 +3,7 @@ from urllib.parse import urlencode
 from django.core.exceptions import ValidationError
 from django.contrib.postgres.fields import JSONField
 import requests
+from apps.core.function import send_mail
 
 
 class Delivery(models.Model):
@@ -22,6 +23,30 @@ class Delivery(models.Model):
         self.response = self.send_request(data)
         if type(self.response) == dict and 'err' in self.response.keys():
                 raise ValidationError({'api_key' : self.response['err']})
+
+    def test_api(self):
+        obj = Delivery.objects.all().first()
+        data = {'key' : obj.api_key, 'q' : 'getCities'}
+        response = obj.send_request(data)
+        if type(response) == dict and 'err' in response.keys():
+            kwargs = {
+                "email" : 'yulmarika@yandex.ru',
+                "subject" : "API калькулятора",
+                "text" :  response['err'],
+            }
+            try: send_mail(**kwargs)
+            except: pass
+        else:
+            if type(response) == list:
+                for city in response:
+                    try:
+                        DeliveryCities.objects.get(parent=obj, name=city['name'])
+                    except:
+                        new_city = DeliveryCities(parent=obj, name=city['name'])
+                        new_city.save()
+           
+        
+
 
 
     def send_request(self, data):

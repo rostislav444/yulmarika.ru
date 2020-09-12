@@ -9,6 +9,7 @@ from apps.order.models import Order
 from apps.delivery.models import Delivery
 from apps.coupon.models import Coupon
 from apps.user.models import UserAdress
+from apps.filecodes.models import FileCodes
 import json
 
 
@@ -93,6 +94,12 @@ class UserAdressViewSet(viewsets.ViewSet):
         
 
     def dlivery_price(self, request):
+        fk = FileCodes.objects.all().first()
+        if fk:
+            base_delivery_price = fk.base_delivery
+        else:
+            base_delivery_price = 400
+
         session = request.session
         if 'delivery' not in session.keys(): session['delivery'] = {}
         delivery_data = { 
@@ -124,20 +131,22 @@ class UserAdressViewSet(viewsets.ViewSet):
                     data['endCity'] = city
                     response = delivery.send_request(data)
             else:
+
                 adress_list = request.session['adress']
                 if len(adress_list):
                     data['endCity'] = adress_list[0]['city']
                     response = delivery.send_request(data)
 
             if response:
-                print(response)
-                try: print(response['err'])
-                except:
+                if type(response) == list:
                     for item in response:
-                        if item['name'] == 'CDEK':
-                            delivery_data['cdek'].append(item['price'])
-                        elif item['name'] == 'Почта России':
-                            delivery_data['ruspost'].append(item['price'])
+                        if   item['name'] == 'CDEK':         delivery_data['cdek'].append(item['price'])
+                        elif item['name'] == 'Почта России': delivery_data['ruspost'].append(item['price'])
+                else:
+                    delivery_data['ruspost'].append(base_delivery_price)
+                    
+            
+
 
         delivery_data['ruspost'] = min(delivery_data['ruspost']) if len(delivery_data['ruspost']) else 0
         delivery_data['cdek'] =    min(delivery_data['cdek'])    if len(delivery_data['cdek'])    else 0

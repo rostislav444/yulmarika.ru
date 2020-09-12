@@ -38,30 +38,50 @@
             </p>
         </div>
         <div class="order_data" id="order_data_{{ order.pk }}">
-            {% if order.payed != None %}
-            <div>
-                <p class="payed">Оплачен</p>
-            </div>
+            {% if order.status == 'declined' %}
+                <div>
+                    <p class="declined">Отменен</p>
+                </div>
+            {% else %}
+                {% if order.payed %}
+                    <div>
+                        <p class="payed">Оплачен</p>
+                    </div>
+                {% else %}
+                    <div>
+                        <a href="{% url 'order:create' order.pk %}">
+                            <button class="button">Оплатить</button>
+                        </a>
+                        <a href="{% url 'order:decline' order.pk %}">
+                            <button class="button decline">Отменить</button>
+                        </a>
+                    </div>
+                {% endif %}
             {% endif %}
             <div class="products">
                 {% for product in order.products.all %}
                     <div class="product">
-                        <div class="image" style="background-image: url({{ product.product.imgs.image.s }});"></div>
+                        <div class="image" style="background-image: url({{ product.variant.imgs.photo_1.s }});"></div>
                         <div class="data">
                             <p class="upper grey">{{ product.name }}</p>
-                            <p>
+                            <div class="info">
                                 {% if product.color %}
-                                    <span>Цвет: {{ product.color.color.name }}</span>
+                                <span>Цвет:  
+                                    <div class="color" data-tippy-content="{{ color.color.name }}" tabindex="0" 
+                                        style="{% if product.color.image %}background-image: url({{ product.color.imgs.image.xs }}){% else %}background-color: {{ product.color.hex }}{% endif %};">
+                                    </div>
+                                </span>
+                               
+                                    
                                 {% endif %}
                                 <span>Артикул: {{ product.code }}</span>
-                            </p>
+                            </div>
                             <p>
                                 <span>Цена: <span class="black">{{ product.price }}</span> <span class="h6"> RUB</span></span>
                                 <span>Кол-во: {{ product.quantity }}</span>
                             </p>
                             <p>Сумма: <span class="balack">{{ product.total }} <span>RUB</span></span></p>
                         </div>
-                        
                     </div>
                 {% endfor %}
             </div>

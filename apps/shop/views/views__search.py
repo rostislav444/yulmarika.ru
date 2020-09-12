@@ -33,7 +33,7 @@ def search(request):
             return wmtch
 
         if search_input:
-            for product in list(Product.objects.all()):
+            for product in list(Product.objects.filter(in_sell=True, variants__in_stock__gte=1, variants__hide=False, variants__isnull=False).distinct()):
                 ratio = match(search_input.lower(), product.name.lower())
                 if ratio >= 65:
                     prod = ProductSeriaziler(product).data

@@ -5,10 +5,11 @@ from . import views
 app_name = 'user'
 
 profile = [
-    path('orders',  views.UserProfile.as_view({'get':'orders'}),             name="profile_orders"),
-    path('data',    views.UserProfile.as_view({'get':'data','post':'data'}), name="profile_data"),
-    path('adress',  views.UserProfile.as_view({'get':'adresses','post':'adresses'}),           name="profile_adresses"),
-    path('exit',    views.UserProfile.as_view({'get':'exit'}),               name="profile_exit"),
+    path('orders',        views.UserProfile.as_view({'get':'orders'}),             name="profile_orders"),
+    path('data',          views.UserProfile.as_view({'get':'data','post':'data'}), name="profile_data"),
+    path('adress',        views.UserProfile.as_view({'get':'adresses','post':'adresses'}), name="profile_adresses"),
+    path('delete_adress', views.UserProfile.as_view({'post':'delete_adress'}), name="delete_adress"),
+    path('exit',       views.UserProfile.as_view({'get':'exit'}),              name="profile_exit"),
 ]
 
 urlpatterns = [

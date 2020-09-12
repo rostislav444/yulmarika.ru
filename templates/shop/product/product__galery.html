@@ -10,7 +10,6 @@
             <div class="swiper-wrapper">
                 {% if variant.first %}
                     {% for field, image in product.imgs.items %}
-                        
                         {% if image.main %}
                             <div class="swiper-slide slide ">
                                 <div class="play active">
@@ -38,10 +37,28 @@
                 {% endif %}
                 {% if variant %}
                     {% for field, image in variant.imgs.items %}
-                        {% if image %}
+                        {% if image.main %}
                             <div class="swiper-slide slide ">
-                                <img class="product_slider_image" src="{{ image.l }}" alt="">
+                                <div class="play active">
+                                    <img src="{% static 'img/ico/play.svg' %}" alt=">">
+                                </div>
+                                <img class="product_slider_image" data-src="{{ image.main }}" data-preview="{{ image.l }}" src="{{ image.l }}" alt="">
                             </div>
+                        {% elif image.video %}
+                            <div class="swiper-slide slide">
+                                <div class="play active">
+                                    <img src="{% static 'img/ico/play.svg' %}" alt=">">
+                                </div>
+                                <video lass="product_slider_image" width="100%" height="100%">
+                                    <source src="{{ image.video }}" type="video/mp4">
+                                </video>
+                            </div>
+                        {% else %}
+                            {% if image %}
+                                <div class="swiper-slide slide ">
+                                    <img class="product_slider_image" src="{{ image.l }}" alt="{{ image }}">
+                                </div>
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                 {% endif %}

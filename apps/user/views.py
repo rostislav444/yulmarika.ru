@@ -6,7 +6,7 @@ from rest_framework.permissions import AllowAny
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import authenticate, login
 from apps.user.models import CustomUser, UserAdress
-from apps.user.serializers import UserAdressSerializer
+from apps.user.serializers import UserAdressSerializer, UserSerializer
 from apps.delivery.models import Delivery
 from project import settings
 import json, os, re
@@ -32,7 +32,7 @@ class UserViewSet(viewsets.ViewSet):
         try:     
             user = CustomUser.objects.get(email=data["email"])
         except: 
-            return Response({'success' : False, 'msg' : f'Пользователь с Email: {data["email"]}, не зарегестрирован.'})
+            return Response({'success' : False, 'msg' : f'Пользователь с Email: {data["email"]}, не зарегистрирован.'})
         user = authenticate(request, username=data['email'], password=data['password'])
         if user is not None:
             login(request, user)
@@ -44,7 +44,7 @@ class UserViewSet(viewsets.ViewSet):
         data = request.data
         try:     
             user = CustomUser.objects.get(email=data["email"])
-            return Response({'success' : False, 'msg' : f'Пользователь с Email: {data["email"]}, уже зарегестрирован.'})
+            return Response({'success' : False, 'msg' : f'Пользователь с Email: {data["email"]}, уже зарегистрирован.'})
         except: 
             try:
                 user = CustomUser.objects.create_user(
@@ -89,12 +89,12 @@ class UserProfile(viewsets.ViewSet):
 
                     email = CustomUser.objects.filter(email=user_data['email']).first()
                     if email != None and email.pk != user.pk:
-                        msg = "Пользователь с таким email уже зарегестрирован на сайте"
+                        msg = "Пользователь с таким email уже зарегистрирован на сайте"
                         errors.append(msg)
 
                     phone = CustomUser.objects.filter(email=user_data['phone']).first()
                     if phone != None and phone.pk != user.pk:
-                        msg = f"Пользователь с таким номером телефона +7{data['phone']} уже зарегестрирован на сайте"
+                        msg = f"Пользователь с таким номером телефона +7{data['phone']} уже зарегистрирован на сайте"
                         errors.append(msg)
 
                     
@@ -105,7 +105,7 @@ class UserProfile(viewsets.ViewSet):
                             surname =  user_data['surname'],
                             email =    user_data['email'],
                             phone =    user_data['phone'],
-                            birthday = datetime.datetime.strptime(user_data['birthday'], "%d.%m.%Y").date()
+                            birthday = datetime.datetime.strptime(user_data['birthday'], "%Y-%m-%d").date()
                         )
                 if 'password' in data.keys():
                     password_data =  data['password']
@@ -132,10 +132,13 @@ class UserProfile(viewsets.ViewSet):
     def adresses(self, request):
         adress_list = UserAdressSerializer(request.user.adress, many=True).data
         context = {
-            'user' : '',
+            'user' : request.user,
+            'user_data' : UserSerializer(request.user).data,
             'adress_list' : adress_list,
             'adress_list_json' : SafeString(json.dumps(adress_list))
         }
+
+
         if request.method == 'POST':
             data = request.data
             UserAdress.objects.filter(user=request.user).update(selected = False)
@@ -170,6 +173,20 @@ class UserProfile(viewsets.ViewSet):
             return Response({'success' : True, 'data': adress_list})
 
         return render(request, 'user/profile__adress.html',context)
+
+    def delete_adress(self, request):
+        data = request.data
+        UserAdress.objects.filter(user=request.user, pk=int(data['pk'])).delete()
+        if len(UserAdress.objects.filter(user=request.user, selected=True)) == 0:
+            adress = UserAdress.objects.filter(user=request.user).first()
+            if adress:
+                adress.selected =True
+                adress.save()
+
+        adress_list = UserAdress.objects.filter(user=request.user)
+        adress_list = UserAdressSerializer(adress_list, many=True).data
+        return Response({'success' : True, 'data': adress_list})
+
 
     def exit(self, request):
         logout(request)

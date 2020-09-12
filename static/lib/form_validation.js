@@ -39,6 +39,7 @@ validation = {
         },
         replace : /[^0-9.]/g
     },
+   
     password : {
         errors : {
             re : /^[0-9a-zA-Z]{6,}$/,
@@ -142,27 +143,22 @@ function fieldValidate(input) {
             errors.push(validator['msg']['func'])
         }
     }
-   
     // REPLACE
     if ('replace' in validator) {
         let re = validator['replace']
         let value = input.value.replace(re, '');
         input.value = value
     }
-
     showMsg(input, errors)
     if (errors.length > 0) {
         input.dataset.valid = false
         input.labels[0].classList.add('err')
         return false
-        
     } else {
         input.labels[0].classList.remove('err')
         input.dataset.valid = true
         return true
     }
-    
-
 }
 
 
@@ -336,10 +332,13 @@ function formOnSubmit(form) {
 
 
 function formValidate(form) {
+    console.log(form);
     form.valid = false
     form.active = false
     form.fields = form.querySelectorAll('input')
-    
+
+    console.log(form);
+
     function formInputsValidate(form) {
         currnetForm = form
         for (let input of form.fields) {
@@ -375,24 +374,27 @@ function formValidate(form) {
     }
 
     for (let input of form.fields) {
-        // Check if field has data type attribute
-        if (input.dataset.type == undefined) {
-            console.log('No dataset type: ',input);
-            input.style.backgroundColor = 'red'
-        } 
-        if (input.name == "" || input.name == undefined) {
-            console.log('No name attr: ',input);
-            input.style.backgroundColor = 'red'
-        } 
-        input.dataset.valid = false
-        input.classList.add('virgin')
-        // Set message paragaphs
-        if (input.required) {
-            let msg = document.createElement('p')
-            msg.classList.add('msg')
-            msg.innerHTML = ''
-            input.after(msg)
+        if (!['search'].includes(input.type)) {
+            // Check if field has data type attribute
+            if (input.dataset.type == undefined) {
+                console.log('No dataset type: ',input);
+                input.style.backgroundColor = 'red'
+            } 
+            if (input.name == "" || input.name == undefined) {
+                console.log('No name attr: ',input);
+                input.style.backgroundColor = 'red'
+            } 
+            input.dataset.valid = false
+            input.classList.add('virgin')
+            // Set message paragaphs
+            if (input.required) {
+                let msg = document.createElement('p')
+                msg.classList.add('msg')
+                msg.innerHTML = ''
+                input.after(msg)
+            }
         }
+       
     }
 }
     

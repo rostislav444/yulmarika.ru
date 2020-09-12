@@ -186,9 +186,10 @@
           </div>
         </div>
         <div class="products_list__pagination">
-         
-          <button class="load_more_btn button">Показать еще</button>
-         
+         {% if more %}
+            <button class="load_more_btn button">Показать еще</button>
+         {% endif %}
+         {% if pages > 0 %}
           <div class="pagination">
             <div class="pages">
               <input type="number" class="current curent_page" data-value="1" min="1" max="{{ pages }}" value="1">
@@ -199,6 +200,7 @@
               <button data-action="next" class="pagination_buton next">></button>
             </div>
           </div>
+          {% endif %}
         </div>
       </div>
     </div>

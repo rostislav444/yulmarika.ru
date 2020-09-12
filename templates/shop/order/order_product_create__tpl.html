@@ -8,10 +8,9 @@
             <div class="info">
                 <p class="name bold">{{ product.name }}</p>
                 {% if product.color %}
-                <div class="product_color">
-                    <span>Цвет: </span><span class="color" style="background-color: {{ product.color }};"></span>
-                </div>
-                    
+                    <div class="product_color">
+                        <span>Цвет: </span><span class="color" style="background-color: {{ product.color }};"></span>
+                    </div>
                 {% endif %}
                 <p class="code">Артикул: {{ product.code }}</p>
                 <p class="quantity">Кол-во: {{ product.quantity }} шт.</p>
