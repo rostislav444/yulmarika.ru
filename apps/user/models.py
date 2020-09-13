@@ -79,6 +79,10 @@ class CustomUser(AbstractBaseUser):
     def is_staff(self):
         return self.is_admin
 
+    @property
+    def user_order(self):
+        return self.orders.exclude(status='new')
+
 
     def save(self,*args,**kwargs):
         # Time 

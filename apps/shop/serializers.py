@@ -102,7 +102,9 @@ class CartVaraintSerializer(serializers.ModelSerializer):
         return '/static/img/no_image.jpg'
 
     def get_color(self, obj):
-        return obj.color.hex
+        if obj.color.image:
+            return f"background-image: url({ obj.color.imgs['image']['xs'] })"
+        return f"background-color: { obj.color.hex }" 
 
 
 class CartProductSerializer(serializers.ModelSerializer):

@@ -49,6 +49,14 @@ def confirmation(request, uid):
         order.status = 'payed'
         order.payed = timezone.now()
         order.save()
+        try:    coupon = Coupon.objects.get(pk=int(request.session['coupon']))
+        except: coupon = None
+        if coupon:
+            if coupon.once:
+                coupon.used = True
+                coupon.save()
+            try: del request.session['coupon']
+            except: pass
         return redirect(reverse('order:success', kwargs={'pk' : order.pk}))
     else:
         return redirect("/")
@@ -56,6 +64,10 @@ def confirmation(request, uid):
 
 def payment_http_msg(request):
     print(request.POST)
+    # if coupon:
+    #     if coupon.once:
+    #         coupon.used = True
+    #         coupon.save()
     return JsonResponse({'status' : True})
 
 
@@ -76,22 +88,29 @@ def save_order(request):
     if len(cart_data['products']):
         try:    coupon = Coupon.objects.get(pk=int(request.session['coupon']))
         except: coupon = None
-        order = Order(
-            status = "new",
-            products_cost = cart_data['total'],
-            discount_cost = cart_data['coupon_discount'] if 'coupon_discount' in cart_data else 0,
-            coupon = coupon,
-        )
-        if coupon:
-            if coupon.once:
-                coupon.used = True
-                coupon.save()
+
+        order_data = {
+            'status' : "new",
+            'products_cost' : cart_data['total'],
+            'discount_cost' : cart_data['coupon_discount'] if 'coupon_discount' in cart_data else 0,
+            'coupon' : coupon
+        }
+
+        try:    order = Order.objects.get(pk=int(request.session.get('order')))
+        except: order = Order()
+        
+        for key, value in order_data.items():
+            setattr(order, key, value)
+        
                 
         if request.user.is_authenticated:
             order.customer = request.user
             order.email =    request.user.email
             order.customer_name = f'{request.user.name} {request.user.surname}'
         order.save()
+
+        order.products.all().delete()
+
         box = {'width' : [], 'height' : [], 'weight' : [], 'length' : [], }        
         for item in cart_data['products']:
             product = Product.objects.get(pk=int(item['product_id']))

@@ -11,9 +11,9 @@
                     <p class="name">{{ product.name }}</p>
                 </a>
                 
-                {% if product.color %}
-                    <p class="color">Цвет: <span style="background-color: {{ product.color }};"></span></p>
-                {% endif %}
+                
+                <p class="color">Цвет: <span style="{{ product.color }}"></span></p>
+                
                 <p class="code">Артикул: {{ product.code }}</p>
                 <div class="counter" data-function="updateCartQuantity">
                     <button>-</button>
