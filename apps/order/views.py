@@ -15,9 +15,7 @@ from apps.coupon.models import Coupon
 from apps.user.models import UserAdress
 from django.http import JsonResponse
 from yandex_checkout import Configuration, Payment
-import json, uuid
-import random
-
+import json, random, uuid, math
 
 
 Configuration.account_id = 740433
