@@ -229,7 +229,7 @@ def make_order(request):
         total = order.products_cost
         if order.free_delivery == False:
             total = order.products_cost + order.delivery_cost
-        description = 'Всего c доставкой: ' + str(total)
+        description += 'Всего c доставкой: ' + str(total)
         context['payment'] = yandex_pay_confirm(request, total, order.uid, description)
        
     context['success'] = False
