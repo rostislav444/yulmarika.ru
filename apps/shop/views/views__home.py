@@ -16,12 +16,6 @@ import math
 from django.db.models import F, Value, Case, When
 from django.db.models.functions import Lower
 
-def sms_process():
-    print('sms')
-
-def email_process():
-    print('email')
-
 
 def add_products():
     s = """

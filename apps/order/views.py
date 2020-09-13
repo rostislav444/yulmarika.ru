@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
@@ -7,6 +8,7 @@ from apps.user.serializers import UserAdressSerializer
 from apps.shop.models import Product, Variant
 from apps.shop.cart import Cart
 from apps.user.serializers import UserSerializer
+from apps.shop.serializers import ProductSeriaziler
 from apps.order.models import Order, OrderProduct
 from apps.delivery.models import Delivery
 from apps.coupon.models import Coupon
@@ -14,20 +16,16 @@ from apps.user.models import UserAdress
 from django.http import JsonResponse
 from yandex_checkout import Configuration, Payment
 import json, uuid
-import math
+import random
 
-def order_payed(request):
-    order = Order.objects.last()
-    for item in order.products.all():
-        product = item.color
-        product.in_stock -= item.quantity
-        product.save()
-    return ''
+
 
 Configuration.account_id = 740433
 Configuration.secret_key = 'test_vElK711q4bXJlKZJ1W4qTpRzwM5c8Ykwhvc6WzmbZjA'
 
-def yandex_pay_confirm(total, description="Заказ"):
+def yandex_pay_confirm(request, total, uid, description="Заказ"):
+    base_url = f"{request.scheme}://{request.META.get('HTTP_HOST')}"
+    path = reverse('order:confirmation', kwargs={'uid' : uid})
     payment = Payment.create({
         "amount": {
             "value": str(total),
@@ -35,12 +33,37 @@ def yandex_pay_confirm(total, description="Заказ"):
         },
         "confirmation": {
             "type": "redirect",
-            "return_url": "https://www.merchant-website.com/return_url"
+            "return_url": f"{base_url}{path}" 
         },
             "capture": True,
             "description": description
     }, uuid.uuid4())
     return json.loads(payment.json())
+
+
+def confirmation(request, uid):
+    Cart(request).clear()
+    
+    order = Order.objects.filter(uid=uid).first()
+    if order:
+        order.uid = ''
+        order.status = 'payed'
+        order.payed = timezone.now()
+        order.save()
+        return redirect(reverse('order:success'))
+    else:
+        return redirect("/")
+
+
+def order_sucess(request, pk=None):
+    context = {}
+    if pk:
+        context['order'] = Order.objects.filter(pk=pk).first()
+
+    recomendations = list(Product.objects.filter(category__in_recomendation=True))
+    context['recomendations'] = ProductSeriaziler(random.sample(recomendations, len(recomendations))[:24], many=True).data
+    context['recomendation_title'] = "Вас также могут заинтересовать:"
+    return render(request, 'shop/order/success.html', context)
 
 
 def save_order(request):
@@ -187,19 +210,29 @@ def make_order(request):
             order.adress = f"{adress['city']}, {adress['street']} д.{adress['house']} кв.{adress['apartment']}"
             order.comments = adress['add_info']
 
+        description = ''
+        for n, item in enumerate(order.products.all()):
+            name = item.product.name
+            color = item.color.name
+            price = item.product.price
+            qty  = item.quantity
+            description += f'{n}. {name} - {color}, {qty} шт. * {price} RUB \n'
+
         session = request.session
         data = json.loads(request.body.decode('utf-8'))
         delivery = {"ruspost" : "Почта России", "cdek" : "CDEK"}
         order.delivery_type = delivery[data['delivery']]
         order.delivery_cost = session['delivery'][data['delivery']]
         order.status = 'created'
+        order.uid = uuid.uuid1()
         order.save()
 
         context['success'] = True
-        order_total = order.products_cost
+        total = order.products_cost
         if order.free_delivery == False:
-            order_total = order.products_cost + order.delivery_cost
-        context['payment'] = yandex_pay_confirm(order_total)
+            total = order.products_cost + order.delivery_cost
+        description = 'Всего c доставкой: ' + str(total)
+        context['payment'] = yandex_pay_confirm(request, total, order.uid, description)
        
     context['success'] = False
     return JsonResponse(context)

@@ -14,7 +14,9 @@ class LoginLog(models.Model):
         verbose_name = "Авторизация в системе"
         verbose_name_plural = "Авторизации в системе"
 
+
     def get_client_ip(self, request):
+        print(request.META.get('HTTP_USER_AGENT'))
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for: ip = x_forwarded_for.split(',')[0]
         else: ip = request.META.get('REMOTE_ADDR')
@@ -23,7 +25,7 @@ class LoginLog(models.Model):
     def set_request_data(self, request):
         headers = request.headers
         login_kwargs = {
-            'user_agent' : headers['User-Agent'] if 'User-Agent' in headers else None,
+            'user_agent' : headers.get('User-Agent'),
             'path' : headers['Referer'] if 'Referer' in  headers else None,
             'ip' : self.get_client_ip(request),
         }

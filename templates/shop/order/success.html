@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+    
+{% block links %}
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/product.css' %}">
+    <style>
+        .products_list {
+            padding-top: 48px;
+        }
+        .make_order {
+            padding-top: 48px;
+        }
+        .make_order h1, 
+        .make_order h2 {
+            text-align: center;
+        }
+        .make_order h1 {
+            color: var(--clr-1);
+            margin-bottom: 8px;
+        }
+        .make_order h2 {
+            color: var(--clr-1-light);
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="make_order">
+    <div class="content">
+        {% if order %}
+        <h1 class="h3">Заказ №{{ order.order_id }} успешно оплачен</h1>
+        <h2 class="h4">Общая стоимость товаров: <span class="number big_num">{{ order.products_cost }}</span> RUB</h2>
+        <div class="products_list">  
+            <div class="preloader">
+              <img src="{% static 'img/preloader.gif' %}" alt="...">
+            </div>
+            <div class="products_list__wrapper">
+                {% for item in order.products.all %}
+                    <div class="product__wrapper">
+                        <div class="product">
+                        <a href="{{ product.url }}" class="image product_image">
+                            {% if item.variant.imgs.photo_2.s %}
+                                <img class="product_image_main"      src="{{ item.variant.imgs.photo_1.s }}" alt="">
+                                <img class="product_image_secondary" src="{{ item.variant.imgs.photo_2.s }}" alt="">
+                            {% else %} 
+                                <img  src="{{ item.variant.imgs.photo_1.s }}" alt="">
+                            {% endif %}
+                        </a>
+                        <div class="info">
+                            <a href="{{ product.url }}" class="name">{{ item.product.name }}, цвет: {{ item.color.name }}, {{ item.quantity }} шт</a>
+                            <p class="product_price {% if product.old_price > product.price %}discount{% endif %}">
+                            <span class="currnet_price"><span class="number big_num">{{ item.product.price }}</span> RUB</span>
+                            {% if product.old_price > product.price %}
+                                <span class="old_price "><span class="number big_num">{{ item.product.old_price }}</span> RUB</span>
+                            {% endif %}
+                            </p>
+                        </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+          </div>
+       
+        {% else %}
+        <h1 class="h3">Заказ успешный</h1>
+        {% endif %}
+
+       
+    </div>
+</div>
+{% if recomendations|length %}
+{% include 'shop/product/product__recomendations.html' %}
+{% endif %}
+{% endblock %}
+
+{% block js %}
+
+<script src="{% static 'js/home/catalogue.js' %}"></script>
+<script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+<script>
+
+ 
+    
+    const recomendations = new Swiper('.recomendation_list', {
+        loop: false,
+        slidesPerView: 5,
+        spaceBetween: 16,
+        navigation: {
+            nextEl: '.recomendations-next',
+            prevEl: '.recomendations-prev',
+        },
+        breakpoints: {
+            // when window width is >= 320px
+            1600: {
+                slidesPerView: 5,
+            },
+            1240: {
+                slidesPerView: 4,
+            },
+            960: {
+                slidesPerView: 3,
+            },
+            // when window width is >= 480px
+            0: {
+                slidesPerView: 2.2,
+                spaceBetween: 8,
+            },
+           
+        }
+})
+</script>
+{% endblock %}

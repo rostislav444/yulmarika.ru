@@ -2,7 +2,7 @@ from django.contrib import admin
 from django import forms
 from .models import Order, OrderProduct
 from apps.shop.models import Color
-
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 
@@ -27,13 +27,24 @@ class OrderProductInline(admin.TabularInline):
 
     def image(self, obj=None):
         if obj.pk:
+            url = reverse(f'admin:{obj.product._meta.app_label}_{obj.product._meta.model_name}_change', args=[obj.product.pk])
             img = mark_safe(
-                """<img style="width:160px; height:160px; object-fit: contain; object-position: center; border: 1px solid #ededed;" 
-                src="{url}" width="{width}" height={height} />""".format(url = obj.product.imgs['image']['s'], width=240, height=240))
+                f"""<a href={url}>
+                    <img style="width:120px; height:120px; object-fit: contain; object-position: center; border: 1px solid #ededed;" src="{obj.product.imgs['image']['s']}" />
+                </a>""")
             return img
         return '-'
 
     def color_image(self, obj=None):
+        if obj.pk:
+            img = mark_safe(
+                f"""<img style="width:120px; height:120px; object-fit: contain; object-position: center; border: 1px solid #ededed;" 
+                src="{obj.variant.imgs['photo_1']['s']}"/>""")
+            return img
+        return '-'
+    color_image.short_description = "Изображение цвета"
+
+    def color_view(self, obj=None):
         if obj.pk:
             if obj.color:
                 if obj.color.image:
@@ -46,15 +57,18 @@ class OrderProductInline(admin.TabularInline):
                 print(obj.color, obj.color.hex, obj.color.image)
                
         return '-'
-    color_image.short_description = "Изображение цвета"
+    color_view.short_description = ""
 
-    readonly_fields = ['image','color_image']
-    fields = ['image','product','name','code','quantity','price','color_image','color']
+
+
+    readonly_fields = ['image','color_image','color_view']
+    fields = ['image','product','name','code','quantity','price','color_image','color','color_view']
 
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderProductInline]
+    change_list_template = 'admin/change_list.html'
     list_display = [
         'status',
         'order_id',

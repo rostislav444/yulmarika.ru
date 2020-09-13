@@ -2,7 +2,7 @@
 
 <div class="content">
     <div class="recomendations">
-        <p class="title">С этим товаром покупают</p>
+        <p class="title">{% if recomendation_title %}{{ recomendation_title }}{% else %}С этим товаром покупают{% endif %}</p>
         <div class="swiper-container recomendation_list">  
             <div class="swiper-wrapper">
                 {% for product in recomendations %}

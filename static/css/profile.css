@@ -64,6 +64,7 @@
     border-radius: 0;
     padding: 4px;
     transition: var(--transition);
+    cursor: pointer;
 }
 .profile .order_details_btn:hover,
 .profile .order_details_btn.active {

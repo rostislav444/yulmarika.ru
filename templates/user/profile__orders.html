@@ -67,7 +67,7 @@
                             <div class="info">
                                 {% if product.color %}
                                 <span>Цвет:  
-                                    <div class="color" data-tippy-content="{{ color.color.name }}" tabindex="0" 
+                                    <div class="color" data-tippy-content="{{ product.color.name }}" tabindex="0" 
                                         style="{% if product.color.image %}background-image: url({{ product.color.imgs.image.xs }}){% else %}background-color: {{ product.color.hex }}{% endif %};">
                                     </div>
                                 </span>

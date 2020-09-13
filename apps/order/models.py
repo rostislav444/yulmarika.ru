@@ -4,6 +4,8 @@ from apps.coupon.models import Coupon
 from apps.core.function import send_mail
 from collections import OrderedDict
 from apps.filecodes.models import FileCodes
+from django.contrib.postgres.fields import JSONField
+
 
 class Order(models.Model):
     ORDER_STATUS = [
@@ -34,6 +36,7 @@ class Order(models.Model):
     comments =      models.TextField(verbose_name="Примечания к заказу", blank=True, null=True)
     delivery_type =  models.CharField(max_length=24, verbose_name="Способ доставки")
     track_number =  models.CharField(max_length=500, unique=True, null=True, blank=True, verbose_name="Трэк-номер")
+    uid =          models.CharField(max_length=500, unique=True, null=True, blank=True, verbose_name="UUID")
     weight =        models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name="Вес коробки")
     width  =        models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name="Ширина коробки")
     height  =       models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name="Высота коробки")
