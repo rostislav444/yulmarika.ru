@@ -24,13 +24,13 @@ function adressListOnLoad(data) {
         delivery = data['delivery']
        
         for (let meth of deliveryMethods) {
-            // if (adressList.length > 0) {
-            //     if (parseInt(delivery[meth.dataset.key]) == 0) {
-            //         meth.style.display = 'none'
-            //     } else {
-            //         meth.style.display = 'grid'
-            //     }
-            // }
+            if (adressList.length > 0) {
+                if (parseInt(delivery[meth.dataset.key]) == 0) {
+                    meth.style.display = 'none'
+                } else {
+                    meth.style.display = 'grid'
+                }
+            }
             
             meth.querySelector('.method_price').innerHTML = delivery[meth.dataset.key]
         }

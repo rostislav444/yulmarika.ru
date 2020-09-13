@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+    
+{% block links %}
+<!--Подключение библиотеки-->
+<script src="https://kassa.yandex.ru/checkout-ui/v2.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="make_order">
+    <div class="content">
+        <!--HTML-элемент, в котором будет отображаться платежная форма-->
+        <div id="payment-form"></div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+
+
+
+
+
+<script>
+//Инициализация виджета. Все параметры обязательные.
+const checkout = new window.YandexCheckout({
+    confirmation_token: 'confirmation-token', //Токен, который перед проведением оплаты нужно получить от Яндекс.Кассы
+    return_url: 'https://merchant.site', //Ссылка на страницу завершения оплаты
+    error_callback(error) {
+        //Обработка ошибок инициализации
+    }
+});
+
+//Отображение платежной формы в контейнере
+checkout.render('payment-form');
+</script>
+{% endblock %}

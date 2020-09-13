@@ -31,7 +31,8 @@ def yandex_pay_confirm(request, total, uid, description="Заказ"):
         },
         "confirmation": {
             "type": "redirect",
-            "return_url": f"{base_url}{path}" 
+            "success_url" : f"{base_url}{path}",
+            "return_url": f"{base_url}{path}" ,
         },
             "capture": True,
             "description": description
@@ -48,9 +49,14 @@ def confirmation(request, uid):
         order.status = 'payed'
         order.payed = timezone.now()
         order.save()
-        return redirect(reverse('order:success'))
+        return redirect(reverse('order:success', kwargs={'pk' : order.pk}))
     else:
         return redirect("/")
+
+
+def payment_http_msg(request):
+    print(request.POST)
+    return JsonResponse({'status' : True})
 
 
 def order_sucess(request, pk=None):
@@ -214,7 +220,7 @@ def make_order(request):
             color = item.color.name
             price = item.product.price
             qty  = item.quantity
-            description += f'{n}. {name} - {color}, {qty} шт. * {price} RUB \n'
+            description += f'{n+1}. {name} - {color}, {qty} шт. * {price} RUB \n'
 
         session = request.session
         data = json.loads(request.body.decode('utf-8'))

@@ -16,4 +16,5 @@ urlpatterns = [
     path('confirmation/<uid>', views.confirmation, name="confirmation"),
     path('success/<int:pk>', views.order_sucess, name="success"),
     path('success/', views.order_sucess, name="success"),
+    path('notification', views.payment_http_msg, name="notification")
 ]
