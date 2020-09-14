@@ -9,7 +9,7 @@ from apps.shop.models import Product, Variant
 from apps.shop.cart import Cart
 from apps.user.serializers import UserSerializer
 from apps.shop.serializers import ProductSeriaziler
-from apps.order.models import Order, OrderProduct
+from apps.order.models import Order, OrderProduct, YandexResponse
 from apps.delivery.models import Delivery
 from apps.coupon.models import Coupon
 from apps.user.models import UserAdress
@@ -63,6 +63,7 @@ def confirmation(request, uid):
 
 
 def payment_http_msg(request):
+   
     print(request.POST)
     # if coupon:
     #     if coupon.once:
@@ -70,6 +71,14 @@ def payment_http_msg(request):
     #         coupon.save()
     return JsonResponse({'status' : True})
 
+
+
+def yandex_response(request):
+    resposne = YandexResponse(data=json.loads(request.body.decode('utf-8')))
+    resposne.save()
+    return JsonResponse({'status' : True})
+
+    
 
 def order_sucess(request, pk=None):
     context = {}

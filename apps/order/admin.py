@@ -1,10 +1,16 @@
 from django.contrib import admin
 from django import forms
-from .models import Order, OrderProduct
+from .models import Order, OrderProduct, YandexResponse
 from apps.shop.models import Color
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 
+
+
+
+@admin.register(YandexResponse)
+class YandexResponseAdmin(admin.ModelAdmin):
+    pass
 
 class OrderProductForm(forms.ModelForm):
     class Meta:

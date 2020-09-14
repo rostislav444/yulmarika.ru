@@ -114,3 +114,9 @@ class OrderProduct(models.Model):
         super(OrderProduct, self).save()
 
 
+class YandexResponse(models.Model):
+    time =  models.DateTimeField(default=timezone.now, blank=True, null=True, verbose_name="Дата создания")
+    data =  JSONField(editable=True, null=True, blank=True, default=dict)
+
+    def __str__(self):
+        return str(self.time)
