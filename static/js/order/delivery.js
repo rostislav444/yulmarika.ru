@@ -24,7 +24,7 @@ function adressListOnLoad(data) {
         delivery = data['delivery']
        
         for (let meth of deliveryMethods) {
-            if (adressList.length > 0) {
+            if (adressList.length > 0 && deliveryMethods.length > 1) {
                 if (parseInt(delivery[meth.dataset.key]) == 0) {
                     meth.style.display = 'none'
                     meth.classList.add('active')
