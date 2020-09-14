@@ -2,3 +2,4 @@ migrations
 __pycache__
 media/
 local_settings.py
+/static_root
