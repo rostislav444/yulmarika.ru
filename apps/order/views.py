@@ -22,13 +22,16 @@ from django.views.decorators.csrf import csrf_exempt
 Configuration.account_id = 740433
 Configuration.secret_key = 'test_vElK711q4bXJlKZJ1W4qTpRzwM5c8Ykwhvc6WzmbZjA'
 
-def yandex_pay_confirm(request, total, uid, description="Заказ"):
+def yandex_pay_confirm(request, total, uid, pk, description="Заказ"):
     base_url = f"{request.scheme}://{request.META.get('HTTP_HOST')}"
     path = reverse('order:confirmation', kwargs={'uid' : uid})
     payment = Payment.create({
         "amount": {
             "value": str(total),
             "currency": "RUB"
+        },
+        "metadata":{
+            'id' : pk,
         },
         "confirmation": {
             "type": "redirect",
@@ -46,10 +49,6 @@ def confirmation(request, uid):
     
     order = Order.objects.filter(uid=uid).first()
     if order:
-        # order.uid = ''
-        # order.status = 'payed'
-        # order.payed = timezone.now()
-        # order.save()
         try:    coupon = Coupon.objects.get(pk=int(request.session['coupon']))
         except: coupon = None
         if coupon:
@@ -58,6 +57,7 @@ def confirmation(request, uid):
                 coupon.save()
             try: del request.session['coupon']
             except: pass
+            Cart().clear()
         return redirect(reverse('order:success', kwargs={'pk' : order.pk}))
     else:
         return redirect("/")
@@ -75,15 +75,17 @@ def payment_http_msg(request):
 
 @csrf_exempt
 def yandex_response(request):
-    resposne = YandexResponse(data=json.loads(json.dumps(json.loads(request.body.decode('utf-8')), sort_keys=True, indent=4)))
+    data = json.loads(request.body.decode('utf-8'))
+    resposne = YandexResponse(data=data)
     resposne.save()
 
     try:
-        order = Order.objects.get(uid=resposne.data['object']['id']) 
+        order = Order.objects.get(pk=int(data['object']['metadata']['id'])) 
         order.status = 'payed'
         order.payed = timezone.now()
         order.save()
     except: pass
+    
     return JsonResponse({'status' : True})
 
     
@@ -259,11 +261,11 @@ def make_order(request):
 
         description = ''
         for n, item in enumerate(order.products.all()):
-            name = item.product.name
+            name =  item.product.name
             color = item.color.name
-            price = item.product.price
-            qty  = item.quantity
-            description += f'{n+1}. {name} - {color}, {qty} шт. * {price} RUB \n'
+            price = str(item.product.price)
+            qty  =  str(item.quantity)
+            description += f'{str(n+1)} {name} - {color} {qty} шт x {price} RUB '
 
         session = request.session
         data = json.loads(request.body.decode('utf-8'))
@@ -278,8 +280,8 @@ def make_order(request):
         total = order.products_cost
         if order.free_delivery == False:
             total = order.products_cost + order.delivery_cost
-        description += 'Всего c доставкой: ' + str(total)
-        context['payment'] = yandex_pay_confirm(request, total, order.uid, description)
+        description += 'Всего: ' + str(total)
+        context['payment'] = yandex_pay_confirm(request, total, order.uid, order.pk, description)
        
     context['success'] = False
     return JsonResponse(context)
