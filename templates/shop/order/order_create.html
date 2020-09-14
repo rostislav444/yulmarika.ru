@@ -30,6 +30,7 @@
         <h1 class="main_title h1"><span class="step_num">1</span> Способ доставки</h1>
         <p class="h5 pb24">Выберите способ доставки и укажите адрес, для вашего заказа будет произведён расчёт стоимости</p>
         <div class="delivery_methods">
+            <!-- RUSPOST -->
             <div class="delivery_methods__item" data-key="ruspost"  data-selected=false data-adress=false>
                 <label>
                     <div class="check_box big_check_box">
@@ -42,7 +43,13 @@
                     <div class="info">
                         <p>Отделение Почты России</p>
                         <p class="grey">Доставка от 3 дней</p>
-                        <p class="cost"><span class="method_price" id="ruspost_price">0</span> RUB</p>
+                        <p class="cost">
+                            {% if order.free_delivery %}
+                                <span>Бесплатно</span>
+                            {% else %}
+                                <span class="method_price" id="ruspost_price">0</span> RUB
+                            {% endif %}
+                        </p>
                     </div>
                     
                 </label>
@@ -51,7 +58,8 @@
                     <div data-key="ruspost" class="adress_prev adress_prev__ruspost"></div>
                 </div>
             </div>
-
+            {% if order.free_delivery == False %}
+            <!-- CDEK -->
             <div class="delivery_methods__item" data-key="cdek" data-selected=false data-adress=false>
                 <label>
                     <div class="check_box">
@@ -73,6 +81,7 @@
                     <div data-key="cdek" class="adress_prev adress_prev__cdektk"></div>
                 </div>
             </div>
+            {% endif %}
         </div>
     </div>
     
@@ -152,12 +161,24 @@
             {% endfor %}
         </div>
         <div class="pay_types">
+            <span class="h5 upper">Способы оплаты</span>
             <img src="{% static 'img/pay_types.png' %}" alt="Pay types">
             <ul class="h6 pay_rules">
-                <li data-price="{{ front_files.minimal_order }}" class="minimal_order_price">Минимальная сумма заказа - {{ front_files.minimal_order }} RUB</li>
-                <li data-price="{{ front_files.free_delivery }}" class="free_delivery_price">Бесплатная доставка для заказов от {{ front_files.free_delivery }} RUB</li>
+                <li data-price="{{ front_files.minimal_order }}" class="minimal_order_price">
+                    <img class="yes" src="{% static 'img/ico/checkbox.svg' %}" alt="+">
+                    <span>Минимальная сумма заказа - {{ front_files.minimal_order }} RUB</span>
+                </li>
+                <li data-price="{{ front_files.free_delivery }}" class="free_delivery_price">
+                    {% if order.free_delivery %}
+                        <img class="yes" src="{% static 'img/ico/checkbox.svg' %}" alt="+">
+                    {% else %}
+                        <img class="no" src="{% static 'img/ico/close.svg' %}" alt="-">
+                    {% endif %}
+                    <span>Бесплатная доставка для заказов от {{ front_files.free_delivery }} RUB</span>
+                    
+                </li>
             </ul>
-            <p class="pay_note">Выбор способа и расчет стоимости доставки производится во время оформления заказа.</p>
+            <p class="pay_note">Выбор способа и расчет стоимости доставки производится во время оформления заказа</p>
         </div>
     </div>
 </div>

@@ -408,3 +408,5 @@
 .adress_popup .data {
     margin: 48px 0;
 }
+.pay_types ul.pay_rules li img.no  {display: inline-block;}
+.pay_types ul.pay_rules li img.yes {display: inline-block;}

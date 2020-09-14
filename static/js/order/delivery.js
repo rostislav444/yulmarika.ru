@@ -40,8 +40,11 @@ function adressListOnLoad(data) {
                     meth.classList.add('active')
                 }
             }
-            
-            meth.querySelector('.method_price').innerHTML = delivery[meth.dataset.key]
+            methPrice = meth.querySelector('.method_price')
+            if (methPrice) {
+                methPrice.innerHTML = delivery[meth.dataset.key]
+            }
+           
         }
     } 
 

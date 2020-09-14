@@ -178,14 +178,18 @@ function checkInputType(input) {
 
 function formResponse(form, data) {
     var form = form
-    form.querySelector('button[type=submit]').classList.add('load')
+    let submitBtn = form.querySelector('button[type=submit]')
+    submitBtn.classList.add('load')
     response = XHR(form.method, form.action, data)
+    submitBtn.classList.remove('load')
+   
     if ('update_func' in form.dataset && response['data'] !== undefined ) {
         if (response['success'] == true) {
             let data = response['data']
             form = this[form.dataset.update_func](data, true)
         }
     }
+
     if (form != undefined) {
         message = form.querySelector('.message')
         if (message) {
@@ -197,6 +201,10 @@ function formResponse(form, data) {
                 message.classList.remove('success')
             }
         }
+    }
+
+    if (response['success'] == true && form.dataset.redirect !== undefined) {
+        window.location.href = form.dataset.redirect
     }
     
     

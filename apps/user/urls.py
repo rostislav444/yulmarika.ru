@@ -14,8 +14,8 @@ profile = [
 
 urlpatterns = [
     path('auth_register_or_order', TemplateView.as_view(template_name="user/auth_register_or_order.html"), name="auth_register_or_order"),
-    path('login',                  TemplateView.as_view(template_name="user/auth_or_reister.html"),        name="login"),
-    path('auth',      views.UserViewSet.as_view({'post': 'auth'}),     name="auth"),
-    path('register',  views.UserViewSet.as_view({'post': 'register'}), name="register"),
+    path('login',                  views.UserViewSet.as_view({'get':  'login'}),     name="login"),
+    path('auth',                   views.UserViewSet.as_view({'post': 'auth'}),     name="auth"),
+    path('register',               views.UserViewSet.as_view({'post': 'register'}), name="register"),
     path('profile/',  include(profile))
 ]

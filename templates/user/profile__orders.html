@@ -2,7 +2,7 @@
 {% load static %}
 {% block profile %}
 <div class="heading_second">
-    <p class="h3 grey title">Мои заказы ({{ user.orders.all|length }})</p>
+    <p class="h3 grey title">Мои заказы ({{ user.user_order|length }})</p>
     <div>
         <span>Показать</span>
         <select name="" id="">

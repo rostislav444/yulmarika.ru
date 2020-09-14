@@ -83,8 +83,14 @@ def order_sucess(request, pk=None):
 
 
 def save_order(request):
+    
+
     cart = Cart(request)
     cart_data = cart.data()
+
+    try:    free_delivery = int(cart_data['total']) > FileCodes.objects.last().free_delivery 
+    except: free_delivery = False
+
     if len(cart_data['products']):
         try:    coupon = Coupon.objects.get(pk=int(request.session['coupon']))
         except: coupon = None
@@ -93,6 +99,7 @@ def save_order(request):
             'status' : "new",
             'products_cost' : cart_data['total'],
             'discount_cost' : cart_data['coupon_discount'] if 'coupon_discount' in cart_data else 0,
+            'free_delivery' : free_delivery,
             'coupon' : coupon
         }
 

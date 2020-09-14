@@ -26,6 +26,13 @@ def auth_register_or_order(request):
 class UserViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
 
+    def login(self, request):
+        context = {}
+        if request.GET.get('order'):
+            context['redirect'] = reverse('order:create')
+        
+        return render(request, 'user/auth_or_reister.html', context)
+
     def auth(self, request):
         data = request.data
         redirect = data['redicrect'] if 'redicrect' in data.keys() else "/"

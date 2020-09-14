@@ -12,7 +12,7 @@
         <div class="auth">
            
                 <p class="h3 title">Уже зарегистрированы?</p>
-                <form class="form" id="form_auth" action="{% url 'user:auth' %}" method="POST" novalidate>
+                <form class="form" id="form_auth" action="{% url 'user:auth' %}" data-redirect="{% if redirect %}{{ redirect }}{% else %}{% url 'user:profile_orders' %}{% endif %}" method="POST" novalidate>
                     
                     <div class="message col2"></div>
                     <div class="data">
@@ -56,7 +56,7 @@
         <div class="register">
         
             <p class="h3 title">Вы здесь первый раз?</p>
-                <form class="form" id="form_register" action="{% url 'user:register' %}" method="POST" novalidate>
+                <form class="form" id="form_register" action="{% url 'user:register' %}" data-redirect="{% if redirect %}{{ redirect }}{% else %}{% url 'user:profile_data' %}{% endif %}" method="POST" novalidate>
                     <div class="message col2"></div>
                     <div class="data">
                         <div class="smart_input_label col2">   
