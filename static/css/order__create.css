@@ -119,6 +119,7 @@
 }
 .delivery_methods__item {
     border-bottom: 1px solid var(--grey-light);
+    background-color: white;
 }
 .delivery_methods__item .cost {
     display: none !important;

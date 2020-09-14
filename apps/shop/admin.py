@@ -102,6 +102,7 @@ class ProductAdmin(admin.ModelAdmin):
 
     readonly_fields = ['image_view','add_image_view']
     fields = [
+        'meta_title','meta_descr',
         'name','code','price','old_price','category','who_intended','gift_reason','status',
         'in_sell','is_popular',
         ('image','image_view','image_thmb',),('add_image','add_image_view',),

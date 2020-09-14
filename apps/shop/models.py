@@ -12,6 +12,7 @@ import os, PIL, io, json
 from django.core.files.storage import FileSystemStorage
 from django.contrib.postgres.fields import JSONField
 from ckeditor.fields import RichTextField
+from apps.core.models import metaTags
 import re
 
 # Globals
@@ -87,7 +88,7 @@ class ProductStatus(NameSlug):
 
 
 
-class Product(ModelImages):
+class Product(metaTags, ModelImages,):
     name =           models.CharField(max_length=255, verbose_name="Название")
     code =           models.CharField(unique=True, max_length=255, verbose_name="Артикул")
     slug =           models.SlugField(max_length=255, editable=False, null=True, blank=True)
