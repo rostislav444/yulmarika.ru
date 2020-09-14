@@ -1,6 +1,9 @@
 import os
+import logging 
 from celery.schedules import crontab
 
+
+logging.basicConfig(level='DEBUG')
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 STATICFILE_DIR  = os.path.join(BASE_DIR, 'static')
