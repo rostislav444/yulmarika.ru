@@ -1,4 +1,5 @@
 from django.db import models
+from project.settings import MEDIA_ROOT
 import os
 
 
@@ -12,6 +13,9 @@ class FileField(models.FileField):
 
 
 class FileCodes(models.Model):
+    meta_title = models.CharField(max_length=300, blank=True, null=True, verbose_name="Мета тег Titile (Домашней страницы)")
+    meta_descr = models.TextField(max_length=500, blank=True, null=True, verbose_name="Мета тег Description (Домашней страницы)")
+
     logo =      FileField(upload_to="file_codes", blank=True, null=True, verbose_name="Логотип сайта")
     favicon =   FileField(upload_to="file_codes", blank=True, null=True, verbose_name="Fav icon")
     css =       FileField(upload_to="file_codes", blank=True, null=True,  verbose_name="Файлы стилей")

@@ -5,6 +5,15 @@
     <link rel="stylesheet" href="{% static 'css/pages.css' %}">
 {% endblock %}
 
+<!-- TITLE -->
+{% block title %}
+    {% if page.meta_title %}{{ page.meta_title }}{% else %}{{ page.name }}{% endif %}
+{% endblock %}
+<!-- DESCRIPTION -->
+{% block meta_description %}
+    {% if page.meta_descr %}{{ page.meta_descr }}{% else %}{% endif %}
+{% endblock %}
+
 {% block content %}
 <div class="pages">
     <div class="content">

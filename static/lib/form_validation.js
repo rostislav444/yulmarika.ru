@@ -201,11 +201,12 @@ function formResponse(form, data) {
                 message.classList.remove('success')
             }
         }
+        if (response['success'] == true && form.dataset.redirect !== undefined) {
+            window.location.href = form.dataset.redirect
+        }
     }
 
-    if (response['success'] == true && form.dataset.redirect !== undefined) {
-        window.location.href = form.dataset.redirect
-    }
+    
     
     
 }

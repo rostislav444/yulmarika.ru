@@ -21,6 +21,12 @@ import re
 import cv2
 from django.core.exceptions import ValidationError
 
+class metaTags(models.Model):
+    meta_title = models.CharField(max_length=300, blank=True, null=True, verbose_name="Мета тег Titile")
+    meta_descr = models.TextField(max_length=500, blank=True, null=True, verbose_name="Мета тег Description")
+
+    class Meta:
+        abstract = True
 
 class BackUpDB(models.Model):
     name = models.CharField(max_length=300, blank=True, verbose_name="Имя файла")

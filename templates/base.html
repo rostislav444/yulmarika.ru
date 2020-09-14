@@ -3,12 +3,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="yandex-verification" content="d5962054963e40df" />
     {% if front_files.favicon %}
         <link rel="icon" href="{{ front_files.favicon.url }}" type="image/{{ favicon_ext }}" sizes="16x16">
     {% endif %}
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}{% if front_files.meta_title %}{{ front_files.meta_title }}{% else %}Yulmarika{% endif %}{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}{{ front_files.meta_descr }}{% endblock %}">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/reset.css' %}">
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
@@ -19,7 +21,9 @@
     <link rel="stylesheet" href="https://unpkg.com/microtip/microtip.css">
     <link rel="stylesheet" href="{% static 'css/footer.css' %}">
     <link rel="stylesheet" href="{% static 'css/base/padding.css' %}">
-
+    {% if front_files.css %}
+        <link rel="stylesheet" href="{{ front_files.css.url }}">
+    {% endif %}
     
     {% block links %}
     {% endblock %}

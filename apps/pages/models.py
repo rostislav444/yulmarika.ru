@@ -7,8 +7,10 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from ckeditor.fields import RichTextField
 from django.contrib.postgres.fields import JSONField
+from apps.core.models import metaTags
 
-class Page(ModelImages):
+
+class Page(metaTags, ModelImages):
     name =       models.CharField(max_length=255, verbose_name="Название странциы")
     slug =       models.SlugField(max_length=255, editable=False, null=True, blank=True)
     image =      models.FileField(verbose_name="Карточка товара (основная)", null=True, blank=True)
