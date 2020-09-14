@@ -24,8 +24,13 @@ function adressListOnLoad(data) {
     }
     if (data['delivery']) {
         delivery = data['delivery']
-        ruspostPrice.innerHTML = delivery['ruspost']
-        cdekPrice.innerHTML =    delivery['cdek']
+        if (ruspostPrice) {
+            ruspostPrice.innerHTML = delivery['ruspost']
+        }
+        if (cdekPrice) {
+            cdekPrice.innerHTML = delivery['cdek']
+        }
+        
     } 
 
     function set_method_adress(method, html) {

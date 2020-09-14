@@ -201,6 +201,9 @@ function formResponse(form, data) {
                 message.classList.remove('success')
             }
         }
+        if (form.dataset.redirect !== undefined) {
+            window.location.href = form.dataset.redirect
+        }
     }
     
     
