@@ -28,6 +28,7 @@
 <div class="order">
     <div class="order__main">
         <h1 class="main_title h1"><span class="step_num">1</span> Способ доставки</h1>
+        <p class="h5 pb24">Выберите способ доставки и укажите адрес, для вашего заказа будет произведён расчёт стоимости</p>
         <div class="delivery_methods">
             <div class="delivery_methods__item" data-key="ruspost"  data-selected=false data-adress=false>
                 <label>
@@ -114,14 +115,14 @@
             <div class="create_order_btn_wrapper disabled tooltip">
                 <span class="tooltiptext">Выберите один из способов доставки</span>
                 <a class="submit_order" href="{% url 'order:make_order' %}">
-                    <button class="button h4 bold create_order_btn">Перейти к оформлению</button>
+                    <button class="button h4 bold create_order_btn">Перейти к оплате</button>
                 </a>
             </div>
         </div>
         <div class="products_list order__products_list">
             {% for product in order.products.all %}
                 <div class="order__product">
-                    <a href="{{ product.url }}" class="image">
+                    <a href="{{ product.variant.get_absolute_url }}" class="image">
                         <img src="{{ product.variant.imgs.photo_1.s }}" alt="">
                     </a>
                     <div class="info">

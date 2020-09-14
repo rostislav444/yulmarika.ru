@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="yandex-verification" content="d5962054963e40df" />
     {% if front_files.favicon %}
         <link rel="icon" href="{{ front_files.favicon.url }}" type="image/{{ favicon_ext }}" sizes="16x16">
     {% endif %}
@@ -17,6 +18,9 @@
     <link rel="stylesheet" href="{% static 'css/header.css' %}">
     <link rel="stylesheet" href="https://unpkg.com/microtip/microtip.css">
     <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base/padding.css' %}">
+
+    
     {% block links %}
     {% endblock %}
 </head>

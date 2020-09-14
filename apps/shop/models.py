@@ -29,7 +29,7 @@ class Category(NameSlug):
         verbose_name_plural = "Категории товаров"
 
     def save(self):
-        self.name = re.sub('[^0-9a-zA-Zа-яА-Я -_,.]', '', self.name) 
+        self.name = re.sub(r'[^0-9a-zA-Zа-яА-Я-_ ,]',"", self.name) 
         super(Category, self).save()
 
     

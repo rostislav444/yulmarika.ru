@@ -8,7 +8,7 @@ validation = {
             length : 0,
         },
         msg : {
-            re : 'Email имеет не верный формат',
+            re : 'Email имеет неверный формат',
             length : 'Введите ваш Email', 
         },
         replace : /[^0-9a-zA-Z._@-]/g,

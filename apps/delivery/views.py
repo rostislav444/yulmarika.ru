@@ -27,10 +27,9 @@ class UserAdressViewSet(viewsets.ViewSet):
             if 'adress' in request.session.keys():
                 adress_list = request.session['adress']
 
-        if 'delivery' not in request.session:
-            delivery = self.dlivery_price(request)
-        else: 
-            delivery = request.session['delivery']
+        
+        delivery = self.dlivery_price(request)
+      
         response = {
             'success' : True,
             'data' : {
@@ -70,7 +69,6 @@ class UserAdressViewSet(viewsets.ViewSet):
 
 
     def set_adress(self, request):
-        print('SET ADRESS')
         adress_list = []
         adress_id = int(request.data['adress']) if 'adress' in request.data.keys() else None
         if request.user.is_authenticated:
@@ -95,10 +93,8 @@ class UserAdressViewSet(viewsets.ViewSet):
 
     def dlivery_price(self, request):
         fk = FileCodes.objects.all().first()
-        if fk:
-            base_delivery_price = fk.base_delivery
-        else:
-            base_delivery_price = 400
+        if fk: base_delivery_price = fk.base_delivery
+        else:  base_delivery_price = 400
 
         session = request.session
         if 'delivery' not in session.keys(): session['delivery'] = {}

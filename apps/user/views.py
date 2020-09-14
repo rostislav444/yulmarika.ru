@@ -38,7 +38,7 @@ class UserViewSet(viewsets.ViewSet):
             login(request, user)
             return Response({'success' : True,  'msg' : 'Вы авторизованы.', 'redirect' : redirect})
         else:
-            return Response({'success' : False, 'msg' : 'Пароль введен не правильно.'})
+            return Response({'success' : False, 'msg' : 'Пароль введён неправильно.'})
     
     def register(self, request):
         data = request.data

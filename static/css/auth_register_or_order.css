@@ -1,8 +1,11 @@
 .auth_register_or_order {
     width: 100%;
     position: relative;
-    
 }
+.auth_register_or_order > div > .title {
+    margin-bottom: 48px;
+}
+
 .auth_register_or_order > div {
     display: flex;
     justify-content: flex-start;
@@ -14,20 +17,47 @@
     width: 50%;
     float: left;
     min-height: calc(100vh - 65px);
-    
+}
+.auth_register_or_order .message {
+    margin-top: 0;
+    margin-bottom: 24px;
 }
 
-.auth_register_or_order > div:first-child {padding-left: 120px;}
-.auth_register_or_order > div:last-child {padding-right: 120px;}
+@media(max-width: 960px) {
+    .auth_register_or_order > div {
+        width: 100%;
+        padding: 48px 16px 0 16px;
+        height: auto;
+        min-height: auto;
+        float: unset !important;
+        padding-top: 48px;
+        padding-bottom: 64px;
+        min-height: 45vh;
+    }
+    .auth_register_or_order > div:last-child {
+        margin-top: 48px;
+       
+    }
+}
 
-.auth_register_or_order > div > div {
-    width: 480px;
-    max-width: calc(100% - 96px);
-    display: flex;
-    justify-content: flex-start;
+.auth_register_or_order .action_wrapper,
+.auth_register_or_order .form_wrapper {
+    position: relative;
+    width: auto;
+    display: none;
+    justify-content: center;
     align-items: center;
     flex-direction: column;
+    height: 100%;
 }
+.auth_register_or_order .action_wrapper {
+    display: flex
+}
+
+
+
+
+
 .auth_register_or_order > div > div > a {
     width: 100%;
 }

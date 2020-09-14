@@ -34,7 +34,7 @@
     transform: rotate(180deg);
     width: 16px;
     height: 16px;
-    margin-right: 12px;
+    margin-right: 4px;
 }
 
 .order__header .content > .order__header__security {
@@ -120,6 +120,13 @@
 .delivery_methods__item {
     border-bottom: 1px solid var(--grey-light);
 }
+.delivery_methods__item .cost {
+    display: none !important;
+}
+.delivery_methods__item.active .cost {
+    display: block !important;
+}
+
 .delivery_methods__item:last-child {
     border-bottom: none;
 }
@@ -135,7 +142,7 @@
 }
 .delivery_methods__item label .info {
     display: grid;
-    grid-template-columns: minmax(120px, 240px) minmax(96px, 1fr) 64px;
+    grid-template-columns: minmax(120px, 240px) minmax(96px, 1fr) minmax(64px, 120px);
 }
 
 

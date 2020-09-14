@@ -27,8 +27,17 @@ function adressListOnLoad(data) {
             if (adressList.length > 0) {
                 if (parseInt(delivery[meth.dataset.key]) == 0) {
                     meth.style.display = 'none'
+                    meth.classList.add('active')
                 } else {
                     meth.style.display = 'grid'
+                    meth.classList.add('active')
+                }
+            }
+            if (adressList.length == 0) {
+                if (parseInt(delivery[meth.dataset.key]) == 0) {
+                    meth.classList.remove('active')
+                } else {
+                    meth.classList.add('active')
                 }
             }
             

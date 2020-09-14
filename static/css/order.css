@@ -92,6 +92,9 @@
 .order__main .products_list .order__product .product_price .old_price {
     font-size: var(--h5);
 }
+.order__main .products_list .order__product .product_price .old_price .number {
+    padding-right: 0;
+}
 .order__main .products_list .order__product .counter {
     display: grid;
     height: 32px;
