@@ -16,6 +16,7 @@ from apps.user.models import UserAdress
 from django.http import JsonResponse
 from yandex_checkout import Configuration, Payment
 import json, random, uuid, math
+from django.views.decorators.csrf import csrf_exempt
 
 
 Configuration.account_id = 740433
@@ -72,7 +73,7 @@ def payment_http_msg(request):
     return JsonResponse({'status' : True})
 
 
-
+@csrf_exempt
 def yandex_response(request):
     resposne = YandexResponse(data=json.loads(request.body.decode('utf-8')))
     resposne.save()
