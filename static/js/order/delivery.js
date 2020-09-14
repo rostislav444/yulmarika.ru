@@ -98,8 +98,12 @@ function AdressSet(data) {
     }
     if (data['delivery']) {
         delivery = data['delivery']
-        ruspostPrice.innerHTML = delivery['ruspost']
-        cdekPrice.innerHTML =    delivery['cdek']
+        if (ruspostPrice) {
+            ruspostPrice.innerHTML = delivery['ruspost']
+        }
+        if (cdekPrice) {
+            cdekPrice.innerHTML = delivery['cdek']
+        }
         for (let input of document.querySelectorAll('input[name="order_delivery_method"]')) {
             if (input.checked) {
                 set_delivery_price(input)
