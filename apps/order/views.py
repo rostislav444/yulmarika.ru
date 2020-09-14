@@ -37,7 +37,7 @@ def yandex_pay_confirm(request, total, uid, description="Заказ"):
         },
             "capture": True,
             "description": description
-    }, uuid.uuid4())
+    }, uid)
     return json.loads(payment.json())
 
 
@@ -46,10 +46,10 @@ def confirmation(request, uid):
     
     order = Order.objects.filter(uid=uid).first()
     if order:
-        order.uid = ''
-        order.status = 'payed'
-        order.payed = timezone.now()
-        order.save()
+        # order.uid = ''
+        # order.status = 'payed'
+        # order.payed = timezone.now()
+        # order.save()
         try:    coupon = Coupon.objects.get(pk=int(request.session['coupon']))
         except: coupon = None
         if coupon:
@@ -75,8 +75,15 @@ def payment_http_msg(request):
 
 @csrf_exempt
 def yandex_response(request):
-    resposne = YandexResponse(data=json.loads(request.body.decode('utf-8')))
+    resposne = YandexResponse(data=json.loads(json.dumps(json.loads(request.body.decode('utf-8'), sort_keys=True, indent=4))))
     resposne.save()
+
+    try:
+        order = Order.objects.get(uid=resposne.data['object']['id']) 
+        order.status = 'payed'
+        order.payed = timezone.now()
+        order.save()
+    except: pass
     return JsonResponse({'status' : True})
 
     
@@ -264,7 +271,7 @@ def make_order(request):
         order.delivery_type = delivery[data['delivery']]
         order.delivery_cost = session['delivery'][data['delivery']]
         order.status = 'created'
-        order.uid = uuid.uuid1()
+        order.uid = uuid.uuid4()
         order.save()
 
         context['success'] = True
