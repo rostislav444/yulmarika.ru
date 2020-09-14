@@ -75,7 +75,7 @@ def payment_http_msg(request):
 
 @csrf_exempt
 def yandex_response(request):
-    resposne = YandexResponse(data=json.loads(json.dumps(json.loads(request.body.decode('utf-8'), sort_keys=True, indent=4))))
+    resposne = YandexResponse(data=json.loads(json.dumps(json.loads(request.body.decode('utf-8')), sort_keys=True, indent=4)))
     resposne.save()
 
     try:
