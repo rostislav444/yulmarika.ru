@@ -45,7 +45,7 @@
                 {% for item in order.products.all %}
                     <div class="product__wrapper">
                         <div class="product">
-                        <a href="{{ product.url }}" class="image product_image">
+                        <a href="{{ item.variant.get_absolute_url }}" class="image product_image">
                             {% if item.variant.imgs.photo_2.s %}
                                 <img class="product_image_main"      src="{{ item.variant.imgs.photo_1.s }}" alt="">
                                 <img class="product_image_secondary" src="{{ item.variant.imgs.photo_2.s }}" alt="">
@@ -54,7 +54,7 @@
                             {% endif %}
                         </a>
                         <div class="info">
-                            <a href="{{ product.url }}" class="name">{{ item.product.name }}, цвет: {{ item.color.name }}, {{ item.quantity }} шт</a>
+                            <a href="{{ item.variant.get_absolute_url }}" class="name">{{ item.product.name }}, цвет: {{ item.color.name }}, {{ item.quantity }} шт</a>
                             <p class="product_price {% if product.old_price > product.price %}discount{% endif %}">
                             <span class="currnet_price"><span class="number big_num">{{ item.product.price }}</span> RUB</span>
                             {% if product.old_price > product.price %}
