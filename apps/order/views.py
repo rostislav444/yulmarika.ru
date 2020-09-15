@@ -198,7 +198,21 @@ def order_decline(request, order_pk):
     else:
         return redirect(reverse('user:login'))
 
-   
+
+def order_description(order):
+    total = order.products_cost
+    if order.free_delivery == False:
+        total = order.products_cost + order.delivery_cost
+    description = ''
+    for n, item in enumerate(order.products.all()):
+        name =  item.product.name
+        color = item.color.name
+        price = str(item.product.price)
+        qty  =  str(item.quantity)
+        description += f'{str(n+1)} {name} - {color} {qty} шт x {price} RUB '
+    description += 'Всего: ' + str(total)
+    return total, description
+
 
 def order_create(request, order_pk=None):
     context = {
@@ -206,30 +220,24 @@ def order_create(request, order_pk=None):
     }
     if request.user.is_authenticated:
         context['user_data'] = json.dumps(UserSerializer(request.user).data)
-    else: context['user_data'] = json.dumps({})
+    else: 
+        context['user_data'] = json.dumps({})
 
 
-    if order_pk and request.user.is_authenticated:
-        user = request.user
-        order = user.orders.filter(pk=order_pk).first()
+    if order_pk:
+        if request.user.is_authenticated:
+            order = Order.objects.filter(pk=order_pk, user = request.user).first()
+        else:
+            order = Order.objects.filter(pk=order_pk, user = None).first()
         if order:
-            if order.delivery_cost > 0:
-                order_total = order.products_cost
-                if order.free_delivery == False: 
-                    order_total += order.delivery_cost
-
-                response = yandex_pay_confirm(order.products_cost + order.delivery_cost)
-                return redirect(response["confirmation"]["confirmation_url"])
-            else:
+            if order.delivery_cost == 0:
                 context['order'] = order
                 return render(request, 'shop/order/order_create.html', context)
-                
+            else:
+                total, description = order_description(order)
+                response = yandex_pay_confirm(request, total, order.uid, order.pk, description)
+                return redirect(response["confirmation"]["confirmation_url"])
 
-    else:
-        order_pk = save_order(request)
-        if order_pk:
-            context['order'] = Order.objects.get(pk = order_pk)
-            return render(request, 'shop/order/order_create.html', context)
     return redirect('/')
 
 
@@ -259,13 +267,7 @@ def make_order(request):
             order.adress = f"{adress['city']}, {adress['street']} д.{adress['house']} кв.{adress['apartment']}"
             order.comments = adress['add_info']
 
-        description = ''
-        for n, item in enumerate(order.products.all()):
-            name =  item.product.name
-            color = item.color.name
-            price = str(item.product.price)
-            qty  =  str(item.quantity)
-            description += f'{str(n+1)} {name} - {color} {qty} шт x {price} RUB '
+        
 
         session = request.session
         data = json.loads(request.body.decode('utf-8'))
@@ -277,10 +279,7 @@ def make_order(request):
         order.save()
 
         context['success'] = True
-        total = order.products_cost
-        if order.free_delivery == False:
-            total = order.products_cost + order.delivery_cost
-        description += 'Всего: ' + str(total)
+        total, description = order_description(order)
         context['payment'] = yandex_pay_confirm(request, total, order.uid, order.pk, description)
        
     context['success'] = False
