@@ -13,12 +13,12 @@ class YandexResponseAdmin(admin.ModelAdmin):
     def order_id(self, obj=None):
         if obj: 
             return obj.data['object']['metadata']['id']
-    return '-'
+        return '-'
 
     def paid(self, obj=None):
         if obj: 
             return obj.data['object']['paid']
-    return '-'
+        return '-'
 
 
     readonly_fileds = ['order_id','paid']
