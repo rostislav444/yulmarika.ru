@@ -94,7 +94,6 @@ def order_sucess(request, pk=None):
     context = {}
     if pk:
         context['order'] = Order.objects.filter(pk=pk).first()
-
     recomendations = list(Product.objects.filter(category__in_recomendation=True))
     context['recomendations'] = ProductSeriaziler(random.sample(recomendations, len(recomendations))[:24], many=True).data
     context['recomendation_title'] = "Вас также могут заинтересовать:"
@@ -102,8 +101,6 @@ def order_sucess(request, pk=None):
 
 
 def save_order(request):
-    
-
     cart = Cart(request)
     cart_data = cart.data()
 
@@ -223,7 +220,6 @@ def order_create(request, order_pk=None):
     else: 
         context['user_data'] = json.dumps({})
 
-
     if order_pk:
         if request.user.is_authenticated:
             order = Order.objects.filter(pk=order_pk, customer=request.user).first()
@@ -237,6 +233,11 @@ def order_create(request, order_pk=None):
                 total, description = order_description(order)
                 response = yandex_pay_confirm(request, total, order.uid, order.pk, description)
                 return redirect(response["confirmation"]["confirmation_url"])
+    else:
+        order_pk = save_order(request)
+        if order_pk:
+            context['order'] = Order.objects.get(pk = order_pk)
+            return render(request, 'shop/order/order_create.html', context)
 
     return redirect('/')
 
