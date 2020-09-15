@@ -262,10 +262,11 @@
     font-weight: 600;
     text-transform: uppercase;
 }
-.profile .payment .payment_data .row .number {
+.profile .payment .payment_data .row > *:nth-child(2n) {
     text-align: right;
     color: var(--grey);
     font-size: var(--h5);
+    text-transform: uppercase;
 }
 .profile .payment .payment_data .row .number .total {
     color: black;

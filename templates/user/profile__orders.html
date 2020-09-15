@@ -66,13 +66,11 @@
                             <p class="upper grey"> <a href="{{ product.variant.get_absolute_url }}">{{ product.name }}</a></p>
                             <div class="info">
                                 {% if product.color %}
-                                <span>Цвет:  
-                                    <div class="color" data-tippy-content="{{ product.color.name }}" tabindex="0" 
-                                        style="{% if product.color.image %}background-image: url({{ product.color.imgs.image.xs }}){% else %}background-color: {{ product.color.hex }}{% endif %};">
-                                    </div>
-                                </span>
-                               
-                                    
+                                    <span>Цвет:  
+                                        <div class="color" data-tippy-content="{{ product.color.name }}" tabindex="0" 
+                                            style="{% if product.color.image %}background-image: url({{ product.color.imgs.image.xs }}){% else %}background-color: {{ product.color.hex }}{% endif %};">
+                                        </div>
+                                    </span>
                                 {% endif %}
                                 <span>Артикул: {{ product.code }}</span>
                             </div>
@@ -108,7 +106,12 @@
                         </div>
                         <div class="row">
                             <p class="title">Стоимость доставки</p>
-                            <p class="number">{{ order.delivery_cost }} RUB</p>
+                            {% if order.free_delivery %}
+                                <p>Бесплатно</p>
+                            {% else %}
+                                <p class="number">{{ order.delivery_cost }} RUB</p>
+                            {% endif %}
+                            
                         </div>
                     </div>
                     
