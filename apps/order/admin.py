@@ -11,11 +11,13 @@ from django.utils.safestring import mark_safe
 @admin.register(YandexResponse)
 class YandexResponseAdmin(admin.ModelAdmin):
     def order_id(self, obj=None):
-        if obj: return obj.data['object']['metadata']['id']
+        if obj: 
+            return obj.data['object']['metadata']['id']
     return '-'
 
     def paid(self, obj=None):
-        if obj: return obj.data['object']['paid']
+        if obj: 
+            return obj.data['object']['paid']
     return '-'
 
 
