@@ -5,10 +5,10 @@
     <p class="h3 grey title">Мои заказы ({{ user.user_order|length }})</p>
     <div>
         <span>Показать</span>
-        <select name="" id="">
-            <option value="10" selected>10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
+        <select name="show" id="swon_n_orders">
+            <option data-url="{% url 'user:profile_orders' 10 cur_page %}" value="10" selected>10</option>
+            <option data-url="{% url 'user:profile_orders' 25 cur_page %}" value="25">25</option>
+            <option data-url="{% url 'user:profile_orders' 50 cur_page %}" value="50">50</option>
         </select>
     </div>
 </div>
@@ -23,7 +23,7 @@
         <span>Трек-номер</span>
         <span>Детали</span>
     </div>
-    {% for order in user.user_order %}
+    {% for order in orders %}
         <div class="row">
             <p data-title="Номер" class="bold">{{ order.order_id }}</p>
             <p data-title="Дата" >{{ order.created|date:"d.m.Y" }}</p>
@@ -120,10 +120,28 @@
         </div>
     {% endfor %}
    
-   
+    <div class="pagination">
+        {% for page in pages %}
+            <a class="{% if page == cur_page %}active{% endif %}"  href="{% url 'user:profile_orders' show page %}">{{ page }}</a>
+        {% endfor %}
+    </div>
 </div>
 
 
 
 
+{% endblock %}
+
+{% block js %}
+<script>
+    const showNOrders = document.querySelector("#swon_n_orders")
+    showNOrders.onchange = () => {
+        for (let option of showNOrders.querySelectorAll('option')) {
+            if (option.selected) {
+                window.location.href = option.dataset.url
+            }
+        }
+    }
+    
+</script>
 {% endblock %}

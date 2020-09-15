@@ -2,21 +2,9 @@
 {% load static %}
     
 <!-- TITLE -->
-{% block title %}
-    {% if page.meta_title %}
-        {{ product.meta_title }}
-    {% else %}
-        {{ product.name }}
-    {% endif %}
-{% endblock %}
+{% block title %}{% if product.meta_title %}{{ product.meta_title }}{% else %}{{ product.name }}{% endif %}{% endblock %}
 <!-- DESCRIPTION -->
-{% block meta_description %}
-    {% if page.meta_descr %}
-        {{ product.meta_descr }}
-    {% else %}
-        {% if product.description %}{{ product.description }}{% endif %}
-    {% endif %}
-{% endblock %}
+{% block meta_description %}{% if product.meta_descr %}{{ product.meta_descr }}{% else %}{% if product.description %}{{ product.description }}{% endif %}{% endif %}{% endblock %}
 
 {% block links %}
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">

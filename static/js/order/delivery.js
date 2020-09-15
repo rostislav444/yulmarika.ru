@@ -32,7 +32,7 @@ function adressListOnLoad(data) {
         for (let meth of deliveryMethods) {
             if (adressList.length > 0 && deliveryMethods.length > 1) {
                 if (parseInt(delivery[meth.dataset.key]) == 0) {
-                    // meth.style.display = 'none'
+                    meth.style.display = 'none'
                     meth.classList.add('active')
                 } else {
                     meth.style.display = 'grid'

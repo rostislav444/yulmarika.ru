@@ -185,12 +185,7 @@ def order_description(order):
     total = order.products_cost
     if order.free_delivery == False:
         total = order.products_cost + order.delivery_cost
-    description = ''
-    for n, item in enumerate(order.products.all()):
-        description += ' '.join([str(n+1) + '.',str(item.product.code),str(item.color.name), str(item.quantity),'шт.', ' \n'])
-        
-    description += 'Всего: ' + str(total)
-    description = description[:128]
+    description = f"Оплата заказа №{ order.order_id } в магазине Юлмарика"
     return total, description
 
 
@@ -263,6 +258,18 @@ def make_order(request):
         order.save()
 
         context['success'] = True
+
+        coupon = order.coupon
+        if coupon and coupon.once:
+            orders = Order.objects.filter(coupon=coupon)
+            if len(orders) > 1:
+                if coupon.used == False:
+                    orders = orders.exclude(pk=order.pk)
+                for ordr in orders:
+                    ordr.products_cost = order.initial_cost
+                    ordr.coupon = None
+                    ordr.save()
+
         total, description = order_description(order)
         context['payment'] = yandex_pay_confirm(request, total, order.uid, order.pk, description)
        

@@ -26,7 +26,7 @@ class Order(models.Model):
     delivery_cost = models.PositiveIntegerField(blank=True, default=0, verbose_name="Стоимость доставки")
     free_delivery = models.BooleanField(default=False, verbose_name="Бесплатная доставка")
     created =       models.DateTimeField(blank=True, null=True, verbose_name="Время заказа", default=timezone.now)
-    payed =         models.DateTimeField(blank=True, null=True, verbose_name="Время оплыта", default=None)
+    payed =         models.DateTimeField(blank=True, null=True, verbose_name="Время оплаты", default=None)
     customer =      models.ForeignKey('user.CustomUser', on_delete=models.SET_NULL, editable=True, blank=True, null=True, verbose_name="Покупатель", related_name="orders")
     customer_name = models.CharField(max_length=500, verbose_name="Покупатель")
     phone =         models.CharField(max_length=24, verbose_name="Телефон")
@@ -35,7 +35,8 @@ class Order(models.Model):
     adress =        models.TextField(verbose_name="Адрес доставки")
     comments =      models.TextField(verbose_name="Примечания к заказу", blank=True, null=True)
     delivery_type =  models.CharField(max_length=24, verbose_name="Способ доставки")
-    track_number =  models.CharField(max_length=500, unique=True, null=True, blank=True, verbose_name="Трэк-номер")
+    track_number_old = models.CharField(max_length=500, default="", unique=False, editable=False, blank=True)
+    track_number =     models.CharField(max_length=500, default="", unique=False, blank=True, verbose_name="Трэк-номер")
     uid =          models.CharField(max_length=500, unique=False, default='', null=True, blank=True, verbose_name="UUID")
     weight =        models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name="Вес коробки")
     width  =        models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name="Ширина коробки")
@@ -66,7 +67,19 @@ class Order(models.Model):
         if fk:
             if self.products_cost >= fk.free_delivery:
                 self.free_delivery = True
-
+        
+        # Set track number event
+        if self.track_number_old != self.track_number:
+            kwargs = {
+                "email" :  self.email,
+                "subject" : f"Трек номер заказа: {self.track_number}",
+                "text" :    f"Для отправления с Вашим заказом установлен трек-номер '{self.track_number}', по которому Вы можете отслеживать перемещения Вашего заказа из магазина Юлмарика",
+            }
+            try: send_mail(**kwargs)
+            except: pass
+            self.track_number_old = self.track_number
+        
+        # Set old as declined
         if self.customer:
             self.customer.orders.filter(status__in=['new','created']).exclude(pk=self.pk).update(status='declined')
     
@@ -79,6 +92,15 @@ class Order(models.Model):
                     "text" :    "Заказ в магазине Юлмарика создан. Пожалуйста, не забудьте его оплатить",
                 }
             elif self.status == 'payed':
+                # FOR ADMIN
+                kwargs = {
+                    "email" :   "yulmarika@yandex.ru",
+                    "subject" : "Заказ: Успешно оплачен!",
+                    "text" :   f"Ваш заказ {self.order_id} в магазине Юлмарика успешно оплачен. Мы будем информировать вас об отправлении вашего заказа и изменениях статуса его доставки. Благодарим Вас за покупку в нашем магазине!",
+                }
+                try: send_mail(**kwargs)
+                except: pass
+                # FOR USER
                 kwargs = {
                     "email" :   self.email,
                     "subject" : "Заказ: Успешно оплачен!",

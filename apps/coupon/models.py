@@ -16,3 +16,7 @@ class Coupon(models.Model):
 
     def __str__(self):
         return self.text
+
+    class Meta:
+        verbose_name = "Купон"
+        verbose_name_plural = "Купоны"

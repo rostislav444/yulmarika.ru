@@ -19,7 +19,6 @@ class UserCreationForm(forms.ModelForm):
         )
 
     def clean_password2(self):
-        print('-- clean_password2 --')
         # Check that the two password entries match
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
@@ -114,6 +113,7 @@ class UserAdmin(BaseUserAdmin):
             'add_info',
             'updated',
         )}),
+        ('Permissions', {'fields': ('is_admin', 'is_active')}),
         
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin

@@ -92,7 +92,7 @@ class Cart(object):
             if coupon.unit == 'rub':
                 data['coupon_discount'] = int(coupon.discount)
             elif coupon.unit == 'percent':
-                data['coupon_discount'] = round(data['total'] * (int(coupon.discount) / 100), 2) 
+                data['coupon_discount'] = round(data['total'] * (int(coupon.discount) / 100), 0) 
             data['total_save'] += data['coupon_discount']
             data['total_initial'] = data['total']
             data['total'] -= data['coupon_discount']

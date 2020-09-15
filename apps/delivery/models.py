@@ -18,11 +18,11 @@ class Delivery(models.Model):
         super(Delivery, self).save()
         self.set_cities()
 
-    def clean(self):
-        data = {'key' : self.api_key, 'q' : 'getCities'}
-        self.response = self.send_request(data)
-        if type(self.response) == dict and 'err' in self.response.keys():
-                raise ValidationError({'api_key' : self.response['err']})
+    # def clean(self):
+    #     data = {'key' : self.api_key, 'q' : 'getCities'}
+    #     self.response = self.send_request(data)
+    #     if type(self.response) == dict and 'err' in self.response.keys():
+    #             raise ValidationError({'api_key' : self.response['err']})
 
     def test_api(self):
         obj = Delivery.objects.all().first()
@@ -46,9 +46,6 @@ class Delivery(models.Model):
                         new_city.save()
            
         
-
-
-
     def send_request(self, data):
         data['arrivalDoor'] = False
         data['derivalDoor'] = False

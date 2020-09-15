@@ -21,12 +21,13 @@
     <link rel="stylesheet" href="https://unpkg.com/microtip/microtip.css">
     <link rel="stylesheet" href="{% static 'css/footer.css' %}">
     <link rel="stylesheet" href="{% static 'css/base/padding.css' %}">
+    {% block links %}
+    {% endblock %}
     {% if front_files.css %}
         <link rel="stylesheet" href="{{ front_files.css.url }}">
     {% endif %}
     
-    {% block links %}
-    {% endblock %}
+    
 </head>
 <body>
     <!-- Header -->

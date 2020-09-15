@@ -8,16 +8,17 @@ def fron_files(request):
     if order_pk:
         order = Order.objects.filter(pk=int(order_pk), status__in=['payed','prepered','at_delivry','delivring','delivred','declined']).first()
         if order:
+            Cart(request).clear()
             try: del request.session['order']
             except: pass
-            Cart(request).clear()
+            try: del request.session['coupon']
+            except: pass
 
-    try:    coupon = Coupon.objects.get(pk=int(request.session['coupon']))
-    except: coupon = None
-    if coupon:
-        if coupon.once:
-            coupon.used = True
-            coupon.save()
+            coupon = order.coupon
+            if coupon:
+                if coupon.once:
+                    coupon.used = True
+                    coupon.save()
 
     context = {
         'front_files' :  FileCodes.objects.last()

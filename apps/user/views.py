@@ -14,7 +14,7 @@ from apps.shop.cart import Cart
 import datetime
 from django.utils.safestring import SafeString
 from django.contrib.auth import logout
-
+import math
 
 def auth_register_or_order(request):
     if request.user:
@@ -76,9 +76,17 @@ class UserViewSet(viewsets.ViewSet):
 class UserProfile(viewsets.ViewSet):
     permission_classes = [AllowAny]
 
-    def orders(self, request):
+    def orders(self, request, show=10, page=1):
         if request.user.is_authenticated:
-            context = {'user' : request.user}
+            context = {}
+            orders = request.user.user_order
+            pages = math.ceil(len(orders) / show)
+            page = page if page <= pages else 1
+            context['user'] = request.user
+            context['orders'] = orders[(page-1) * show:page * show]
+            context['pages'] = [n + 1 for n in range(0,pages)]
+            context['cur_page'] = page
+            context['show'] = show
             return render(request, 'user/profile__orders.html',context)
         else:
             return redirect(reverse('user:login'))
