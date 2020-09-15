@@ -7,14 +7,13 @@ class OrderConfig(AppConfig):
 
     def ready(self):
         from yandex_checkout import Configuration
-        from apps.filecodes.models import YandexKassaAPI
 
-        api = YandexKassaAPI.objects.first()
-
-        if api and api.kassa_num and api.kassa_key:
+        try:
+            from apps.filecodes.models import YandexKassaAPI
+            api = YandexKassaAPI.objects.first()
             Configuration.account_id = api.kassa_num
             Configuration.secret_key = api.kassa_key
-        else:
+        except:
             Configuration.account_id = 740433
             Configuration.secret_key = 'test_vElK711q4bXJlKZJ1W4qTpRzwM5c8Ykwhvc6WzmbZjA'
    
