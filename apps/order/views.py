@@ -54,6 +54,7 @@ def confirmation(request, uid):
 
 
 
+
 @csrf_exempt
 def yandex_response(request):
     data = json.loads(request.body.decode('utf-8'))
