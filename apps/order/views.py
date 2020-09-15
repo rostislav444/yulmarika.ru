@@ -69,7 +69,7 @@ def yandex_response(request):
 
     for item in order.products.all():
         variant = item.variant
-        variant.stock = max(0, variant.stock - order.quantity) 
+        variant.in_stock = max(0, variant.in_stock - order.quantity) 
         variant.save()
     
     return JsonResponse({'status' : True})
