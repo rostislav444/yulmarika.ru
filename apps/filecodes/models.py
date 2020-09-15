@@ -44,3 +44,21 @@ class SocialIcons(models.Model):
         verbose_name = "Данные соц. сетей в футере"
         verbose_name_plural = "Данные соц. сетей в футере"
 
+
+class YandexKassaAPI(models.Model):
+    kassa_num = models.CharField(max_length=500, blank=True, null=True, verbose_name="ID аккаунта")
+    kassa_key = models.CharField(max_length=500, blank=True, null=True, verbose_name="Секретный ключ")
+
+    class Meta:
+        verbose_name = "API Яндекс Кассы"
+        verbose_name_plural = "API Яндекс Кассы"
+
+
+class YandexMailAPI(models.Model):
+    email    = models.EmailField(max_length=500, default="yulmarika@yandex.ru", blank=False,  verbose_name="Email")
+    password = models.CharField(max_length=500,  default="Cr3-XK5-db8-CRf",     blank=False,  verbose_name="Пароль от почты")
+    smtp =     models.CharField(max_length=500,  default="smtp.yandex.com",     blank=False,  verbose_name="SMTP") 
+
+    class Meta:
+        verbose_name = "API Яндекс Почты"
+        verbose_name_plural = "API Яндекс Почты"

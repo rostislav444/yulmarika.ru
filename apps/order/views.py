@@ -14,13 +14,12 @@ from apps.delivery.models import Delivery
 from apps.coupon.models import Coupon
 from apps.user.models import UserAdress
 from django.http import JsonResponse
-from yandex_checkout import Configuration, Payment
+from yandex_checkout import Payment
 import json, random, uuid, math
 from django.views.decorators.csrf import csrf_exempt
 
 
-Configuration.account_id = 740433
-Configuration.secret_key = 'test_vElK711q4bXJlKZJ1W4qTpRzwM5c8Ykwhvc6WzmbZjA'
+
 
 def yandex_pay_confirm(request, total, uid, pk, description="Заказ"):
     base_url = f"{request.scheme}://{request.META.get('HTTP_HOST')}"
@@ -61,12 +60,17 @@ def yandex_response(request):
     resposne = YandexResponse(data=data)
     resposne.save()
 
-   
-    order = Order.objects.get(pk=int(data['object']['metadata']['id'])) 
-    order.status = 'payed'
-    order.payed = timezone.now()
-    order.save()
-    
+    try:
+        order = Order.objects.get(pk=int(data['object']['metadata']['id'])) 
+        order.status = 'payed'
+        order.payed = timezone.now()
+        order.save()
+    except: pass
+
+    for item in order.products.all():
+        variant = item.variant
+        variant.stock = max(0, variant.stock - order.quantity) 
+        variant.save()
     
     return JsonResponse({'status' : True})
 
@@ -183,8 +187,7 @@ def order_description(order):
         total = order.products_cost + order.delivery_cost
     description = ''
     for n, item in enumerate(order.products.all()):
-        product = ' '.join([str(n+1) + '.',str(item.product.code),str(item.color.name), str(item.quantity),'шт.', ' \n'])
-        escription += product
+        description += ' '.join([str(n+1) + '.',str(item.product.code),str(item.color.name), str(item.quantity),'шт.', ' \n'])
         
     description += 'Всего: ' + str(total)
     description = description[:128]
