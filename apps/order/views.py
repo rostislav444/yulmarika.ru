@@ -61,12 +61,12 @@ def yandex_response(request):
     resposne = YandexResponse(data=data)
     resposne.save()
 
-    try:
-        order = Order.objects.get(pk=int(data['object']['metadata']['id'])) 
-        order.status = 'payed'
-        order.payed = timezone.now()
-        order.save()
-    except: pass
+   
+    order = Order.objects.get(pk=int(data['object']['metadata']['id'])) 
+    order.status = 'payed'
+    order.payed = timezone.now()
+    order.save()
+    
     
     return JsonResponse({'status' : True})
 

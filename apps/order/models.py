@@ -68,7 +68,7 @@ class Order(models.Model):
                 self.free_delivery = True
 
         if self.customer:
-            self.customer.orders.filter(status__in=['new','created']).update(status='declined')
+            self.customer.orders.filter(status__in=['new','created']).exclude(pk=self.pk).update(status='declined')
     
         if self.status_old != self.status and self.email:
             if self.status == 'payed':
