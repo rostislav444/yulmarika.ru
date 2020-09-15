@@ -45,32 +45,13 @@ def yandex_pay_confirm(request, total, uid, pk, description="Заказ"):
 
 
 def confirmation(request, uid):
-    Cart(request).clear()
-    
     order = Order.objects.filter(uid=uid).first()
     if order:
-        try:    coupon = Coupon.objects.get(pk=int(request.session['coupon']))
-        except: coupon = None
-        if coupon:
-            if coupon.once:
-                coupon.used = True
-                coupon.save()
-            try: del request.session['coupon']
-            except: pass
-            Cart().clear()
         return redirect(reverse('order:success', kwargs={'pk' : order.pk}))
     else:
         return redirect("/")
 
 
-def payment_http_msg(request):
-   
-    print(request.POST)
-    # if coupon:
-    #     if coupon.once:
-    #         coupon.used = True
-    #         coupon.save()
-    return JsonResponse({'status' : True})
 
 
 @csrf_exempt
