@@ -12,13 +12,23 @@ from django.utils.safestring import mark_safe
 class YandexResponseAdmin(admin.ModelAdmin):
     def order_id(self, obj=None):
         if obj: 
-            return obj.data['object']['metadata']['id']
+            try: return obj.data['object']['metadata']['id']
+            except: pass
         return '-'
 
     def paid(self, obj=None):
         if obj: 
-            return obj.data['object']['paid']
+            try: return obj.data['object']['paid']
+            except: pass
         return '-'
+
+    def paid(self, obj=None):
+        if obj: 
+            try: return f"{obj.data['object']['amount']['value']} RUB"
+            except: pass
+        return '-'
+
+     
 
 
     readonly_fileds = ['order_id','paid']

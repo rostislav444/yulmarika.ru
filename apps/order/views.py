@@ -183,12 +183,11 @@ def order_description(order):
         total = order.products_cost + order.delivery_cost
     description = ''
     for n, item in enumerate(order.products.all()):
-        name =  item.product.name
-        color = item.color.name
-        price = str(item.product.price)
-        qty  =  str(item.quantity)
-        description += f'{str(n+1)} {name} - {color} {qty} шт x {price} RUB '
+        product = ' '.join([str(n+1) + '.',str(item.product.code),str(item.color.name), str(item.quantity),'шт.', ' \n'])
+        escription += product
+        
     description += 'Всего: ' + str(total)
+    description = description[:128]
     return total, description
 
 

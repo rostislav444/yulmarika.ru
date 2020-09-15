@@ -71,24 +71,54 @@ class Order(models.Model):
             self.customer.orders.filter(status__in=['new','created']).exclude(pk=self.pk).update(status='declined')
     
         if self.status_old != self.status and self.email:
-            if self.status == 'payed':
-                status = OrderedDict(self.ORDER_STATUS)[self.status] 
+            status = OrderedDict(self.ORDER_STATUS)[self.status] 
+            if self.status == 'created':
                 kwargs = {
-                    "email" : self.email,
-                    "subject" : "Ваш заказа успешно оплачен!",
-                    "text" : f"Ваш заказ {self.order_id} в магазине Юлмарика успешно оплачен. Мы будем информировать вас об отправлении вашего заказа и изменениях статуса его доставки. Благодарим Вас за покупку в нашем магазине!",
+                    "email" :   self.email,
+                    "subject" : "Заказ: Создан, ожидает оплаты",
+                    "text" :    "Заказ в магазине Юлмарика создан. Пожалуйста, не забудьте его оплатить",
                 }
-                try: send_mail(**kwargs)
-                except: pass
+            elif self.status == 'payed':
+                kwargs = {
+                    "email" :   self.email,
+                    "subject" : "Заказ: Успешно оплачен!",
+                    "text" :   f"Ваш заказ {self.order_id} в магазине Юлмарика успешно оплачен. Мы будем информировать вас об отправлении вашего заказа и изменениях статуса его доставки. Благодарим Вас за покупку в нашем магазине!",
+                }
+            elif self.status == 'prepered':
+                kwargs = {
+                    "email" :   self.email,
+                    "subject" : "Заказ: Собран, ожидает передачи на доставку",
+                    "text" :    "Ваш заказ в магазине Юлмарика собран и ожидает передачи службе доставки.",
+                }
+            elif self.status == 'at_delivry':
+                kwargs = {
+                    "email" :  self.email,
+                    "subject" : "Заказ: Передан на доставку",
+                    "text" :    "Ваш заказ в магазине Юлмарика передан службе доставки. Совсем скоро он будет у вас.",
+                }
+            elif self.status == 'delivring':
+                kwargs = {
+                    "email" :   self.email,
+                    "subject" : "Заказ: Доставляется",
+                    "text" :    "Ваш заказ в магазине Юлмарика уже в пути. Служба доставки везёт его к Вам.",
+                }
+            elif self.status == 'delivred':
+                kwargs = {
+                    "email" :   self.email,
+                    "subject" : "Заказ: Доставляется",
+                    "text" :    "По информации от службы доставки, Ваш заказ в магазине Юлмарика был Вам доставлен. Надеемся, что Вы остались довольны от сотрудничества с Юлмарика и порекомендуете наш магазин своим друзьям.",
+                }
+            elif self.status in ['new','declined']:
+                pass
             else:
-                status = OrderedDict(self.ORDER_STATUS)[self.status] 
                 kwargs = {
-                    "email" : self.email,
+                    "email" :  self.email,
                     "subject" : f"Статус Вашего заказа: {status}",
-                    "text" : f"Статус Вашего заказа, был изменен на {status}",
+                    "text" :    f"Статус Вашего заказа, был изменен на {status}",
                 }
-                try: send_mail(**kwargs)
-                except: pass
+
+            try: send_mail(**kwargs)
+            except: pass
 
 
 
