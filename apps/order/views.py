@@ -226,9 +226,9 @@ def order_create(request, order_pk=None):
 
     if order_pk:
         if request.user.is_authenticated:
-            order = Order.objects.filter(pk=order_pk, user = request.user).first()
+            order = Order.objects.filter(pk=order_pk, customer=request.user).first()
         else:
-            order = Order.objects.filter(pk=order_pk, user = None).first()
+            order = Order.objects.filter(pk=order_pk, customer=None).first()
         if order:
             if order.delivery_cost == 0:
                 context['order'] = order
