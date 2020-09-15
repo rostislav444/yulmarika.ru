@@ -112,7 +112,6 @@ def save_order(request):
         except: coupon = None
 
         order_data = {
-            'status' : "new",
             'products_cost' : cart_data['total'],
             'discount_cost' : cart_data['coupon_discount'] if 'coupon_discount' in cart_data else 0,
             'free_delivery' : free_delivery,
@@ -120,7 +119,7 @@ def save_order(request):
         }
 
         try:    order = Order.objects.get(pk=int(request.session.get('order')))
-        except: order = Order()
+        except: order = Order(status="new")
         
         for key, value in order_data.items():
             setattr(order, key, value)
