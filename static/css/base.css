@@ -779,4 +779,4 @@ form button[type=submit].load img {
     border-radius: 50%;
 }
 /* END RICHTEXT */
-.number, .big_num { padding-right: 4px;}
+.currency { padding-left: 4px;}

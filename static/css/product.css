@@ -217,7 +217,8 @@
     width: calc(100% - 10px);
     height: calc(100% - 10px);
     box-shadow:  0px 0px 0px 4px rgb(250,250,250), 0px 0px 0px 5px #bdbdbd;
-      
+    background-size: cover;
+    background-position: center;
 }
 .product__actions  .product__color .colors a.active {
     box-shadow:  
@@ -473,4 +474,10 @@
     padding-top: 133%;
     background-position: center;
     background-size: cover;
+    margin-bottom: 9px;
+}
+
+.recomendations .info > *{
+    display: block;
+    padding-bottom: 4px;
 }

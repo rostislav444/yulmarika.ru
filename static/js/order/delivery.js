@@ -1,7 +1,10 @@
 
 
 const chosenPrice = document.querySelector('.delivery_chosen_price')
-const chosenPriceParent = chosenPrice.parentElement
+var   chosenPriceParent = undefined
+if (chosenPrice) {
+    chosenPriceParent = chosenPrice.parentElement
+}
 const totalProductsPrice =     document.querySelector('.total_products_price')
 const totalPiceWithDelivery =  document.querySelector('.total_price_with_delivery')
 var adressList = []
@@ -26,7 +29,7 @@ function adressListOnLoad(data) {
         for (let meth of deliveryMethods) {
             if (adressList.length > 0 && deliveryMethods.length > 1) {
                 if (parseInt(delivery[meth.dataset.key]) == 0) {
-                    meth.style.display = 'none'
+                    // meth.style.display = 'none'
                     meth.classList.add('active')
                 } else {
                     meth.style.display = 'grid'
@@ -164,11 +167,15 @@ function deliveryMethodSelected(i) {
 function set_delivery_price(input)  {
     if (delivery != undefined) {
         if (freeDelivery == false) {
-            chosenPrice.innerHTML = delivery[input.dataset.key];
+            if (chosenPrice) {
+                chosenPrice.innerHTML = delivery[input.dataset.key];
+            }
+            
             totalPiceWithDelivery.innerHTML = parseInt(totalProductsPrice.dataset.price) + parseInt(chosenPrice.innerHTML.replace(' ',''))
         } else {
-            chosenPriceParent.innerHTML = 'Бесплатно'
-            console.log(totalProductsPrice.innerHTML);
+            if (chosenPriceParent) {
+                chosenPriceParent.innerHTML = 'Бесплатно'
+            }
             totalPiceWithDelivery.innerHTML = parseInt(totalProductsPrice.dataset.price)
         }
     }

@@ -128,8 +128,8 @@ class UserAdressViewSet(viewsets.ViewSet):
                     response = delivery.send_request(data)
             else:
 
-                adress_list = request.session['adress']
-                if len(adress_list):
+                adress_list = request.session.get('adress')
+                if adress_list:
                     data['endCity'] = adress_list[0]['city']
                     response = delivery.send_request(data)
 

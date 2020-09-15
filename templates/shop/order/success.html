@@ -31,7 +31,11 @@
 <div class="make_order">
     <div class="content">
         {% if order %}
-        <h1 class="h3">Заказ №{{ order.order_id }} успешно оплачен</h1>
+        {% if order.payed %}
+            <h1 class="h3">Заказ №{{ order.order_id }} успешно оплачен</h1>
+        {% else %}
+            <h1 class="h3">Проблема с оплатой заказа №{{ order.order_id }}. Попробуйте <a class="underline" href="{% url 'order:make_order' %}"> оплатить ещё раз</a>, либо используйте другое средство оплаты.</h1>
+        {% endif %}
         <h2 class="h4">Общая стоимость товаров: <span class="number big_num">{{ order.products_cost }}</span> RUB</h2>
         <div class="products_list">  
             <div class="preloader">

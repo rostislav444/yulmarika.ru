@@ -8,4 +8,4 @@ class DeliveryCitiesInline(admin.StackedInline):
 
 @admin.register(Delivery)
 class DeliveryAdmin(SingleModelAdmin):
-    inlines = [DeliveryCitiesInline]
+    inlines = []

@@ -390,6 +390,8 @@
     margin-left: 8px;
     width: 16px;
     height: 16px;
+    background-size: cover;
+    background-position: center;
 }
 .order__products_list .order__product .image {
     position: relative;

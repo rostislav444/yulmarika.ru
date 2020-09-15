@@ -28,10 +28,14 @@
 <div class="order">
     <div class="order__main">
         <h1 class="main_title h1"><span class="step_num">1</span> Способ доставки</h1>
-        <p class="h5 pb24">Выберите способ доставки и укажите адрес, для вашего заказа будет произведён расчёт стоимости</p>
+        {% if order.free_delivery  %}
+            <p class="h5 pb24">Выберите способ доставки и укажите адрес, для вашего заказа.</p>
+        {% else %}
+            <p class="h5 pb24">Выберите способ доставки и укажите адрес, для вашего заказа будет произведён расчёт стоимости</p>
+        {% endif %}
         <div class="delivery_methods">
             <!-- RUSPOST -->
-            <div class="delivery_methods__item" data-key="ruspost"  data-selected=false data-adress=false>
+            <div class="delivery_methods__item {% if order.free_delivery %}active{% endif %}" data-key="ruspost"  data-selected=false data-adress=false>
                 <label>
                     <div class="check_box big_check_box">
                         <input type="radio" name="order_delivery_method" data-key="ruspost" data-api_name="russianpost" id="daelivery_ruspost" value="Почта России">
@@ -91,13 +95,17 @@
             <div class="total_save"></div>
             <div class="row">
                 <span class="title">Стоимость товаров</span>
-                <span class="data "><span data-price="{{ order.products_cost }}" class="number big_num total_products_price initial_total_price_num">{{ order.initial_cost }}</span> RUB</span>
+                <span class="data ">
+                    <span data-price="{{ order.products_cost }}" class="number big_num total_products_price initial_total_price_num">{{ order.initial_cost }}</span>
+                    <span class="currency"> RUB</span>
+                </span>
             </div>
             <div class="row">
                 <span class="title">Скидка по купону</span>
                     {% if order.discount_cost %}
                         <span class="data coupon_total_discount active">
-                            <span class="number big_num">{{ order.discount_cost }}</span><span> RUB</span>
+                            <span class="number big_num">{{ order.discount_cost }}</span>
+                            <span class="currency"> RUB</span>
                         </span>
                     {% else %}
                         <span class="data coupon_total_discount">
@@ -108,7 +116,14 @@
             </div>
             <div class="row">
                 <span class="title">Доставка</span>
-                <span class="data "><span class="number big_num delivery_chosen_price">0</span> RUB</span>
+                {% if order.free_delivery %}
+                    <span class="data">Бесплатно</span>
+                {% else %}
+                    <span class="data ">
+                        <span class="number big_num delivery_chosen_price">0</span>
+                        <span class="currency"> RUB</span>
+                    </span>
+                {% endif %}
             </div>
             <div class="total row">
                 <div class="title">

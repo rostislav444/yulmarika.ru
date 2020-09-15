@@ -160,6 +160,8 @@ def home(request, category=None):
             value = [int(pk) for pk in data[key]] 
             if key in ['color']:
                 product_filter[f"variants__{key}__pk__in"] = value
+                product_filter[f"variants__in_stock__gte"] = 1
+                product_filter[f"variants__hide"] = False
             else:
                 product_filter[f"{key}__pk__in"] = value
             fltr['selected'] = value
