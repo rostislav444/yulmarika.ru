@@ -16,6 +16,9 @@ const deliveryMethods =      document.querySelectorAll('.delivery_methods__item'
 const deliveryMethodInputs = document.querySelectorAll('input[name="order_delivery_method"]') 
 const minimalFreeDeliveryTotal = parseInt(document.querySelector('.free_delivery_price').dataset.price)
 
+var methSelected = undefined
+
+
 function adressListOnLoad(data) {
     let adressPreview = undefined
     
@@ -46,6 +49,13 @@ function adressListOnLoad(data) {
             methPrice = meth.querySelector('.method_price')
             if (methPrice) {
                 methPrice.innerHTML = delivery[meth.dataset.key]
+            }
+            // If user previously selected some method
+           
+            if (methSelected !== undefined) {
+                console.log(deliveryMethodInputs[methSelected]);
+                deliveryMethodInputs[methSelected].checked = true
+                checkDeliveryChecked()
             }
            
         }
@@ -200,11 +210,12 @@ function checkDeliveryChecked() {
 for (let i = 0; i < deliveryMethodInputs.length; i++) {
     let input = deliveryMethodInputs[i];
     input.onchange = () => {
-        
+        methSelected = i
         set_delivery_price(input)
         if (adressList.length == 0) {
-            AdressBlankForm()
             input.checked = false
+            
+            AdressBlankForm()
         } else {
             checkDeliveryChecked()
         }

@@ -51,7 +51,7 @@ class UserViewSet(viewsets.ViewSet):
         data = request.data
         try:     
             user = CustomUser.objects.get(email=data["email"])
-            return Response({'success' : False, 'msg' : f'Пользователь с Email: {data["email"]}, уже зарегистрирован.'})
+            return Response({'success' : False, 'msg' : f'Пользователь с Email: {data["email"]} уже зарегистрирован.'})
         except: 
             try:
                 user = CustomUser.objects.create_user(

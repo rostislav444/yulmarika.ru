@@ -71,16 +71,28 @@ class Order(models.Model):
             self.customer.orders.filter(status__in=['new','created']).update(status='declined')
     
         if self.status_old != self.status and self.email:
-            status = OrderedDict(self.ORDER_STATUS)[self.status] 
-            kwargs = {
-                "email" : self.email,
-                "subject" : f"Статус Вашего заказа: {status}",
-                "text" : f"Статус Вашего заказа, был изменен на {status}",
-            }
-            try: send_mail(**kwargs)
-            except: pass
+            if self.status == 'payed':
+                status = OrderedDict(self.ORDER_STATUS)[self.status] 
+                kwargs = {
+                    "email" : self.email,
+                    "subject" : "Ваш заказа успешно оплачен!",
+                    "text" : f"Ваш заказ {order.order_id} в магазине Юлмарика успешно оплачен. Мы будем информировать вас об отправлении вашего заказа и изменениях статуса его доставки. Благодарим Вас за покупку в нашем магазине!",
+                }
+                try: send_mail(**kwargs)
+                except: pass
+            else:
+                status = OrderedDict(self.ORDER_STATUS)[self.status] 
+                kwargs = {
+                    "email" : self.email,
+                    "subject" : f"Статус Вашего заказа: {status}",
+                    "text" : f"Статус Вашего заказа, был изменен на {status}",
+                }
+                try: send_mail(**kwargs)
+                except: pass
 
-            self.status_old = self.status
+
+
+        self.status_old = self.status
         if not self.pk:
             last_order = Order.objects.all().order_by('order_id').last()
             self.order_id = last_order.order_id + 1 if last_order else 1

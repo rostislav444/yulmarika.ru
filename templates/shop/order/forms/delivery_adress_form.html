@@ -15,14 +15,14 @@
         <div class="smart_input_label">   
             <label>
                 <input data-type="text_only" type="text" name="name"  placeholder="" value="{{ adress.name }}" required>
-                <span>Имя</span>
+                <span>Имя *</span>
             </label>
         </div>
         <!-- SURNAME -->
         <div class="smart_input_label">   
             <label>
                 <input data-type="text_only" type="text" name="surname"  placeholder="" value="{{ adress.surname }}" required>
-                <span>Фамилия</span>
+                <span>Фамилия *</span>
             </label>
         </div>
         <!-- PHONE -->
@@ -36,37 +36,38 @@
             <div class="smart_input_label">   
                 <label>
                     <input data-type="number" type="tel" name="phone"  placeholder="" value="{{ adress.phone }}" required>
-                    <span>Телефон</span>
+                    <span>Телефон *</span>
                 </label>
             </div>
         </div>
+       
     
         <!-- CITY -->
         <div class="smart_input_label col2">   
             <label>
                 <input data-type="text" type="text" name="city" data-ajax="/core/search/city" placeholder="" autocomplete="off" value="{{ adress.city }}" required>
-                <span>Город</span>
+                <span>Город *</span>
             </label>
         </div>
         <!-- STREET -->
         <div class="smart_input_label col2">   
             <label>
                 <input data-type="text" type="text" name="street"  placeholder="" value="{{ adress.street }}" required>
-                <span>Улица</span>
+                <span>Улица *</span>
             </label>
         </div>
         <!-- HOUSE -->
         <div class="smart_input_label">   
             <label>
                 <input data-type="text" type="text" name="house"  placeholder="" value="{{ adress.house }}" required>
-                <span>Дом</span>
+                <span>Дом *</span>
             </label>
         </div>
         <!-- APARTMENT -->
         <div class="smart_input_label">   
             <label>
                 <input data-type="text" type="text" name="apartment"  placeholder="" value="{{ adress.apartment }}" required>
-                <span>Квартира</span>
+                <span>Квартира *</span>
             </label>
         </div>
         <!-- ADDTIYIONAL INFO -->
