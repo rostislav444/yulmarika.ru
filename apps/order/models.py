@@ -75,12 +75,13 @@ class Order(models.Model):
 
             for n, item in enumerate(self.products.all()):
                 name = item.product.name
+                code = item.product.code
                 price = str(item.product.price)
                 variant = item.variant
                 color = item.color.name
                 qty = str(item.quantity)
 
-                msg += f"{n+1}. {name}\nцвет: {color} \n{qty} шт. x {price} RUB\n"
+                msg += f"{n+1}. {code} - {name}\nцвет: {color} \n{qty} шт. x {price} RUB\n"
 
             msg += f"\nСтоимость товаров: {str(self.products_cost)}\n"
             msg += f"Размер скидки: {str(self.discount_cost)}\n"
