@@ -86,7 +86,7 @@ class Order(models.Model):
             msg += f"Размер скидки: {str(self.discount_cost)}\n"
             msg += f"Клиент: {str(self.customer_name)}\n"
             msg += f"Способ доставки: {str(self.delivery_type)}\n"
-            msg += f"Стоимость доставки: {str(self.delivery_cost)}\n"
+            msg += f"Стоимость доставки: {str(self.delivery_cost)} RUB\n"
             msg += f"Телфон: {str(self.phone)}\n"
             msg += f"Адрес: {str(self.adress)}\n"
             msg += f"Комментарий: {str(self.comments)}\n"
