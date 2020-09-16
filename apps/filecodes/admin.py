@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import FileCodes, SocialIcons, YandexKassaAPI, YandexMailAPI
+from .models import FileCodes, SocialIcons, YandexKassaAPI, YandexMailAPI, TelegramAPI
 from singlemodeladmin import SingleModelAdmin
 
 class SocialIconsInline(admin.TabularInline):
@@ -13,10 +13,13 @@ class FileCodesAdmin(SingleModelAdmin):
     
 
 
+@admin.register(TelegramAPI)
+class TelegramAPIAdmin(SingleModelAdmin):
+    pass
+
 @admin.register(YandexKassaAPI)
 class YandexKassaAPIAdmin(SingleModelAdmin):
     pass
-
 
 
 @admin.register(YandexMailAPI)

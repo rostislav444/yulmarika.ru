@@ -19,7 +19,7 @@ class FileCodes(models.Model):
     logo =      FileField(upload_to="file_codes", blank=True, null=True, verbose_name="Логотип сайта")
     favicon =   FileField(upload_to="file_codes", blank=True, null=True, verbose_name="Fav icon")
     css =       FileField(upload_to="file_codes", blank=True, null=True,  verbose_name="Файлы стилей")
-    free_delivery = models.PositiveIntegerField(default=5000, blank=True,  verbose_name="Бесплатная доставка от")
+    free_delivery = models.PositiveIntegerField(default=1000, blank=True,  verbose_name="Бесплатная доставка от")
     base_delivery = models.PositiveIntegerField(default=400, blank=True,  verbose_name="Базовая стоимость доставки")
 
     minimal_order = models.PositiveIntegerField(default=500,  blank=True,  verbose_name="Минимальная сумма заказа")
@@ -44,6 +44,25 @@ class SocialIcons(models.Model):
         verbose_name = "Данные соц. сетей в футере"
         verbose_name_plural = "Данные соц. сетей в футере"
 
+class TelegramAPI(models.Model):
+    chanel_id =  models.CharField(
+        max_length=500, 
+        default="1270278191", 
+        blank=True, null=True, 
+        verbose_name="ID канала", 
+        help_text="Его можно взять из URL в браузерной версии Telegram между 'c' и '_'"
+    )
+    api_key =    models.CharField(
+        max_length=500, 
+        default="1130353501:AAHQWTGljZtT39hv5cohgQ8scmp42BFp7GU", 
+        blank=True, null=True, 
+        verbose_name="API ключ", 
+        help_text="Дается а чате BotFather при создании бота, которго потому нужно назначить администратором канала"
+    )
+
+    class Meta:
+        verbose_name = "API Telegram"
+        verbose_name_plural = "API Telegram"
 
 class YandexKassaAPI(models.Model):
     kassa_num = models.CharField(max_length=500, blank=True, null=True, verbose_name="ID аккаунта")

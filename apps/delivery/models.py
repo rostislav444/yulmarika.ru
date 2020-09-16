@@ -7,8 +7,10 @@ from apps.core.function import send_mail
 
 
 class Delivery(models.Model):
-    api_key =  models.CharField(max_length=255, verbose_name="Ключ API")
+    api_key =   models.CharField(max_length=255, default="", null=True, blank=True, verbose_name="Ключ API")
+    api_check = models.CharField(max_length=255, default="", null=True, blank=True, verbose_name="Состояние API ключа")
     response = JSONField(editable=False, null=True, blank=True, default=dict)
+
 
     class Meta:
         verbose_name = "Доставка"
@@ -17,12 +19,7 @@ class Delivery(models.Model):
     def save(self):
         super(Delivery, self).save()
         self.set_cities()
-
-    # def clean(self):
-    #     data = {'key' : self.api_key, 'q' : 'getCities'}
-    #     self.response = self.send_request(data)
-    #     if type(self.response) == dict and 'err' in self.response.keys():
-    #             raise ValidationError({'api_key' : self.response['err']})
+        super(Delivery, self).save()
 
     def test_api(self):
         obj = Delivery.objects.all().first()
@@ -57,13 +54,23 @@ class Delivery(models.Model):
         return None
 
     def set_cities(self):
+        data = {'key' : self.api_key, 'q' : 'getCities'}
+        try: self.response = self.send_request(data)
+        except: pass
+        
         if type(self.response) == list:
+            self.api_check = 'API работает'
             for city in self.response:
                 try:
                     DeliveryCities.objects.get(parent=self, name=city['name'])
                 except:
                     new_city = DeliveryCities(parent=self, name=city['name'])
                     new_city.save()
+
+        elif type(self.response) == dict and 'err' in self.response.keys():
+            self.api_check = self.response['err']
+        else:
+            self.api_check = 'Что-то пошло не так'
        
 
 class DeliveryCities(models.Model):

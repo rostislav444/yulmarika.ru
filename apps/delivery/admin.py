@@ -9,3 +9,6 @@ class DeliveryCitiesInline(admin.StackedInline):
 @admin.register(Delivery)
 class DeliveryAdmin(SingleModelAdmin):
     inlines = []
+    readonly_fields = ['api_check']
+    fileds = ['api_check','api_key']
+    

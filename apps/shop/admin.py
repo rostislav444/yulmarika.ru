@@ -18,7 +18,28 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Color)
 class ColorAdmin(admin.ModelAdmin):
-    pass
+    def color_view(self, obj=None):
+        if obj.pk:
+            if obj.image:
+                img = mark_safe(f"""<img src={obj.imgs['image']['s']} style='object-fit: contain; object-position: center; border: 1px solid #ededed;'width="24" height=24 />""")
+                return img
+            elif obj.hex:
+                img = mark_safe(f"""<img style='background-color: {obj.hex}; object-fit: contain; object-position: center; border: 1px solid #ededed;' width=24 height=24/>""")
+                return img
+
+        return '-'
+    color_view.short_description = "Цвет"
+
+    def products(self, obj):
+        if obj.pk:
+            return len(obj.variants.all())
+        return 0
+
+    products.short_description = "Товаров"
+    
+    readonly_fileds = ['color_view','products']
+    list_display = ['color_view','name','products']
+    list_display_links = ('color_view','name')
 
 @admin.register(WhoIntended)
 class WhoIntendedAdmin(admin.ModelAdmin):

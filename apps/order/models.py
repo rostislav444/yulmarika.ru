@@ -3,9 +3,10 @@ from django.utils import timezone
 from apps.coupon.models import Coupon
 from apps.core.function import send_mail
 from collections import OrderedDict
-from apps.filecodes.models import FileCodes
+from apps.filecodes.models import FileCodes, TelegramAPI
 from django.contrib.postgres.fields import JSONField
-
+import urllib.request
+import urllib.parse
 
 class Order(models.Model):
     ORDER_STATUS = [
@@ -60,7 +61,39 @@ class Order(models.Model):
     def order_satus(self):
         return dict(self.__class__.ORDER_STATUS).get(self.status)
 
-    
+    def telegram_msg(self):
+        api = TelegramAPI.objects.first()
+        if api and api.chanel_id and api.api_key:
+            chanel_id = api.chanel_id
+            api_key =   api.api_key
+        else:
+            chanel_id = "1270278191"
+            api_key = "1130353501:AAHQWTGljZtT39hv5cohgQ8scmp42BFp7GU"
+
+        if self.status == 'payed':
+            msg = f"Заказ №{self.order_id}\n\n"
+
+            for n, item in enumerate(self.products.all()):
+                name = item.product.name
+                price = str(item.product.price)
+                variant = item.variant
+                color = item.color.name
+                qty = str(item.quantity)
+
+                msg += f"{n+1}. {name}\nцвет: {color} \n{qty} шт. x {price} RUB\n"
+
+            msg += f"\nСтоимость товаров: {str(self.products_cost)}\n"
+            msg += f"Размер скидки: {str(self.discount_cost)}\n"
+            msg += f"Клиент: {str(self.customer_name)}\n"
+            msg += f"Телфон: {str(self.phone)}\n"
+            msg += f"Адрес: {str(self.adress)}\n"
+            msg += f"Комментарий: {str(self.comments)}\n"
+            
+            try:
+                msg = urllib.parse.quote(msg)
+                url = f"https://api.telegram.org/bot{api_key}/sendMessage?chat_id=-100{chanel_id}&text=" + msg
+                contents = urllib.request.urlopen(url).read()
+            except: pass
 
     def save(self):
         fk = FileCodes.objects.first()
@@ -93,13 +126,7 @@ class Order(models.Model):
                 }
             elif self.status == 'payed':
                 # FOR ADMIN
-                kwargs = {
-                    "email" :   "yulmarika@yandex.ru",
-                    "subject" : "Заказ: Успешно оплачен!",
-                    "text" :   f"Ваш заказ {self.order_id} в магазине Юлмарика успешно оплачен. Мы будем информировать вас об отправлении вашего заказа и изменениях статуса его доставки. Благодарим Вас за покупку в нашем магазине!",
-                }
-                try: send_mail(**kwargs)
-                except: pass
+                self.telegram_msg()
                 # FOR USER
                 kwargs = {
                     "email" :   self.email,
