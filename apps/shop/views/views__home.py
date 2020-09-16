@@ -115,11 +115,10 @@ def home(request, category=None):
         fltr['category__slug__in'] = categories
         context['selected']['categories'] = categories
 
-    elif category==None and request.method=='GET' and len(dict(request.GET).keys()) == 0:
+    elif category==None and len(dict(request.GET).keys()) == 0:
         categories = Category.objects.filter(in_catalogue=True).values_list('slug',flat=True)
         if len(categories):
             fltr['category__slug__in'] = categories
-            # context['selected']['categories'] = categories
 
     products =     all_products.filter(**fltr).distinct()
     variants =     Variant.objects.filter(parent__in=products)
