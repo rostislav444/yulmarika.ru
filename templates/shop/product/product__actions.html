@@ -50,6 +50,21 @@
       <img src="{% static 'img/ico/wallet.svg' %}" alt="[]">
       <span>Купить в 1 клик</span>
     </a>
+	
+	<div class="product__info">
+                {% if product.description %}
+                <div class="description product__info__description">
+                    <p onclick="opendDescription(this)" class="title active h4"><span>Описание</span> <img src="{% static 'img/ico/arrow.svg' %}" alt=">"></p>
+                    <div class="text richtext">{{ product.description|safe }}</div>
+                </div>
+                {% endif %}
+                {% if product.preferences %}
+                <div class="preferences product__info__preferences">
+                    <p onclick="opendDescription(this)" class="title h4"><span>Характеристики</span> <img src="{% static 'img/ico/arrow.svg' %}" alt=">"></p>
+                    <div class="text richtext">{{ product.preferences|safe  }}</div>
+                </div>
+                {% endif %}
+    </div>
   </div>
     
 </div>

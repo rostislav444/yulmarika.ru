@@ -75,6 +75,8 @@
     height: 16px;
     margin-left: 8px;
     border: 1px solid var(--grey-light);
+    background-size: cover;
+    background-position: center;
 }
 
 .order__main .products_list .order__product .code {
@@ -91,6 +93,9 @@
 }
 .order__main .products_list .order__product .product_price .old_price {
     font-size: var(--h5);
+}
+.order__main .products_list .order__product .product_price .old_price .number {
+    padding-right: 0;
 }
 .order__main .products_list .order__product .counter {
     display: grid;
@@ -176,6 +181,10 @@
     width: 16px;
     height: 16px;
     margin-left: 8px;
+    display: none;
+}
+.order .order__form .total_table .row img.info.active {
+    display: inline-block;
 }
 .order .order__form .total_table .row .data {
     display: flex;
@@ -277,20 +286,30 @@
 }
 .pay_types ul.pay_rules li {
     position: relative;
-    padding-left: 20px;
     margin-bottom: 2px;
 }
-.pay_types ul.pay_rules li::before {
-    position: absolute;
-    top: 3px;
-    left: 0;
-    display: block;
-    content: "";
-    width: 10px;
-    height: 10px;
-    margin-right: 4px;
-    background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSI3Ij4KICAgIDxwYXRoIGZpbGw9IiM0NzQ3NDciIGZpbGwtcnVsZT0iZXZlbm9kZCIgZD0iTTkuOTk3IDEuMTcxbC02LjI1IDUuODI3LTEuMjUxLTEuMTY2LTIuNS0yLjMzIDEuMjUtMS4xNjYgMi41IDIuMzMxTDguNzQ3LjAwNmwxLjI1IDEuMTY1eiIvPgo8L3N2Zz4K) center center / contain no-repeat;
+.pay_types ul.pay_rules li {
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
+
+.pay_types ul.pay_rules li img {
+    display: none;
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    margin: 0;
+    margin-right: 8px;
+}
+
+
+
+.pay_types ul.pay_rules li img.no  {display: inline-block;}
+.pay_types ul.pay_rules li img.yes {display: none;}
+.pay_types ul.pay_rules li.active img.no  {display: none;}
+.pay_types ul.pay_rules li.active img.yes {display: inline-block;}
 
 .pay_types .pay_note {
     font-size: var(--h6);
@@ -329,4 +348,9 @@
 .coupon_total_discount.active * {
     color: blue;
 }
+
+.promocode_info_active[aria-label][role~="tooltip"]::after {
+    content: attr(aria-label) ': ' attr(data-total) ' RUB' !important;
+}
+
 

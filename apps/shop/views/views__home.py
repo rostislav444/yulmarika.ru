@@ -100,6 +100,7 @@ def home(request, category=None):
         {'key' : 'popular',  'name' : 'По популярности',   'arg' : '-is_popular'},
         {'key' : 'discount', 'name' : 'По размеру скидки', 'arg' : 'discount'},
         {'key' : 'date',     'name' : 'Новинки',           'arg' : '-date'},
+        {'key' : 'status',     'name' : 'Все акции',           'arg' : 'status'},
         {'key' : 'default',  'name' : 'По умолчанию',      'arg' : None},
     ]
     context['sort_by'] = sort_by
@@ -186,6 +187,8 @@ def home(request, category=None):
             products = products.order_by('price')
         elif sort_by_key == 'date':
             products = products.order_by('-created')
+        elif sort_by_key == 'status':
+            products = products.order_by('status')
         elif sort_by_key == 'popular':
             products = products.order_by('-is_popular')
         elif sort_by_key == 'discount':

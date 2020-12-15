@@ -3,7 +3,7 @@
     
 {% block links %}
 <!--Подключение библиотеки-->
-<script src="https://kassa.yandex.ru/checkout-ui/v2.js"></script>
+<script src="https://yookassa.ru/checkout-ui/v2.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -24,7 +24,7 @@
 
 <script>
 //Инициализация виджета. Все параметры обязательные.
-const checkout = new window.YandexCheckout({
+const checkout = new window.YooMoneyCheckoutWidget({
     confirmation_token: 'confirmation-token', //Токен, который перед проведением оплаты нужно получить от Яндекс.Кассы
     return_url: 'https://merchant.site', //Ссылка на страницу завершения оплаты
     error_callback(error) {

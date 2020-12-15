@@ -1,12 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Warstwa_1" xmlns="http://www.w3.org/2000/svg"  x="0px" y="0px"
-	 viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:none;stroke:#000000;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
-</style>
-<g>
-	<circle class="st0" cx="11.5" cy="11.5" r="10"/>
-</g>
-<line class="st0" x1="18.9" y1="18.9" x2="29.9" y2="29.9"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" enable-background="new 0 0 1024 1024" xml:space="preserve" width="64" height="64" style=""><rect id="backgroundrect" width="100%" height="100%" x="0" y="0" fill="none" stroke="none"/><defs><linearGradient id="svg_3" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#000000" stop-opacity="1" offset="0"/><stop stop-color="#ffffff" stop-opacity="1" offset="1"/></linearGradient></defs>
+
+
+<g class="currentLayer" style=""><title>Layer 1</title>
+	
+	
+	
+	
+	
+<g id="svg_5" class="" fill="#ffffff" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="2">
+		<polygon fill="#ffffff" points="24.615257263183594,41.362873911857605 22.489948272705078,39.23589789867401 28.308927536010742,33.41858756542206 30.434175491333008,35.545552134513855 24.615257263183594,41.362873911857605 " id="svg_6" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="2"/>
+	</g>
+		<polygon fill="#ffffff" points="20.642242431640625,37.390793681144714 26.45956802368164,43.20810401439667 8.038095474243164,61.63291251659393 2.2207703590393066,55.81558310985565 " id="svg_8" class="" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="2"/>
+		
+	<path fill="#FFFFFF" d="M29.262506739143475,34.64815620705591 c-7.588648168987285,-7.555911553048877 -7.615478573370087,-19.83635789764177 -0.05870985641751381,-27.425064776485474 c7.556827426808993,-7.58950533289098 19.837285513373168,-7.614621409466391 27.425874972504033,-0.0578526925138181 " id="svg_1" class="" stroke="#000000" stroke-opacity="1" stroke-width="2"/><path fill="#e0fcff" d="M56.62967185522998,7.165238738056625 c7.5904212066510945,7.558494786731249 7.615537283226505,19.83722680351675 0.057101206351674025,27.42754233242629 c-7.555113099001599,7.588706878843701 -19.833821631844536,7.61381121344783 -27.424266322438193,0.05537513657299909 " id="svg_2" class="" stroke="#000000" stroke-opacity="1" stroke-width="2" fill-opacity="1"/></g></svg>

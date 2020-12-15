@@ -60,21 +60,21 @@
         <div class="smart_input_label">   
             <label>
                 <input data-type="text" type="text" name="house"  placeholder="" value="{{ adress.house }}" required>
-                <span>Дом *</span>
+                <span>Дом * (если есть, то корпус)</span>
             </label>
         </div>
         <!-- APARTMENT -->
         <div class="smart_input_label">   
             <label>
                 <input data-type="text" type="text" name="apartment"  placeholder="" value="{{ adress.apartment }}" required>
-                <span>Квартира *</span>
+                <span>Квартира * (если нет, то прочерк)</span>
             </label>
         </div>
         <!-- ADDTIYIONAL INFO -->
         <div class="smart_input_label col2">   
             <label>
                 <input data-type="text" type="text" name="add_info"  placeholder="" value="{{ adress.add_info }}">
-                <span>Почтовый индекс</span>
+                <span>Почтовый индекс *</span>
             </label>
             <div class="help_text">Сюда же можно написать комментарий к заказу (не обязательно)</div>
         </div>

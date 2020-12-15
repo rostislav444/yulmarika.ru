@@ -4,11 +4,11 @@
     <div class="data">
         <input type="hidden" data-type="id" name="id" value="{{ adress.pk }}">
         <div class="form_field">
-            <label for="profile_adres_name_field">Имя</label>
+            <label for="profile_adres_name_field">Имя *</label>
             <input id="profile_adres_name_field"   name="name"     data-type="text" type="text" value="{{ adress.name }}" required>
         </div>
         <div class="form_field">
-            <label for="profile_adres_surname_field">Фамилия</label>
+            <label for="profile_adres_surname_field">Фамилия *</label>
             <input id="profile_adres_surname_field" name="surname" data-type="text" type="text" value="{{ adress.surname }}" required>
         </div>
         <div class="form_field phone">
@@ -19,23 +19,23 @@
             </div>
         </div>
         <div class="form_field">
-            <label for="profile_adres_city_field">Город</label>
+            <label for="profile_adres_city_field">Город *</label>
             <input id="profile_adres_city_field" name="city" data-ajax="/core/search/city" data-type="text" type="text" value="{{ adress.city }}" required>
         </div>
         <div class="form_field">
-            <label for="profile_adres_street_field">Улица</label>
+            <label for="profile_adres_street_field">Улица *</label>
             <input id="profile_adres_street_field" name="street" data-type="text" type="text" value="{{ adress.street }}" required>
         </div>
         <div class="form_field">
-            <label for="profile_adres_house_field">Дом</label>
+            <label for="profile_adres_house_field">Дом * (если есть, то корпус)</label>
             <input id="profile_adres_house_field" name="house" data-type="text" type="text" value="{{ adress.house }}" required>
         </div>
         <div class="form_field">
-            <label for="profile_adres_appartment_field">Квартира</label>
+            <label for="profile_adres_appartment_field">Квартира * (если нет, то прочерк)</label>
             <input id="profile_adres_appartment_field" name="apartment" data-type="text" type="text" value="{{ adress.apartment }}" required>
         </div>
         <div class="form_field">
-            <label for="profile_adres_add_info_field">Дополнительная информация</label>
+            <label for="profile_adres_add_info_field">Индекс *</label>
             <input id="profile_adres_add_info_field" name="add_info" data-type="text" type="text" value="{{ adress.add_info }}" required>
         </div>
     </div>

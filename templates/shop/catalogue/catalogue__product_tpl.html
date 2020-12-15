@@ -6,12 +6,12 @@
     <div class="product">
       <a href="{{ product.url }}" class="image product_image">
          
-          {% if product.add_image.s %}
+          {% if product.add_image.m %}
           
-            <img class="product_image_main"      src="{{ product.image.s }}" alt="">
-            <img class="product_image_secondary" src="{{ product.add_image.s }}" alt="">
+            <img class="product_image_main"      src="{{ product.image.m }}" alt="">
+            <img class="product_image_secondary" src="{{ product.add_image.m }}" alt="">
           {% else %} 
-            <img  src="{{ product.image.s }}" alt="">
+            <img  src="{{ product.image.m }}" alt="">
           {% endif %}
       </a>
       <div class="info">

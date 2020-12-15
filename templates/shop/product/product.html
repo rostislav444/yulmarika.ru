@@ -22,20 +22,6 @@
             <div class="galery__wrapper">
                 {% include 'shop/product/product__galery.html' %}
             </div>
-            <div class="product__info">
-                {% if product.description %}
-                <div class="description product__info__description">
-                    <p onclick="opendDescription(this)" class="title active h4"><span>Описание</span> <img src="{% static 'img/ico/arrow.svg' %}" alt=">"></p>
-                    <div class="text richtext">{{ product.description|safe }}</div>
-                </div>
-                {% endif %}
-                {% if product.preferences %}
-                <div class="preferences product__info__preferences">
-                    <p onclick="opendDescription(this)" class="title h4"><span>Характеристики</span> <img src="{% static 'img/ico/arrow.svg' %}" alt=">"></p>
-                    <div class="text richtext">{{ product.preferences|safe  }}</div>
-                </div>
-                {% endif %}
-            </div>
         </div>
         {% include 'shop/product/product__actions.html' %}
     </div>
@@ -52,37 +38,7 @@
 <script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script src="{% static 'js/product/galery.js' %}"></script>
-<script src="{% static 'lib/sticky-sidebar-master/dist/sticky-sidebar.min.js' %}"></script>
-<script>
-    var sidebar = undefined
 
-    function sidebarInit() {
-        sidebar = new StickySidebar('.product__actions__wrapper', {
-            containerSelector: '.product__content',
-            innerWrapperSelector: '.product__actions',
-            topSpacing: 0,
-            bottomSpacing: 80,
-        });
-    }
-    
-    var mql = window.matchMedia('(max-width: 960px)');
-    if (mql.matches == false) { 
-        sidebarInit() 
-    }
-
-
-    function screenTest(e) {
-        if (e.matches && window['sidebar'] != undefined) {
-            console.log('< 960');
-            sidebar.destroy()
-        } else {
-            console.log('> 960');
-            sidebarInit()
-        }
-    }
-    mql.addListener(screenTest);
-
-</script>
 <script>
 
  

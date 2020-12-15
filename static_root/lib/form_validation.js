@@ -8,7 +8,7 @@ validation = {
             length : 0,
         },
         msg : {
-            re : 'Email имеет не верный формат',
+            re : 'Email имеет неверный формат',
             length : 'Введите ваш Email', 
         },
         replace : /[^0-9a-zA-Z._@-]/g,
@@ -39,6 +39,7 @@ validation = {
         },
         replace : /[^0-9.]/g
     },
+   
     password : {
         errors : {
             re : /^[0-9a-zA-Z]{6,}$/,
@@ -142,27 +143,22 @@ function fieldValidate(input) {
             errors.push(validator['msg']['func'])
         }
     }
-   
     // REPLACE
     if ('replace' in validator) {
         let re = validator['replace']
         let value = input.value.replace(re, '');
         input.value = value
     }
-
     showMsg(input, errors)
     if (errors.length > 0) {
         input.dataset.valid = false
         input.labels[0].classList.add('err')
         return false
-        
     } else {
         input.labels[0].classList.remove('err')
         input.dataset.valid = true
         return true
     }
-    
-
 }
 
 
@@ -182,14 +178,18 @@ function checkInputType(input) {
 
 function formResponse(form, data) {
     var form = form
-    form.querySelector('button[type=submit]').classList.add('load')
+    let submitBtn = form.querySelector('button[type=submit]')
+    submitBtn.classList.add('load')
     response = XHR(form.method, form.action, data)
+    submitBtn.classList.remove('load')
+   
     if ('update_func' in form.dataset && response['data'] !== undefined ) {
         if (response['success'] == true) {
             let data = response['data']
             form = this[form.dataset.update_func](data, true)
         }
     }
+
     if (form != undefined) {
         message = form.querySelector('.message')
         if (message) {
@@ -201,12 +201,30 @@ function formResponse(form, data) {
                 message.classList.remove('success')
             }
         }
-        if (form.dataset.redirect !== undefined) {
+        if (response['success'] == true && form.dataset.redirect !== undefined) {
             window.location.href = form.dataset.redirect
         }
     }
+
     
     
+    
+}
+
+function AjaxFieldChanged(data, field=undefined) {
+    data = JSON.parse(data)['data']['list']
+    if (data.length == 1) {
+        field.value = data[0]
+        document.querySelector('.ajax_input_values_list').remove()
+    } else if (data.includes(field.value) == false) {
+        field.value = ''
+        alert('Выберите значение из списка доступных')
+    }
+}
+
+function AjaxFieldOnChange(e) {
+    input = e.target
+    xhrOnLoad('POST', input.dataset.ajax, data, AjaxFieldChanged, input)
 }
 
 
@@ -220,6 +238,7 @@ function AjaxFieldUpdate(data, field=undefined) {
             parent.appendChild(ul)
         } 
         ul.innerHTML = ''
+        ul.classList.add('ajax_input_values_list')
         for (let item of data['list']) {
             li = document.createElement('li')
             li.innerHTML = item
@@ -227,14 +246,17 @@ function AjaxFieldUpdate(data, field=undefined) {
         }
         let list = ul.querySelectorAll('li')
         function set_value(value) {
+            field.removeEventListener('change', AjaxFieldOnChange, false)
             field.value = value
             checkInputType(field)
             ul.remove()
         }
 
         for (let li of list) {
-            li.onclick = () => { set_value(li.innerHTML) } 
+            li.addEventListener('mousedown',  function () { set_value(li.innerHTML) }, false )
         }
+        field.removeEventListener('change', AjaxFieldOnChange, false)
+        field.addEventListener('change', AjaxFieldOnChange, false)
 
         function set_active(n, enter=false) {
             if (n == -1 && enter==true && list.length > 0) {
@@ -319,22 +341,31 @@ function formOnSubmit(form) {
 
 
 function formValidate(form) {
+    console.log(form);
     form.valid = false
     form.active = false
     form.fields = form.querySelectorAll('input')
-    
+
+    console.log(form);
+
     function formInputsValidate(form) {
         currnetForm = form
         for (let input of form.fields) {
-            input.onchange = () => { 
+        
+            input.onchange = (e) => { 
                 checkInputType(input) 
                 input.classList.remove('virgin')
+                if ('ajax' in input.dataset) {
+                    input.addEventListener('change', AjaxFieldOnChange, false)
+                }
             }
+        
             input.oninput = (e) =>  { 
                 checkInputType(input) 
                 if ('ajax' in input.dataset) {
                     data = JSON.stringify({'name' : input.value})
                     xhrOnLoad('POST', input.dataset.ajax, data, AjaxFieldUpdate, input)
+                  
                 }
             }
         }
@@ -352,24 +383,27 @@ function formValidate(form) {
     }
 
     for (let input of form.fields) {
-        // Check if field has data type attribute
-        if (input.dataset.type == undefined) {
-            console.log('No dataset type: ',input);
-            input.style.backgroundColor = 'red'
-        } 
-        if (input.name == "" || input.name == undefined) {
-            console.log('No name attr: ',input);
-            input.style.backgroundColor = 'red'
-        } 
-        input.dataset.valid = false
-        input.classList.add('virgin')
-        // Set message paragaphs
-        if (input.required) {
-            let msg = document.createElement('p')
-            msg.classList.add('msg')
-            msg.innerHTML = ''
-            input.after(msg)
+        if (!['search'].includes(input.type)) {
+            // Check if field has data type attribute
+            if (input.dataset.type == undefined) {
+                console.log('No dataset type: ',input);
+                input.style.backgroundColor = 'red'
+            } 
+            if (input.name == "" || input.name == undefined) {
+                console.log('No name attr: ',input);
+                input.style.backgroundColor = 'red'
+            } 
+            input.dataset.valid = false
+            input.classList.add('virgin')
+            // Set message paragaphs
+            if (input.required) {
+                let msg = document.createElement('p')
+                msg.classList.add('msg')
+                msg.innerHTML = ''
+                input.after(msg)
+            }
         }
+       
     }
 }
     

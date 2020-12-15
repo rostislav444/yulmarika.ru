@@ -1,9 +1,11 @@
 .order__header {
-    position: relative;
+    position: absolute;
+    top: 0;
     width: 100%;
     border-bottom: 1px solid var(--grey-light);
     background-color: white;
     height: 65px;
+    z-index: 1000;
 }
 .order__header .content {
     position: relative;
@@ -32,7 +34,7 @@
     transform: rotate(180deg);
     width: 16px;
     height: 16px;
-    margin-right: 12px;
+    margin-right: 4px;
 }
 
 .order__header .content > .order__header__security {
@@ -117,7 +119,15 @@
 }
 .delivery_methods__item {
     border-bottom: 1px solid var(--grey-light);
+    background-color: white;
 }
+.delivery_methods__item .cost {
+    display: none !important;
+}
+.delivery_methods__item.active .cost {
+    display: block !important;
+}
+
 .delivery_methods__item:last-child {
     border-bottom: none;
 }
@@ -133,7 +143,7 @@
 }
 .delivery_methods__item label .info {
     display: grid;
-    grid-template-columns: minmax(120px, 240px) minmax(96px, 1fr) 64px;
+    grid-template-columns: minmax(120px, 240px) minmax(96px, 1fr) minmax(64px, 120px);
 }
 
 
@@ -348,17 +358,23 @@
     height: auto;
 }
 .order__products_list .name {
-    font-size: var(--h6);
+    font-size: var(--h5);
     margin-top: 8px;
     margin-bottom: 4px;
 }
-.order__products_list .code {
+.order__products_list .code,
+.order__products_list .product_color,
+.order__products_list .quantity {
     font-size: var(--h6);
     margin-bottom: 4px;
 }
-.order__products_list .price * {
-    font-size: var(--h6) !important;
+.order__products_list .product_color {
+    font-size: var(--h6);
 }
+.order__products_list .product_price * {
+    font-size: var(--h5) !important;
+}
+
 
 .order__products_list .order__product {
     position: relative;
@@ -374,6 +390,8 @@
     margin-left: 8px;
     width: 16px;
     height: 16px;
+    background-size: cover;
+    background-position: center;
 }
 .order__products_list .order__product .image {
     position: relative;
@@ -393,3 +411,5 @@
 .adress_popup .data {
     margin: 48px 0;
 }
+.pay_types ul.pay_rules li img.no  {display: inline-block;}
+.pay_types ul.pay_rules li img.yes {display: inline-block;}

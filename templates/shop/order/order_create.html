@@ -15,7 +15,7 @@
         </div>
         <div class="logo">
             <a href="/">
-                <img src="{% static 'img/logo.png' %}" alt="logo">
+                <img src="{% if front_files.logo %}{{ front_files.logo.url }}{% endif %}" alt="logo">
             </a>
         </div>
         <div class="order__header__security">

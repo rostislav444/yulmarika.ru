@@ -17,7 +17,7 @@
                 "value":100.0
             },
             "confirmation":{
-                "confirmation_url":"https://money.yandex.ru/api-pages/v2/payment-confirm/epl?orderId=26d8cb72-000f-5000-a000-172d0bc7bcb7",
+                "confirmation_url":"https://yoomoney.ru/api-pages/v2/payment-confirm/epl?orderId=26d8cb72-000f-5000-a000-172d0bc7bcb7",
                 "type":"redirect"
             },
             "created_at":"2020-08-26T19:27:46.131Z",
@@ -36,14 +36,14 @@
         }
 
                 <!--Подключение библиотеки-->
-        <script src="https://kassa.yandex.ru/checkout-ui/v2.js"></script>
+        <script src="https://yookassa.ru/checkout-ui/v2.js"></script>
 
         <!--HTML-элемент, в котором будет отображаться платежная форма-->
         <div id="payment-form"></div>
 
         <script>
             //Инициализация виджета. Все параметры обязательные.
-            const checkout = new window.YandexCheckout({
+            const checkout = new window.YooMoneyCheckoutWidget({
                 confirmation_token: 'confirmation-token', //Токен, который перед проведением оплаты нужно получить от Яндекс.Кассы
                 return_url: 'https://merchant.site', //Ссылка на страницу завершения оплаты
                 error_callback(error) {

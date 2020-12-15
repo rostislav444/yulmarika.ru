@@ -134,31 +134,31 @@ class Order(models.Model):
                 kwargs = {
                     "email" :   self.email,
                     "subject" : "Заказ: Успешно оплачен!",
-                    "text" :   f"Ваш заказ {self.order_id} в магазине Юлмарика успешно оплачен. Мы будем информировать вас об отправлении вашего заказа и изменениях статуса его доставки. Благодарим Вас за покупку в нашем магазине!",
+                    "text" :   f"Ваш заказ №{self.order_id} в магазине Юлмарика успешно оплачен. Мы будем информировать вас об отправлении вашего заказа и изменениях статуса его доставки. Благодарим Вас за покупку в нашем магазине!",
                 }
             elif self.status == 'prepered':
                 kwargs = {
                     "email" :   self.email,
                     "subject" : "Заказ: Собран, ожидает передачи на доставку",
-                    "text" :    "Ваш заказ в магазине Юлмарика собран и ожидает передачи службе доставки.",
+                    "text" :    "Ваш заказ №{self.order_id} в магазине Юлмарика собран и ожидает передачи службе доставки.",
                 }
             elif self.status == 'at_delivry':
                 kwargs = {
                     "email" :  self.email,
                     "subject" : "Заказ: Передан на доставку",
-                    "text" :    "Ваш заказ в магазине Юлмарика передан службе доставки. Совсем скоро он будет у вас.",
+                    "text" :    "Ваш заказ №{self.order_id} в магазине Юлмарика передан службе доставки. Совсем скоро он будет у вас.",
                 }
             elif self.status == 'delivring':
                 kwargs = {
                     "email" :   self.email,
                     "subject" : "Заказ: Доставляется",
-                    "text" :    "Ваш заказ в магазине Юлмарика уже в пути. Служба доставки везёт его к Вам.",
+                    "text" :    "Ваш заказ №{self.order_id} в магазине Юлмарика уже в пути. Служба доставки везёт его к Вам.",
                 }
             elif self.status == 'delivred':
                 kwargs = {
                     "email" :   self.email,
                     "subject" : "Заказ: Доставлен",
-                    "text" :    "По информации от службы доставки, Ваш заказ в магазине Юлмарика был Вам доставлен. Надеемся, что Вы остались довольны от сотрудничества с Юлмарика и порекомендуете наш магазин своим друзьям.",
+                    "text" :    "По информации от службы доставки, Ваш заказ №{self.order_id} в магазине Юлмарика был Вам доставлен. Надеемся, что Вы остались довольны от сотрудничества с Юлмарика и порекомендуете наш магазин своим друзьям.",
                 }
             elif self.status in ['new','declined']:
                 pass
@@ -187,8 +187,8 @@ class OrderProduct(models.Model):
     parent =   models.ForeignKey(Order, on_delete=models.CASCADE, related_name="products")
     product =  models.ForeignKey('shop.Product', on_delete=models.CASCADE, blank=True, null=True, related_name="orders", verbose_name="Продукт")
     variant =  models.ForeignKey('shop.Variant', on_delete=models.PROTECT, blank=True, null=True, verbose_name="Вариант")
-    name =     models.CharField(max_length=255, verbose_name="Название")
-    code =     models.CharField(max_length=255, verbose_name="Артикул")
+    name =     models.CharField(max_length=500, verbose_name="Название")
+    code =     models.CharField(max_length=500, verbose_name="Артикул")
     quantity = models.PositiveIntegerField(verbose_name="Количесвто, шт", default=1, blank=False)
     price =    models.PositiveIntegerField(verbose_name="Цена за шт", null=True, blank=True)
     color =    models.ForeignKey('shop.Color', on_delete=models.PROTECT, blank=True, null=True, verbose_name="Цвет")

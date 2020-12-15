@@ -1,9 +1,50 @@
-<svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 18 18">
-    <defs>
-        <style>.cls-1{stroke:#474747;}.cls-2{fill:#474747;}</style>
-    </defs>
-    <title>icon-info</title>
-    <circle class="cls-1" cx="9" cy="9" r="8" stroke-width="1" fill="none"/>
-    <path class="cls-2" d="M8.1 7.9H9.9v4.9H8.1Z"/>
-    <path class="cls-2" d="M8.1 5H9.9V6.7H8.1Z"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="32" height="32" style="" xml:space="preserve"><rect id="backgroundrect" width="100%" height="100%" x="0" y="0" fill="none" stroke="none" class="" style=""/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<g class="currentLayer" style=""><title>Layer 1</title><g id="svg_1" class="selected" filter="" fill="#242424" fill-opacity="1">
+	<path d="M15.979591727256775,0 C7.154300413357559,0 0,7.154300413357559 0,15.979591727256775 s7.154300413357559,15.979591727256775 15.979591727256775,15.979591727256775 s15.979591727256775,-7.154300413357559 15.979591727256775,-15.979591727256775 S24.804883041155993,0 15.979591727256775,0 zM13.982142761349678,5.992346897721291 h3.9948979318141937 v3.9948979318141937 h-3.9948979318141937 V5.992346897721291 zM19.97448965907097,25.96683655679226 H11.984693795442581 v-1.9974489659070969 h1.9974489659070969 V15.979591727256775 h-1.9974489659070969 v-1.9974489659070969 h5.992346897721291 v9.987244829535484 h1.9974489659070969 V25.96683655679226 z" id="svg_2" filter="" fill="#242424" fill-opacity="1"/>
+</g><g id="svg_3">
+</g><g id="svg_4">
+</g><g id="svg_5">
+</g><g id="svg_6">
+</g><g id="svg_7">
+</g><g id="svg_8">
+</g><g id="svg_9">
+</g><g id="svg_10">
+</g><g id="svg_11">
+</g><g id="svg_12">
+</g><g id="svg_13">
+</g><g id="svg_14">
+</g><g id="svg_15">
+</g><g id="svg_16">
+</g><g id="svg_17">
+</g></g><defs><filter id="f013" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" inkscape:label="Bloom" inkscape:menu="Bevels" inkscape:menu-tooltip="Soft, cushion-like bevel with matte highlights" color-interpolation-filters="sRGB">
+            <feGaussianBlur result="result1" in="SourceAlpha" stdDeviation="2.2"/>
+            <feSpecularLighting result="result0" specularExponent="18.1" specularConstant="2" surfaceScale="5">
+                <feDistantLight azimuth="225" elevation="24"/>
+            </feSpecularLighting>
+            <feComposite result="result6" operator="in" in2="SourceAlpha"/>
+            <feMorphology radius="5.7" operator="dilate"/>
+            <feGaussianBlur result="result11" stdDeviation="5.7"/>
+            <feDiffuseLighting surfaceScale="5" result="result3" diffuseConstant="2" in="result1">
+                <feDistantLight elevation="25" azimuth="225"/>
+            </feDiffuseLighting>
+            <feBlend result="result7" mode="multiply" in="result3" in2="SourceGraphic"/>
+            <feComposite in="result7" operator="in" in2="SourceAlpha" result="result91"/>
+            <feBlend result="result9" mode="lighten" in="result6" in2="result91"/>
+            <feComposite in="result11" in2="result9"/>
+        </filter></defs></svg>

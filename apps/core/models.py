@@ -119,7 +119,7 @@ IMAGES_SIZES = {
 }
 
 class ModelImages(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.AutoField(max_length=500, primary_key=True)
 
     class Meta:
         abstract = True

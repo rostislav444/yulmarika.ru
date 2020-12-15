@@ -48,24 +48,14 @@
                     <span class="currency"> RUB</span>
                 </span>
             </div>
-            <div class="create_order_btn_wrapper tooltip">
-                <span class="tooltiptext">Минимальная сумма для заказа {{ front_files.minimal_order }} RUB</span>
-                <a href="{% url 'order:order_or_register' %}">
-                    <button class="button h4 bold create_order_btn">Перейти к оформлению</button>
-                </a>
-            </div>
-            
-        </div>
-        <div class="pomo_code">
+			<div class="pomo_code">
             <div class="drop_button pomo_code_button">
                 <span class="h5">У меня есть промокод</span>
                 <div class="arr">
                     <img src="{% static 'img/ico/arrow.svg' %}" alt=">">
                 </div>
             </div>
-            
-            <div class="pomo_code_data">
-               
+            <div class="pomo_code_data"> 
                 <form class="form" action="{% url 'coupon:coupon' %}" method="POST" id="promocode_form">
                     <div>
                         <p class="prormocode_messages message"></p>
@@ -80,6 +70,14 @@
                     
                 </form>
             </div>
+        </div>
+            <div class="create_order_btn_wrapper tooltip">
+                <span class="tooltiptext">Минимальная сумма для заказа {{ front_files.minimal_order }} RUB</span>
+                <a href="{% url 'order:order_or_register' %}">
+                    <button class="button h4 bold create_order_btn">Перейти к оформлению</button>
+                </a>
+            </div>
+            
         </div>
         <div class="pay_types">
             <span class="h5 upper">Способы оплаты</span>
